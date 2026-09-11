@@ -5,72 +5,97 @@
 [![Tampermonkey](https://img.shields.io/badge/Tampermonkey-Supported-brightgreen.svg)](https://www.tampermonkey.net/)
 [![East West University](https://img.shields.io/badge/Portal-portal.ewubd.edu-003366.svg)](https://portal.ewubd.edu/)
 
-**EWU-Toolkit** is an open-source browser extension and userscript suite for East West University (EWU) students. It reveals hidden **Faculty Initial**, **Faculty Name**, and **Faculty Email** on the EWU portal's **Class Schedule** and **Advising Slip** pages (`https://portal.ewubd.edu/Home/ClassSchedule`).
+**EWU-Toolkit** is an open-source browser extension and userscript made by students, for students. It makes using the East West University student portal (`portal.ewubd.edu`) simpler, faster, and much more useful.
 
-💖 **Open Source Project:** Contributions and feature suggestions are welcome! If you find this helpful, please consider giving it a ⭐ on [GitHub](https://github.com/sowmiksudo/EWU-Toolkit).
+💖 **Open Source Project:** If this tool saves you time, please give it a ⭐ on [GitHub](https://github.com/sowmiksudo/EWU-Toolkit)!
 
 ---
 
-## ⚡ 1-Click Installation (Tampermonkey - Easiest & Recommended)
+## ⚡ 1-Click Install (Easiest Method - Tampermonkey)
 
 > [!TIP]
-> **This is the fastest method** — works in 1 click across Chrome, Edge, Brave, Firefox, and mobile browsers (Kiwi / Orion)!
+> **Recommended:** Takes only 10 seconds and works across Chrome, Brave, Edge, Firefox, and mobile browsers (Kiwi / Orion)!
 
 ### 👉 [Click Here to Install Script](https://raw.githubusercontent.com/sowmiksudo/EWU-Toolkit/main/ewu-toolkit.user.js)
 
-### Step-by-Step Instructions:
-1. **Install Tampermonkey** (if you don't already have it):
-   - [Get Tampermonkey for Chrome / Edge / Brave](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkminghmkfafnlmfeedhkdaph)
-   - [Get Tampermonkey for Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/)
+### Steps:
+1. **Install the Tampermonkey extension** in your browser if you don't have it yet:
+   - [Tampermonkey for Chrome / Edge / Brave](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkminghmkfafnlmfeedhkdaph)
+   - [Tampermonkey for Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/)
 2. **Click the install link:**
    - Click 👉 **[Install Script](https://raw.githubusercontent.com/sowmiksudo/EWU-Toolkit/main/ewu-toolkit.user.js)**
-   - Tampermonkey will automatically open an **"Install Userscript"** tab.
+   - Tampermonkey will open a tab showing the script details.
    - Click the green **"Install"** button.
 3. **Open EWU Portal:**
-   - Go to [portal.ewubd.edu/Home/ClassSchedule](https://portal.ewubd.edu/Home/ClassSchedule).
-   - The hidden **Faculty Initial**, **Faculty Name**, and **Faculty Email** columns will immediately appear! 🎉
+   - Log into [portal.ewubd.edu](https://portal.ewubd.edu) — all features will work automatically! 🎉
 
 ---
 
-## 📦 Alternative: Install as Chrome Extension (Developer Mode)
+## 📦 Alternative: Install as Chrome Extension
 
-If you prefer using a standalone Chrome Extension:
+If you prefer installing it directly as a browser extension without Tampermonkey:
 
-1. **Download / Clone this repository:**
-   - `git clone https://github.com/sowmiksudo/EWU-Toolkit.git`
-   - Or click **Code $
-ightarrow$ Download ZIP** on GitHub and extract the folder.
+1. **Download the Extension:**
+   - Download the latest **`EWU-Toolkit-v1.2.0.zip`** from [Releases](https://github.com/sowmiksudo/EWU-Toolkit/releases).
+   - Unzip the downloaded folder on your computer.
 2. **Open Extensions in Chrome:**
-   - Navigate to `chrome://extensions` in your Chrome URL bar.
-3. **Enable Developer Mode:**
+   - Type `chrome://extensions` in your Chrome URL address bar and press Enter.
+3. **Turn on Developer Mode:**
    - Toggle on the **"Developer mode"** switch in the top right corner.
 4. **Load the Extension:**
-   - Click **"Load unpacked"** in the top left.
-   - Select the folder containing `manifest.json`.
+   - Click the **"Load unpacked"** button in the top left.
+   - Select the unzipped folder containing `manifest.json`.
 5. **Done!**
-   - Click the extension icon in your toolbar to see the **EWU-Toolkit** dialogue showing:
-     - **Name:** EWU-Toolkit
-     - **Version:** 1.0.0
-     - **GitHub Repo:** `github.com/sowmiksudo/EWU-Toolkit`
-     - **License:** MIT License
-   - Open [portal.ewubd.edu/Home/ClassSchedule](https://portal.ewubd.edu/Home/ClassSchedule).
+   - You can pin the EWU-Toolkit icon to your browser toolbar for quick shortcuts!
 
 ---
 
-## ✨ Key Features
+## ✨ Features (Explained in Simple Words)
 
-- 🔍 **Instant Unhiding**: Automatically reveals the 3 faculty columns (`Faculty Initial`, `Faculty Name`, `Faculty Email`) that the university portal serves in HTML but hides via AngularJS `.ng-hide`.
-- 📋 **1-Click Copy**: Includes a handy "Copy" button next to every faculty email.
-- ✉️ **Clickable Mailto Links**: Click any email to compose an email directly in your default mail app.
-- 🏷️ **Initials Badge**: Clean, styled badge for teacher initials for easy scanning.
-- 🖨️ **Print-Friendly**: When you press `Ctrl + P` to print or save your advising slip as a PDF, the faculty columns are cleanly preserved.
-- ℹ️ **Extension Dialogue**: Displays version (1.0.0), project name, MIT license details, and quick link to the open-source GitHub repository.
-- 🌿 **Eye-Friendly White/Light Theme Notice**: A gentle, modern notice banner right above the schedule table designed to blend naturally with the portal without straining your eyes, featuring an open-source gesture to GitHub.
+### 1. 🔍 See Teacher Names & Emails on Your Class Schedule
+* **The Problem:** The university portal hides faculty names, initials, and emails on your class schedule and advising slip.
+* **What EWU-Toolkit does:** 
+  * Automatically reveals your teachers' **initials**, **full names**, and official **emails**.
+  * Adds a handy **"📋 Copy"** button next to every email address so you can copy it in 1 click.
+  * Clicking an email address opens your email app directly to write an email.
+  * Everything stays visible when you press `Ctrl + P` to print or save your advising slip as a PDF.
+
+### 2. 💺 Know How Many Seats Are Left & Hide Full Courses
+* **The Problem:** During advising rush, you have to read confusing numbers like `28 / 30` to guess how many seats are left, while scrolling through dozens of full sections.
+* **What EWU-Toolkit does:**
+  * Displays easy color-coded badges for every course:
+    * 🟢 **Green:** Open (e.g. `8 left`)
+    * 🟡 **Yellow:** Almost full (`1 - 5 left`)
+    * 🔴 **Red:** Full (`0 left`)
+  * Adds a **"Show Open Sections Only"** checkbox at the top: check it, and all full courses disappear instantly so you only see what you can actually take!
+  * Adds an **instant search bar** to filter courses by course code, room number, or time slot.
+
+### 3. ⭐ See Teacher Names in Faculty Evaluation
+* **The Problem:** When evaluating courses, the portal shows codes like `STA293(2)` without showing who the instructor is, making it easy to get confused.
+* **What EWU-Toolkit does:**
+  * Adds an **"Instructor"** column right in your evaluation list and shows the teacher's full name and initial, so you always know who you are reviewing.
+
+### 4. 📊 Understand Your Tuition Fees & Dues Easily
+* **The Problem:** The student accounts ledger is a giant, confusing table of "Debit Notes" and "Credit Notes".
+* **What EWU-Toolkit does:**
+  * Adds a clean **financial summary** right above the table:
+    * 💳 **Total Money Paid:** Sum of all your bank and online deposit receipts.
+    * 🎓 **Scholarships & Waivers:** Total merit discounts and waivers granted to you.
+    * 💰 **Total Tuition Billed:** Total university fees charged across all semesters.
+    * ⚠️ **Current Due:** Exactly how much you need to pay for the current semester.
+  * Shows a neat **semester-by-semester table** with green `✓ Cleared` badges for completed semesters and clear amounts for pending terms.
+
+### 5. 🎛️ Extension Control Menu
+* Click the extension icon anytime to:
+  * Turn individual features on or off.
+  * Quick-jump directly to Class Schedule, Offered Courses, Evaluation, or Accounts Ledger.
+  * Check version info and open the GitHub project.
+
 ---
 
 ## 👥 Contributors
 
-Thank you to all the amazing students and developers who contribute to **EWU-Toolkit**!
+Thank you to all the students and developers who contribute to making **EWU-Toolkit** better!
 
 <a href="https://github.com/sowmiksudo/EWU-Toolkit/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=sowmiksudo/EWU-Toolkit" alt="EWU-Toolkit Contributors" />
@@ -83,8 +108,5 @@ Contributions of any kind (new features, bug fixes, UI improvements, or ideas) a
 ## 📄 License
 
 This project is open-sourced under the **[MIT License](LICENSE)**. 
-
-### Why MIT License?
-- **Permissive & Open:** Anyone can freely use, modify, study, or contribute to it.
-- **Liability Protection:** Protects contributors by disclaiming any warranty or liability.
-- **Community Standard:** Widely recognized and trusted across the open-source community.
+- You are free to use, study, modify, and share this software.
+- Provided "as-is" without warranty, created by and for the EWU student community.

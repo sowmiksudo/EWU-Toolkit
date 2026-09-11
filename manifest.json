@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "EWU-Toolkit",
-  "version": "1.0.0",
-  "description": "Essential student utility toolkit for East West University portal. Unhides faculty initial, name, email & more.",
+  "version": "1.2.0",
+  "description": "Complete student utility suite for EWU Portal: unhide faculty info, seat availability & filters, evaluation instructors, accounts ledger breakdown, and more.",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",

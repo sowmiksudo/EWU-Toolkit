@@ -14,12 +14,12 @@
         <img src="icons/icon48.png" alt="EWU-Toolkit Logo" class="logo">
         <div>
           <h1 class="title">EWU-Toolkit</h1>
-          <p class="subtitle">EWU Portal Student Suite</p>
+          <p class="subtitle">East West University Student Suite</p>
         </div>
       </div>
       <div class="status-indicator">
         <span class="pulse-dot"></span>
-        <span class="status-text" id="statusText">Active</span>
+        <span class="status-text">Active</span>
       </div>
     </header>
 
@@ -27,7 +27,7 @@
     <section class="dialogue-card" id="aboutDialogue">
       <div class="dialogue-header">
         <span class="dialogue-tag">Extension Details</span>
-        <span class="version-badge">v1.0.0</span>
+        <span class="version-badge">v1.2.0</span>
       </div>
       
       <div class="meta-grid">
@@ -37,7 +37,7 @@
         </div>
         <div class="meta-row">
           <span class="meta-label">Version</span>
-          <span class="meta-val">1.0.0</span>
+          <span class="meta-val">1.2.0</span>
         </div>
         <div class="meta-row">
           <span class="meta-label">License</span>
@@ -47,7 +47,7 @@
         </div>
         <div class="meta-row">
           <span class="meta-label">Repository</span>
-          <a href="https://github.com/sowmiksudo/EWU-Toolkit" target="_blank" class="repo-link" id="repoLink" title="View Source on GitHub">
+          <a href="https://github.com/sowmiksudo/EWU-Toolkit" target="_blank" class="repo-link" title="View Source on GitHub">
             github.com/sowmiksudo/EWU-Toolkit ↗
           </a>
         </div>
@@ -57,38 +57,85 @@
         <a href="https://github.com/sowmiksudo/EWU-Toolkit" target="_blank" class="github-star-btn">
           ⭐ Star on GitHub
         </a>
-        <button type="button" class="license-info-btn" id="toggleLicenseBtn" title="View License details">
-          📄 License Details
+        <button type="button" class="license-info-btn" id="toggleLicenseBtn">
+          📄 License
         </button>
       </div>
 
-      <!-- Collapsible License Notice -->
       <div class="license-notice hidden" id="licenseNotice">
-        <p><strong>MIT License</strong> &bull; Free & Open Source</p>
+        <p><strong>MIT License</strong> &bull; Free & Open Source for EWU Students</p>
         <p class="license-text">
-          Permission is hereby granted, free of charge, to any person obtaining a copy of this software to use, copy, modify, merge, and distribute.
+          Permission is hereby granted, free of charge, to any person obtaining a copy of this software to use, copy, modify, and distribute.
         </p>
       </div>
     </section>
 
-    <!-- Toggle Card -->
-    <section class="card">
-      <div class="card-row">
-        <div>
-          <div class="card-title">Faculty Info Revealer</div>
-          <div class="card-desc">Show Initial, Name & Email on Schedule</div>
+    <!-- Features Control Group -->
+    <section class="features-group">
+      <div class="group-title">Active Superpowers</div>
+
+      <!-- Feature 1 -->
+      <div class="feature-toggle-row">
+        <div class="feature-info">
+          <div class="feature-name">🎓 Schedule Faculty Info</div>
+          <div class="feature-desc">Unhide Initial, Name & Email</div>
         </div>
-        <label class="switch" title="Toggle unhiding feature">
-          <input type="checkbox" id="toggleExtension" checked>
+        <label class="switch">
+          <input type="checkbox" id="toggleSchedule" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="feature-toggle-row">
+        <div class="feature-info">
+          <div class="feature-name">💺 Smart Seat Badges & Filter</div>
+          <div class="feature-desc">Offered Courses Open Seats Counter</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggleOffered" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="feature-toggle-row">
+        <div class="feature-info">
+          <div class="feature-name">📝 Evaluation Instructors</div>
+          <div class="feature-desc">Reveal teacher on evaluation grid</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggleEval" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="feature-toggle-row">
+        <div class="feature-info">
+          <div class="feature-name">📊 Ledger Breakdown & Totals</div>
+          <div class="feature-desc">Total tuition paid & semester cards</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggleLedger" checked>
           <span class="slider"></span>
         </label>
       </div>
     </section>
 
-    <!-- Quick Navigation -->
-    <div class="action-section">
-      <a href="https://portal.ewubd.edu/Home/ClassSchedule" target="_blank" class="portal-btn" id="openPortalBtn">
-        Open EWU Class Schedule ↗
+    <!-- Quick Portal Links -->
+    <div class="action-grid">
+      <a href="https://portal.ewubd.edu/Home/ClassSchedule" target="_blank" class="quick-btn" title="Open Class Schedule">
+        📅 Class Schedule
+      </a>
+      <a href="https://portal.ewubd.edu/Home/OfferedCoursesStudent" target="_blank" class="quick-btn" title="Open Offered Courses">
+        🔍 Offered Courses
+      </a>
+      <a href="https://portal.ewubd.edu/Home/FacultyEvaluation" target="_blank" class="quick-btn" title="Open Faculty Evaluation">
+        ⭐ Evaluation
+      </a>
+      <a href="https://portal.ewubd.edu/Home/StudentLedger" target="_blank" class="quick-btn" title="Open Accounts Ledger">
+        💳 Accounts / Ledger
       </a>
     </div>
 

@@ -1,0 +1,11 @@
+# Archives and builds
+*.zip
+dist/
+
+# Python
+__pycache__/
+*.pyc
+
+# Local / temporary reference files
+table_reference.html
+scratch_portal/

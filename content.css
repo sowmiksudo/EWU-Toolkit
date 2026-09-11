@@ -1,9 +1,10 @@
 /* ==========================================================================
-   EWU-Toolkit - Class Schedule & Advising Enhancer
-   Styles for unhiding faculty name, initials, and email in class schedule
+   EWU-Toolkit - Comprehensive Stylesheet (v1.2.0)
    ========================================================================== */
 
-/* 1. Force hidden Angular faculty header and data columns to display */
+/* --------------------------------------------------------------------------
+   1. Class Schedule & Advising Slip: Faculty Info Unhiding
+   -------------------------------------------------------------------------- */
 th[ng-show*="Status"].ng-hide,
 td[ng-show*="Status"].ng-hide,
 th.ewu-revealed-col,
@@ -11,22 +12,20 @@ td.ewu-revealed-col {
     display: table-cell !important;
 }
 
-/* When explicitly disabled via toggle */
-body.ewu-faculty-disabled th[ng-show*="Status"].ng-hide,
-body.ewu-faculty-disabled td[ng-show*="Status"].ng-hide,
-body.ewu-faculty-disabled th.ewu-revealed-col,
-body.ewu-faculty-disabled td.ewu-revealed-col {
+body.ewu-schedule-disabled th[ng-show*="Status"].ng-hide,
+body.ewu-schedule-disabled td[ng-show*="Status"].ng-hide,
+body.ewu-schedule-disabled th.ewu-revealed-col,
+body.ewu-schedule-disabled td.ewu-revealed-col {
     display: none !important;
 }
 
-body.ewu-faculty-disabled .ewu-revealer-banner {
+body.ewu-schedule-disabled .ewu-schedule-banner {
     display: none !important;
 }
 
-/* 2. Faculty Initial Badge */
 .ewu-initial-badge {
     display: inline-block;
-    padding: 3px 8px;
+    padding: 2px 7px;
     font-size: 11px;
     font-weight: 700;
     color: #1e40af;
@@ -35,9 +34,9 @@ body.ewu-faculty-disabled .ewu-revealer-banner {
     border-radius: 4px;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+    width: fit-content;
 }
 
-/* 3. Faculty Email Interactive Container */
 .ewu-email-container {
     display: inline-flex;
     align-items: center;
@@ -58,7 +57,6 @@ body.ewu-faculty-disabled .ewu-revealer-banner {
     text-decoration: underline !important;
 }
 
-/* Copy Button */
 .ewu-copy-btn {
     display: inline-flex;
     align-items: center;
@@ -87,7 +85,7 @@ body.ewu-faculty-disabled .ewu-revealer-banner {
     border-color: #86efac;
 }
 
-/* 4. Top Banner - Light / White Theme (Soft, eye-friendly, easily noticeable) */
+/* Light Theme Notice Banner */
 .ewu-revealer-banner {
     display: flex;
     align-items: center;
@@ -135,7 +133,6 @@ body.ewu-faculty-disabled .ewu-revealer-banner {
     gap: 10px;
 }
 
-/* Open Source GitHub Gesture */
 .ewu-github-gesture {
     display: inline-flex;
     align-items: center;
@@ -158,7 +155,311 @@ body.ewu-faculty-disabled .ewu-revealer-banner {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/* 5. Print Optimization */
+/* --------------------------------------------------------------------------
+   2. Offered Courses: Seat Availability Badges & Smart Filter Bar
+   -------------------------------------------------------------------------- */
+.ewu-offered-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    flex-wrap: wrap;
+    gap: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.ewu-toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.ewu-filter-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #1e293b;
+    user-select: none;
+}
+
+.ewu-filter-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #2563eb;
+}
+
+.ewu-search-input {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 12.5px;
+    outline: none;
+    transition: border-color 0.15s ease;
+    width: 180px;
+}
+
+.ewu-search-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
+.ewu-stats-pill {
+    font-size: 11.5px;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.ewu-seat-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ewu-seat-badge {
+    display: inline-block;
+    padding: 2px 7px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+.ewu-seat-badge.open {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+.ewu-seat-badge.warning {
+    background: #fef9c3;
+    color: #854d0e;
+    border: 1px solid #fde047;
+}
+
+.ewu-seat-badge.full {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+.ewu-row-hidden {
+    display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. Faculty Evaluation: Instructor Column & Badges
+   -------------------------------------------------------------------------- */
+.ewu-instructor-cell {
+    font-size: 12.5px;
+    vertical-align: middle !important;
+}
+
+.ewu-instructor-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.ewu-instructor-name {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.ewu-instructor-badge {
+    display: inline-block;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e40af;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.ewu-loading-spinner {
+    display: inline-block;
+    font-size: 11px;
+    color: #94a3b8;
+    font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   4. Student Ledger: Financial Summary & Semester Breakdown
+   -------------------------------------------------------------------------- */
+.ewu-ledger-summary-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.ewu-ledger-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ewu-ledger-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ewu-ledger-tag {
+    font-size: 11px;
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-weight: 600;
+}
+
+/* Bento KPI Grid */
+.ewu-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.ewu-kpi-card {
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border: 1px solid transparent;
+}
+
+.ewu-kpi-card.paid {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.ewu-kpi-card.paid .ewu-kpi-amount {
+    color: #15803d;
+}
+
+.ewu-kpi-card.waiver {
+    background: #f5f3ff;
+    border-color: #ddd6fe;
+}
+
+.ewu-kpi-card.waiver .ewu-kpi-amount {
+    color: #6d28d9;
+}
+
+.ewu-kpi-card.billed {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+
+.ewu-kpi-card.billed .ewu-kpi-amount {
+    color: #1e293b;
+}
+
+.ewu-kpi-card.due {
+    background: #fff1f2;
+    border-color: #fecdd3;
+}
+
+.ewu-kpi-card.due .ewu-kpi-amount {
+    color: #be123c;
+}
+
+.ewu-kpi-card.due.cleared {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.ewu-kpi-card.due.cleared .ewu-kpi-amount {
+    color: #15803d;
+}
+
+.ewu-kpi-label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.ewu-kpi-amount {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.ewu-kpi-desc {
+    font-size: 11px;
+    color: #64748b;
+}
+
+/* Semester Breakdown Table */
+.ewu-summary-table {
+    width: 100%;
+    margin-bottom: 0 !important;
+    font-size: 13px;
+}
+
+.ewu-summary-table th {
+    background: #f8fafc !important;
+    font-weight: 600;
+    color: #334155;
+    border-bottom: 2px solid #cbd5e1 !important;
+}
+
+.ewu-summary-table td {
+    vertical-align: middle !important;
+}
+
+.ewu-status-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.ewu-status-badge.cleared {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+.ewu-status-badge.due {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+/* --------------------------------------------------------------------------
+   5. Print Optimization
+   -------------------------------------------------------------------------- */
 @media print {
     th[ng-show*="Status"].ng-hide,
     td[ng-show*="Status"].ng-hide,
@@ -167,7 +468,12 @@ body.ewu-faculty-disabled .ewu-revealer-banner {
         display: table-cell !important;
     }
     .ewu-copy-btn,
-    .ewu-revealer-banner {
+    .ewu-revealer-banner,
+    .ewu-offered-toolbar {
         display: none !important;
+    }
+    .ewu-ledger-summary-card {
+        border: 1px solid #000;
+        box-shadow: none;
     }
 }
