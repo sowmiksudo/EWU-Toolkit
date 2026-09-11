@@ -3,7 +3,6 @@
 
   let isEnabled = true;
 
-  // Check initial state from storage if chrome.storage is available
   if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
     chrome.storage.local.get({ ewu_enabled: true }, (res) => {
       isEnabled = res.ewu_enabled !== false;
@@ -73,7 +72,6 @@
 
       if (!hasFacultyHeader) return;
 
-      // Identify indices of faculty columns
       let initialIdx = -1;
       let nameIdx = -1;
       let emailIdx = -1;
@@ -85,7 +83,6 @@
         else if (text.includes('faculty email')) emailIdx = idx;
       });
 
-      // Fallback: If headers could not be matched by text, detect by ng-show attributes
       if (initialIdx === -1) {
         const hiddenHeaders = headers.filter(th => th.getAttribute('ng-show') && th.getAttribute('ng-show').includes('Status'));
         if (hiddenHeaders.length >= 3) {
@@ -95,27 +92,23 @@
         }
       }
 
-      // Mark headers as revealed
       headers.forEach(th => {
         if (th.getAttribute('ng-show') && th.getAttribute('ng-show').includes('Status')) {
           th.classList.add('ewu-revealed-col');
         }
       });
 
-      // Process rows
       const rows = table.querySelectorAll('tbody tr:not(.ewu-processed)');
       rows.forEach((row) => {
         const cells = row.querySelectorAll('td');
         if (cells.length < 5) return;
 
-        // Reveal any cells with ng-show Status
         cells.forEach(td => {
           if (td.getAttribute('ng-show') && td.getAttribute('ng-show').includes('Status')) {
             td.classList.add('ewu-revealed-col');
           }
         });
 
-        // Format Faculty Initial badge
         if (initialIdx !== -1 && cells[initialIdx]) {
           const initCell = cells[initialIdx];
           const text = initCell.textContent.trim();
@@ -124,7 +117,6 @@
           }
         }
 
-        // Format Faculty Email with link & copy button
         if (emailIdx !== -1 && cells[emailIdx]) {
           const emailCell = cells[emailIdx];
           const rawEmail = emailCell.textContent.trim();
@@ -151,18 +143,20 @@
         row.classList.add('ewu-processed');
       });
 
-      // Inject friendly notification banner above table-responsive
+      // Inject notice banner above table-responsive in clean light theme with GitHub open source gesture
       const responsiveContainer = table.closest('.table-responsive') || table.parentElement;
       if (responsiveContainer && !responsiveContainer.previousElementSibling?.classList.contains('ewu-revealer-banner')) {
         const banner = document.createElement('div');
         banner.className = 'ewu-revealer-banner';
         banner.innerHTML = `
           <div class="ewu-banner-left">
-            <span class="ewu-banner-pill">Active</span>
-            <span>🎓 <strong>EWU Faculty Revealer:</strong> Faculty Initial, Name & Email unhidden.</span>
+            <span class="ewu-banner-pill">EWU-Toolkit</span>
+            <span class="ewu-banner-text">🎓 Faculty Initial, Name & Email unhidden</span>
           </div>
           <div class="ewu-banner-right">
-            <span class="ewu-banner-count">Click "Copy" to copy faculty emails</span>
+            <a href="https://github.com/sowmiksudo/EWU-Toolkit" target="_blank" rel="noopener noreferrer" class="ewu-github-gesture" title="EWU-Toolkit is open-source. Star or contribute on GitHub!">
+              ⭐ <span>Open Source on GitHub ↗</span>
+            </a>
           </div>
         `;
         responsiveContainer.parentElement.insertBefore(banner, responsiveContainer);
@@ -170,10 +164,8 @@
     });
   }
 
-  // Initial pass
   processTable();
 
-  // Observe DOM for Angular rendering updates (e.g. course selection, semester changes)
   let debounceTimer = null;
   const observer = new MutationObserver(() => {
     if (debounceTimer) clearTimeout(debounceTimer);
@@ -184,7 +176,6 @@
 
   observer.observe(document.body, { childList: true, subtree: true });
 
-  // Chrome Extension message listener
   if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.onMessage) {
     chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       if (msg.action === 'toggle') {

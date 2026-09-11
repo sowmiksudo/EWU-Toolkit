@@ -3,55 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EWU Faculty Revealer</title>
+  <title>EWU-Toolkit</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
   <div class="popup-container">
     <!-- Header -->
-    <div class="header">
+    <header class="header">
       <div class="brand">
-        <img src="icons/icon48.png" alt="Logo" class="logo">
+        <img src="icons/icon48.png" alt="EWU-Toolkit Logo" class="logo">
         <div>
-          <h1 class="title">EWU Faculty Revealer</h1>
-          <p class="subtitle">Class Schedule & Advising</p>
+          <h1 class="title">EWU-Toolkit</h1>
+          <p class="subtitle">EWU Portal Student Suite</p>
         </div>
       </div>
       <div class="status-indicator">
         <span class="pulse-dot"></span>
         <span class="status-text" id="statusText">Active</span>
       </div>
-    </div>
+    </header>
+
+    <!-- Info Dialogue / Meta Card -->
+    <section class="dialogue-card" id="aboutDialogue">
+      <div class="dialogue-header">
+        <span class="dialogue-tag">Extension Details</span>
+        <span class="version-badge">v1.0.0</span>
+      </div>
+      
+      <div class="meta-grid">
+        <div class="meta-row">
+          <span class="meta-label">Name</span>
+          <span class="meta-val font-semibold">EWU-Toolkit</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Version</span>
+          <span class="meta-val">1.0.0</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">License</span>
+          <span class="meta-val">
+            <span class="license-pill">MIT License</span>
+          </span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Repository</span>
+          <a href="https://github.com/sowmiksudo/EWU-Toolkit" target="_blank" class="repo-link" id="repoLink" title="View Source on GitHub">
+            github.com/sowmiksudo/EWU-Toolkit ↗
+          </a>
+        </div>
+      </div>
+
+      <div class="dialogue-actions">
+        <a href="https://github.com/sowmiksudo/EWU-Toolkit" target="_blank" class="github-star-btn">
+          ⭐ Star on GitHub
+        </a>
+        <button type="button" class="license-info-btn" id="toggleLicenseBtn" title="View License details">
+          📄 License Details
+        </button>
+      </div>
+
+      <!-- Collapsible License Notice -->
+      <div class="license-notice hidden" id="licenseNotice">
+        <p><strong>MIT License</strong> &bull; Free & Open Source</p>
+        <p class="license-text">
+          Permission is hereby granted, free of charge, to any person obtaining a copy of this software to use, copy, modify, merge, and distribute.
+        </p>
+      </div>
+    </section>
 
     <!-- Toggle Card -->
-    <div class="card">
+    <section class="card">
       <div class="card-row">
         <div>
-          <div class="card-title">Reveal Faculty Info</div>
-          <div class="card-desc">Show Initial, Name & Email</div>
+          <div class="card-title">Faculty Info Revealer</div>
+          <div class="card-desc">Show Initial, Name & Email on Schedule</div>
         </div>
-        <label class="switch">
+        <label class="switch" title="Toggle unhiding feature">
           <input type="checkbox" id="toggleExtension" checked>
           <span class="slider"></span>
         </label>
       </div>
-    </div>
-
-    <!-- Feature Highlights -->
-    <div class="features-list">
-      <div class="feature-item">
-        <span class="feature-icon">✨</span>
-        <span>Unhides Initial, Name & Email</span>
-      </div>
-      <div class="feature-item">
-        <span class="feature-icon">📋</span>
-        <span>1-Click copy for faculty emails</span>
-      </div>
-      <div class="feature-item">
-        <span class="feature-icon">🖨️</span>
-        <span>Retains faculty info in print (PDF)</span>
-      </div>
-    </div>
+    </section>
 
     <!-- Quick Navigation -->
     <div class="action-section">
@@ -61,11 +93,9 @@
     </div>
 
     <!-- Footer -->
-    <div class="footer">
-      <span>Version 1.0.0</span>
-      <span class="separator">•</span>
-      <a href="https://github.com/sowmiksudo/show-faculty-info--EWU" target="_blank" class="github-link">GitHub</a>
-    </div>
+    <footer class="footer">
+      <span>EWU-Toolkit &bull; Open Source for EWU Students</span>
+    </footer>
   </div>
 
   <script src="popup.js"></script>

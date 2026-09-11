@@ -5,9 +5,9 @@
 }
 
 body {
-  width: 310px;
+  width: 320px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #0f172a;
+  background: #0b1120;
   color: #f8fafc;
   padding: 14px;
   font-size: 13px;
@@ -20,6 +20,7 @@ body {
   gap: 12px;
 }
 
+/* Header */
 .header {
   display: flex;
   align-items: center;
@@ -38,11 +39,11 @@ body {
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .title {
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   color: #ffffff;
   letter-spacing: -0.2px;
@@ -91,11 +92,166 @@ body {
   color: #86efac;
 }
 
-.card {
-  background: #1e293b;
-  border: 1px solid #334155;
+/* Dialogue Card (About / Meta) */
+.dialogue-card {
+  background: #131d31;
+  border: 1px solid #20304c;
   border-radius: 10px;
-  padding: 12px 14px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dialogue-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #1c2b44;
+}
+
+.dialogue-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #60a5fa;
+}
+
+.version-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: #1e3a8a;
+  color: #bfdbfe;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.meta-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.meta-label {
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+.meta-val {
+  color: #f1f5f9;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.license-pill {
+  background: #15803d;
+  color: #dcfce7;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.repo-link {
+  color: #38bdf8;
+  text-decoration: none;
+  font-size: 11px;
+  transition: color 0.15s ease;
+  max-width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.repo-link:hover {
+  color: #7dd3fc;
+  text-decoration: underline;
+}
+
+.dialogue-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.github-star-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: #1f2937;
+  border: 1px solid #374151;
+  color: #f9fafb;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 8px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.github-star-btn:hover {
+  background: #283548;
+  border-color: #60a5fa;
+  color: #60a5fa;
+}
+
+.license-info-btn {
+  background: transparent;
+  border: 1px solid #2d3f5e;
+  color: #94a3b8;
+  font-size: 11px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.license-info-btn:hover {
+  background: #1a273f;
+  color: #f1f5f9;
+}
+
+.license-notice {
+  background: #0d1527;
+  border: 1px solid #20304c;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 10.5px;
+  color: #cbd5e1;
+  line-height: 1.4;
+}
+
+.license-notice.hidden {
+  display: none;
+}
+
+.license-text {
+  color: #94a3b8;
+  margin-top: 3px;
+  font-size: 10px;
+}
+
+/* Feature Toggle Card */
+.card {
+  background: #131d31;
+  border: 1px solid #20304c;
+  border-radius: 10px;
+  padding: 10px 12px;
 }
 
 .card-row {
@@ -105,7 +261,7 @@ body {
 }
 
 .card-title {
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
   color: #f1f5f9;
 }
@@ -119,8 +275,8 @@ body {
 .switch {
   position: relative;
   display: inline-block;
-  width: 42px;
-  height: 24px;
+  width: 40px;
+  height: 22px;
 }
 
 .switch input {
@@ -138,14 +294,14 @@ body {
   bottom: 0;
   background-color: #475569;
   transition: 0.2s ease;
-  border-radius: 24px;
+  border-radius: 22px;
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 18px;
-  width: 18px;
+  height: 16px;
+  width: 16px;
   left: 3px;
   bottom: 3px;
   background-color: white;
@@ -161,25 +317,7 @@ input:checked + .slider:before {
   transform: translateX(18px);
 }
 
-.features-list {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  padding: 0 4px;
-}
-
-.feature-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: #cbd5e1;
-}
-
-.feature-icon {
-  font-size: 13px;
-}
-
+/* Portal Button */
 .action-section {
   margin-top: 2px;
 }
@@ -201,26 +339,13 @@ input:checked + .slider:before {
   background: #1d4ed8;
 }
 
+/* Footer */
 .footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  font-size: 11px;
+  font-size: 10.5px;
   color: #64748b;
-  padding-top: 4px;
-}
-
-.separator {
-  opacity: 0.5;
-}
-
-.github-link {
-  color: #94a3b8;
-  text-decoration: none;
-}
-
-.github-link:hover {
-  color: #cbd5e1;
-  text-decoration: underline;
+  padding-top: 2px;
+  text-align: center;
 }

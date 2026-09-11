@@ -3,6 +3,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const statusIndicator = document.querySelector('.status-indicator');
   const statusText = document.getElementById('statusText');
   const openPortalBtn = document.getElementById('openPortalBtn');
+  const toggleLicenseBtn = document.getElementById('toggleLicenseBtn');
+  const licenseNotice = document.getElementById('licenseNotice');
+
+  if (toggleLicenseBtn && licenseNotice) {
+    toggleLicenseBtn.addEventListener('click', () => {
+      licenseNotice.classList.toggle('hidden');
+      toggleLicenseBtn.textContent = licenseNotice.classList.contains('hidden') 
+        ? '📄 License Details' 
+        : '✖ Close License';
+    });
+  }
 
   if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
     chrome.storage.local.get({ ewu_enabled: true }, (res) => {

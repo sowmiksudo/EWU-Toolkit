@@ -1,5 +1,5 @@
 /* ==========================================================================
-   EWU Portal - Reveal Faculty Info
+   EWU-Toolkit - Class Schedule & Advising Enhancer
    Styles for unhiding faculty name, initials, and email in class schedule
    ========================================================================== */
 
@@ -30,7 +30,7 @@ body.ewu-faculty-disabled .ewu-revealer-banner {
     font-size: 11px;
     font-weight: 700;
     color: #1e40af;
-    background: #dbeafe;
+    background: #eff6ff;
     border: 1px solid #bfdbfe;
     border-radius: 4px;
     letter-spacing: 0.5px;
@@ -87,20 +87,23 @@ body.ewu-faculty-disabled .ewu-revealer-banner {
     border-color: #86efac;
 }
 
-/* 4. Top Banner */
+/* 4. Top Banner - Light / White Theme (Soft, eye-friendly, easily noticeable) */
 .ewu-revealer-banner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #0f172a;
-    color: #f8fafc;
+    background: #ffffff;
+    color: #334155;
+    border: 1px solid #e2e8f0;
     border-left: 4px solid #3b82f6;
     padding: 10px 14px;
     border-radius: 6px;
     margin-bottom: 12px;
     font-size: 13px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .ewu-banner-left {
@@ -110,9 +113,10 @@ body.ewu-faculty-disabled .ewu-revealer-banner {
 }
 
 .ewu-banner-pill {
-    background: #22c55e;
-    color: #ffffff;
-    font-size: 10px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+    font-size: 11px;
     font-weight: 700;
     padding: 2px 8px;
     border-radius: 9999px;
@@ -120,9 +124,38 @@ body.ewu-faculty-disabled .ewu-revealer-banner {
     text-transform: uppercase;
 }
 
-.ewu-banner-count {
-    color: #60a5fa;
-    font-weight: 600;
+.ewu-banner-text {
+    color: #1e293b;
+    font-weight: 500;
+}
+
+.ewu-banner-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Open Source GitHub Gesture */
+.ewu-github-gesture {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    color: #475569 !important;
+    text-decoration: none !important;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+}
+
+.ewu-github-gesture:hover {
+    background: #f1f5f9;
+    border-color: #3b82f6;
+    color: #1d4ed8 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 /* 5. Print Optimization */
