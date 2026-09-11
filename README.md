@@ -38,7 +38,8 @@ If you prefer using a standalone Chrome Extension:
 
 1. **Download / Clone this repository:**
    - `git clone https://github.com/sowmiksudo/EWU-Toolkit.git`
-   - Or click **Code $ightarrow$ Download ZIP** on GitHub and extract the folder.
+   - Or click **Code $
+ightarrow$ Download ZIP** on GitHub and extract the folder.
 2. **Open Extensions in Chrome:**
    - Navigate to `chrome://extensions` in your Chrome URL bar.
 3. **Enable Developer Mode:**
@@ -65,37 +66,17 @@ If you prefer using a standalone Chrome Extension:
 - 🖨️ **Print-Friendly**: When you press `Ctrl + P` to print or save your advising slip as a PDF, the faculty columns are cleanly preserved.
 - ℹ️ **Extension Dialogue**: Displays version (1.0.0), project name, MIT license details, and quick link to the open-source GitHub repository.
 - 🌿 **Eye-Friendly White/Light Theme Notice**: A gentle, modern notice banner right above the schedule table designed to blend naturally with the portal without straining your eyes, featuring an open-source gesture to GitHub.
-
 ---
 
-## 📸 Preview
+## 👥 Contributors
 
-### What EWU serves vs What you see with EWU-Toolkit:
+Thank you to all the amazing students and developers who contribute to **EWU-Toolkit**!
 
-| Course | Section | Timing | Room No. | Faculty Initial | Faculty Name | Faculty Email |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **MAT291** | 2 | ST 4:50PM-6:20PM | AB1-802 | `APURBO` | Apurbo Roy Chowdhury | `apurbo.roy@ewubd.edu` [📋 Copy] |
-| **STA293** | 2 | SR 11:50AM-1:20PM | AB1-802 | `AAS` | DR. AFSANA AL SHARMIN | `aas@ewubd.edu` [📋 Copy] |
-| **PPHS7102** | 4 | MW 3:10PM-4:40PM | 429 | `DAAH` | Dr Aeorangajeb Al Hossain | `aeorangajeb.hossain@ewubd.edu` [📋 Copy] |
+<a href="https://github.com/sowmiksudo/EWU-Toolkit/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=sowmiksudo/EWU-Toolkit" alt="EWU-Toolkit Contributors" />
+</a>
 
----
-
-## 🛠️ File Structure
-
-```
-EWU-Toolkit/
-├── manifest.json         # Chrome Extension Manifest V3 configuration
-├── content.css           # CSS rules overriding Angular's .ng-hide & UI polish
-├── content.js            # Dynamic observer, email copy helper & open-source banner
-├── popup.html            # Extension popup dialogue (name, version, repo, license)
-├── popup.css             # Modern styling for popup dialogue
-├── popup.js              # Popup toggle logic, license toggler & storage sync
-├── icons/                # Extension icons (16x16, 48x48, 128x128)
-├── ewu-toolkit.user.js   # Standalone 1-Click Tampermonkey script
-├── LICENSE               # MIT License
-├── table_reference.html  # Sample EWU portal DOM structure reference
-└── README.md             # Documentation and install guide
-```
+Contributions of any kind (new features, bug fixes, UI improvements, or ideas) are warmly welcomed! Feel free to check out open [Issues](https://github.com/sowmiksudo/EWU-Toolkit/issues) or submit a [Pull Request](https://github.com/sowmiksudo/EWU-Toolkit/pulls).
 
 ---
 
