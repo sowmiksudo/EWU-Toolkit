@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EWU Faculty Revealer</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <div class="header">
+      <div class="brand">
+        <img src="icons/icon48.png" alt="Logo" class="logo">
+        <div>
+          <h1 class="title">EWU Faculty Revealer</h1>
+          <p class="subtitle">Class Schedule & Advising</p>
+        </div>
+      </div>
+      <div class="status-indicator">
+        <span class="pulse-dot"></span>
+        <span class="status-text" id="statusText">Active</span>
+      </div>
+    </div>
+
+    <!-- Toggle Card -->
+    <div class="card">
+      <div class="card-row">
+        <div>
+          <div class="card-title">Reveal Faculty Info</div>
+          <div class="card-desc">Show Initial, Name & Email</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggleExtension" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Feature Highlights -->
+    <div class="features-list">
+      <div class="feature-item">
+        <span class="feature-icon">✨</span>
+        <span>Unhides Initial, Name & Email</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">📋</span>
+        <span>1-Click copy for faculty emails</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">🖨️</span>
+        <span>Retains faculty info in print (PDF)</span>
+      </div>
+    </div>
+
+    <!-- Quick Navigation -->
+    <div class="action-section">
+      <a href="https://portal.ewubd.edu/Home/ClassSchedule" target="_blank" class="portal-btn" id="openPortalBtn">
+        Open EWU Class Schedule ↗
+      </a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <span>Version 1.0.0</span>
+      <span class="separator">•</span>
+      <a href="https://github.com/sowmiksudo/show-faculty-info--EWU" target="_blank" class="github-link">GitHub</a>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

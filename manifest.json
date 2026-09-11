@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "EWU Portal - Reveal Faculty Info",
+  "version": "1.0.0",
+  "description": "Reveals hidden faculty initial, name, and email on East West University (EWU) Portal Class Schedule and Advising slip.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "EWU Faculty Info Revealer"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "*://portal.ewubd.edu/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://portal.ewubd.edu/*"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_end"
+    }
+  ]
+}

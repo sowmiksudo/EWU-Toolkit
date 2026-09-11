@@ -1,0 +1,140 @@
+/* ==========================================================================
+   EWU Portal - Reveal Faculty Info
+   Styles for unhiding faculty name, initials, and email in class schedule
+   ========================================================================== */
+
+/* 1. Force hidden Angular faculty header and data columns to display */
+th[ng-show*="Status"].ng-hide,
+td[ng-show*="Status"].ng-hide,
+th.ewu-revealed-col,
+td.ewu-revealed-col {
+    display: table-cell !important;
+}
+
+/* When explicitly disabled via toggle */
+body.ewu-faculty-disabled th[ng-show*="Status"].ng-hide,
+body.ewu-faculty-disabled td[ng-show*="Status"].ng-hide,
+body.ewu-faculty-disabled th.ewu-revealed-col,
+body.ewu-faculty-disabled td.ewu-revealed-col {
+    display: none !important;
+}
+
+body.ewu-faculty-disabled .ewu-revealer-banner {
+    display: none !important;
+}
+
+/* 2. Faculty Initial Badge */
+.ewu-initial-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1e40af;
+    background: #dbeafe;
+    border: 1px solid #bfdbfe;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* 3. Faculty Email Interactive Container */
+.ewu-email-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    flex-wrap: nowrap;
+}
+
+.ewu-email-link {
+    color: #1d4ed8 !important;
+    text-decoration: none !important;
+    font-weight: 500;
+    transition: color 0.15s ease;
+}
+
+.ewu-email-link:hover {
+    color: #1e40af !important;
+    text-decoration: underline !important;
+}
+
+/* Copy Button */
+.ewu-copy-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    padding: 2px 6px;
+    cursor: pointer;
+    color: #64748b;
+    font-size: 11px;
+    line-height: 1;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+
+.ewu-copy-btn:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+    border-color: #94a3b8;
+}
+
+.ewu-copy-btn.copied {
+    background: #dcfce7;
+    color: #166534;
+    border-color: #86efac;
+}
+
+/* 4. Top Banner */
+.ewu-revealer-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #0f172a;
+    color: #f8fafc;
+    border-left: 4px solid #3b82f6;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+}
+
+.ewu-banner-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ewu-banner-pill {
+    background: #22c55e;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.ewu-banner-count {
+    color: #60a5fa;
+    font-weight: 600;
+}
+
+/* 5. Print Optimization */
+@media print {
+    th[ng-show*="Status"].ng-hide,
+    td[ng-show*="Status"].ng-hide,
+    th.ewu-revealed-col,
+    td.ewu-revealed-col {
+        display: table-cell !important;
+    }
+    .ewu-copy-btn,
+    .ewu-revealer-banner {
+        display: none !important;
+    }
+}

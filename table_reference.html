@@ -1,0 +1,68 @@
+<div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <tbody><tr>
+
+                        <th>Serial</th>
+                        <th>Course</th>
+                        <th>Section</th>
+                        <th>Credits</th>
+                        <th>Timing</th>
+                        <th>Room No.</th>
+                        <th>WithDraw Status</th>
+                        <th>Drop Status</th>
+                        <th ng-show="Status==1" class="ng-hide">Faculty Initial</th>
+                        <th ng-show="Status==1" class="ng-hide">Faculty Name</th>
+                        <th ng-show="Status==1" class="ng-hide">Faculty Email</th>
+
+                    </tr>
+                    <!-- ngRepeat: sc in SemesterAdvData --><tr ng-repeat="sc in SemesterAdvData" class="ng-scope">
+
+                        <td class="ng-binding">1</td>
+                        <td class="ng-binding">MAT291</td>
+                        <td class="ng-binding">2</td>
+                        <td class="ng-binding">3</td>
+                        <td class="ng-binding">ST 4:50PM-6:20PM</td>
+                        <td class="ng-binding">AB1-802</td>
+                        <td class="ng-binding">No</td>
+                        <td class="ng-binding">No</td>
+                        <td ng-show="Status==1" class="ng-binding ng-hide">APURBO</td>
+                        <td ng-show="Status==1" class="ng-binding ng-hide">Apurbo Roy Chowdhury</td>
+                        <td ng-show="Status==1" class="ng-binding ng-hide">apurbo.roy@ewubd.edu</td>
+
+
+
+                    </tr><!-- end ngRepeat: sc in SemesterAdvData --><tr ng-repeat="sc in SemesterAdvData" class="ng-scope">
+
+                        <td class="ng-binding">2</td>
+                        <td class="ng-binding">STA293</td>
+                        <td class="ng-binding">2</td>
+                        <td class="ng-binding">3</td>
+                        <td class="ng-binding">SR 11:50AM-1:20PM</td>
+                        <td class="ng-binding">AB1-802</td>
+                        <td class="ng-binding">No</td>
+                        <td class="ng-binding">No</td>
+                        <td ng-show="Status==1" class="ng-binding ng-hide">AAS</td>
+                        <td ng-show="Status==1" class="ng-binding ng-hide">DR. AFSANA AL SHARMIN</td>
+                        <td ng-show="Status==1" class="ng-binding ng-hide">aas@ewubd.edu</td>
+
+
+
+                    </tr><!-- end ngRepeat: sc in SemesterAdvData --><tr ng-repeat="sc in SemesterAdvData" class="ng-scope">
+
+                        <td class="ng-binding">3</td>
+                        <td class="ng-binding">PPHS7102</td>
+                        <td class="ng-binding">4</td>
+                        <td class="ng-binding">3</td>
+                        <td class="ng-binding">MW 3:10PM-4:40PM</td>
+                        <td class="ng-binding">429</td>
+                        <td class="ng-binding">No</td>
+                        <td class="ng-binding">No</td>
+                        <td ng-show="Status==1" class="ng-binding ng-hide">DAAH</td>
+                        <td ng-show="Status==1" class="ng-binding ng-hide">Dr Aeorangajeb Al Hossain</td>
+                        <td ng-show="Status==1" class="ng-binding ng-hide">aeorangajeb.hossain@ewubd.edu</td>
+
+
+
+                    </tr><!-- end ngRepeat: sc in SemesterAdvData -->
+                </tbody></table>
+            </div>
