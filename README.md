@@ -8,6 +8,7 @@
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-blue.svg)](https://developer.chrome.com/docs/extensions/mv3/intro/)
 [![Tampermonkey](https://img.shields.io/badge/Tampermonkey-Supported-brightgreen.svg)](https://www.tampermonkey.net/)
 [![Android App](https://img.shields.io/badge/Android%20App-Download%20APK-brightgreen.svg?logo=android)](https://github.com/sowmiksudo/EWU-Toolkit/releases/download/v1.3.0/app-debug.apk)
+[![Faculty Explorer](https://img.shields.io/badge/Web%20App-Faculty%20Explorer-6366f1.svg?logo=azure)](https://ewu-faculty-explorer.azurewebsites.net/)
 [![East West University](https://img.shields.io/badge/Portal-portal.ewubd.edu-003366.svg)](https://portal.ewubd.edu/)
 
 **EWU-Toolkit** is an open-source browser extension and userscript made by students, for students. It makes using the East West University student portal (`portal.ewubd.edu`) simpler, faster, and much more useful.
@@ -67,6 +68,29 @@ Prefer using an app on your Android phone instead of a browser extension? EWU-To
 * **Native Android Integration**: Pull-to-refresh, hardware back button navigation, native system PDF printing (`PrintManager`), and direct file saving/sharing to Android's `Downloads` folder via the native Share Sheet.
 * **Minimal Footprint**: Native Kotlin WebView with zero third-party bloatware (~5 MB).
 * For developers or building from source, see [android/README.md](android/README.md).
+
+---
+
+## 🌐 Also Available: EWU Faculty & Section Explorer (Web App)
+
+Looking for a dedicated web portal to browse, search, and plan course sections with faculty details before advising starts? Check out the **[EWU Faculty & Section Explorer](https://ewu-faculty-explorer.azurewebsites.net/)**:
+
+### 👉 **[Launch EWU Faculty & Section Explorer](https://ewu-faculty-explorer.azurewebsites.net/)**
+
+<p align="center">
+  <a href="https://ewu-faculty-explorer.azurewebsites.net/" target="_blank">
+    <img src="icons/faculty_explorer.png" alt="EWU Faculty and Section Explorer Web App" width="100%">
+  </a>
+</p>
+
+* 🔍 **Instant Search & Multi-Filters**: Search by Course Code (e.g. `CSE101`), Teacher Name, Faculty Initial (`MIR`, `SJA`, `AUR`), Classroom (`AB1-601`, `SEIP Lab`), or schedule timings.
+* 📋 **Department & Seat Status Filters**: Narrow down sections by department, schedule days, and open/full seats.
+* 🔀 **Cards & Table Views**: Easily switch between a high-density table and visual card layout.
+* 📄 **1-Click PDF Export**: Download clean, print-ready PDF section overviews for offline planning.
+
+> [!IMPORTANT]
+> **🔒 Access Confidentiality & Prevention of Misuse:**  
+> To protect institutional privacy, safeguard faculty contact details, and prevent automated web scraping or misuse by outside third parties, access to the Faculty Explorer web app **strictly requires logging in with your official East West University student account (`@std.ewubd.edu`)**. Only verified EWU students are granted access.
 
 ---
 

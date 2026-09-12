@@ -340,6 +340,47 @@ input:checked + .slider:before {
   color: #ffffff;
 }
 
+/* Promo Banner */
+.promo-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+  border: 1px solid #4338ca;
+  border-radius: 8px;
+  padding: 7px 10px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.promo-banner:hover {
+  border-color: #6366f1;
+  background: linear-gradient(135deg, #2e1065 0%, #1e1b4b 100%);
+  transform: translateY(-1px);
+}
+
+.promo-icon {
+  font-size: 16px;
+}
+
+.promo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-align: left;
+}
+
+.promo-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #a5b4fc;
+}
+
+.promo-sub {
+  font-size: 9.5px;
+  color: #94a3b8;
+}
+
 /* Footer */
 .footer {
   display: flex;
