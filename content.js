@@ -4,7 +4,6 @@
   let config = {
     scheduleEnabled: true,
     offeredEnabled: true,
-    evalEnabled: true,
     ledgerEnabled: true,
     routineEnabled: true
   };
@@ -13,13 +12,11 @@
     chrome.storage.local.get({
       ewu_schedule_enabled: true,
       ewu_offered_enabled: true,
-      ewu_eval_enabled: true,
       ewu_ledger_enabled: true,
       ewu_routine_enabled: true
     }, (res) => {
       config.scheduleEnabled = res.ewu_schedule_enabled !== false;
       config.offeredEnabled = res.ewu_offered_enabled !== false;
-      config.evalEnabled = res.ewu_eval_enabled !== false;
       config.ledgerEnabled = res.ewu_ledger_enabled !== false;
       config.routineEnabled = res.ewu_routine_enabled !== false;
       runEnhancements();
@@ -29,7 +26,6 @@
       if (area === 'local') {
         if (changes.ewu_schedule_enabled) config.scheduleEnabled = changes.ewu_schedule_enabled.newValue !== false;
         if (changes.ewu_offered_enabled) config.offeredEnabled = changes.ewu_offered_enabled.newValue !== false;
-        if (changes.ewu_eval_enabled) config.evalEnabled = changes.ewu_eval_enabled.newValue !== false;
         if (changes.ewu_ledger_enabled) config.ledgerEnabled = changes.ewu_ledger_enabled.newValue !== false;
         if (changes.ewu_routine_enabled) config.routineEnabled = changes.ewu_routine_enabled.newValue !== false;
         runEnhancements();
@@ -167,6 +163,9 @@
     });
 
     const responsiveContainer = table.closest('.table-responsive') || table.parentElement;
+    if (responsiveContainer) {
+      responsiveContainer.classList.add('ewu-schedule-table-responsive');
+    }
     let banner = responsiveContainer.parentElement.querySelector('.ewu-schedule-banner');
     if (responsiveContainer && !banner) {
       banner = document.createElement('div');
@@ -1389,7 +1388,13 @@
             <button type="button" class="ewu-dropdown-btn" id="ewuExportDropdownBtn" title="Export Routine Options">
               <span>📥 Export</span> <span class="dropdown-caret">▾</span>
             </button>
+            <div class="ewu-dropdown-backdrop" id="ewuDropdownBackdrop"></div>
             <div class="ewu-dropdown-menu" id="ewuExportDropdownMenu">
+              <div class="ewu-dropdown-mobile-header">
+                <div class="ewu-bottom-sheet-handle"></div>
+                <div class="ewu-bottom-sheet-title">Export Routine Options</div>
+                <button type="button" class="ewu-bottom-sheet-close" id="ewuCloseDropdownBtn" title="Close">✕</button>
+              </div>
               <button type="button" class="ewu-dropdown-item" id="ewuExportImageBtn" title="Export as High-Resolution PNG Image">
                 <span class="dropdown-item-icon">🖼️</span>
                 <div class="dropdown-item-text">
@@ -1419,6 +1424,10 @@
         </div>
       </div>
       <div class="ewu-routine-body" id="ewuRoutineBody">
+        <div class="ewu-mobile-scroll-hint">
+          <span class="hint-icon">⇄</span>
+          <span>Swipe horizontally to view full routine & time slots</span>
+        </div>
         <div class="table-responsive ewu-routine-table-responsive">
           <table class="table ewu-routine-grid">
             <thead>
@@ -1462,6 +1471,8 @@
       routineCard.dataset.delegated = 'true';
       routineCard.addEventListener('click', (e) => {
         const dropdownBtn = e.target.closest('#ewuExportDropdownBtn');
+        const closeDropdownBtn = e.target.closest('#ewuCloseDropdownBtn');
+        const backdrop = e.target.closest('#ewuDropdownBackdrop');
         const exportImageBtn = e.target.closest('#ewuExportImageBtn');
         const exportExcelBtn = e.target.closest('#ewuExportExcelBtn');
         const printBtn = e.target.closest('#ewuPrintRoutineBtn');
@@ -1473,6 +1484,10 @@
           e.preventDefault();
           e.stopPropagation();
           if (dropdown) dropdown.classList.toggle('show');
+        } else if (closeDropdownBtn || backdrop) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (dropdown) dropdown.classList.remove('show');
         } else if (exportImageBtn) {
           e.preventDefault();
           e.stopPropagation();
@@ -1676,174 +1691,7 @@
     });
   }
 
-  // =========================================================================
-  // FEATURE 3: Faculty Evaluation Instructor Names Revealer
-  // =========================================================================
-  const facultyMap = {};
-  let isFetchingFacultyMap = false;
-  let hasFetchedFacultyMap = false;
 
-  function loadEvaluationFacultyData(semesterId, callback) {
-    if (hasFetchedFacultyMap && Object.keys(facultyMap).length > 0) {
-      if (callback) callback();
-      return;
-    }
-    if (isFetchingFacultyMap) return;
-    isFetchingFacultyMap = true;
-
-    const advisingUrl = semesterId 
-      ? `/api/Advising/GetSemesterStudentWiseAdvisingCourseListStudent/${semesterId}`
-      : '/api/Advising/GetSemesterStudentWiseAdvisingCourseListStudent/141';
-
-    fetch(advisingUrl)
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          data.forEach(item => {
-            const code = (item.CourseCode || '').toUpperCase().trim();
-            const sec = String(item.SectionName || '').trim();
-            if (code && sec) {
-              const key = `${code}-${sec}`;
-              facultyMap[key] = {
-                name: item.FacultyName || item.FacFirstName || 'Instructor',
-                initial: item.ShortName || '',
-                email: item.Email || ''
-              };
-            }
-          });
-        }
-        hasFetchedFacultyMap = true;
-        isFetchingFacultyMap = false;
-        if (callback) callback();
-      })
-      .catch(() => {
-        const evalUrl = `/api/FacultyEvaluation/GetAdvisingCourseListBySemesterStudentinfoId?SemesterId=${semesterId || 141}`;
-        fetch(evalUrl)
-          .then(r => r.json())
-          .then(evalCourses => {
-            if (Array.isArray(evalCourses)) {
-              evalCourses.forEach(c => {
-                const code = (c.CourseCode || '').toUpperCase().trim();
-                const sec = String(c.SectionName || '').trim();
-                const secId = c.SectionId;
-                if (code && sec && secId) {
-                  const key = `${code}-${sec}`;
-                  fetch(`/api/FacultyEvaluation/GetCourseSectionInstructorSingle?SectionId=${secId}`)
-                    .then(r2 => r2.json())
-                    .then(instData => {
-                      facultyMap[key] = {
-                        name: instData.FacFirstName || instData.FacultyName || 'Instructor',
-                        initial: '',
-                        email: ''
-                      };
-                      if (callback) callback();
-                    });
-                }
-              });
-            }
-          })
-          .finally(() => {
-            hasFetchedFacultyMap = true;
-            isFetchingFacultyMap = false;
-          });
-      });
-  }
-
-  function processFacultyEvaluation(table) {
-    if (!config.evalEnabled) return;
-
-    const headers = Array.from(table.querySelectorAll('th'));
-    const isEvalTable = headers.some(th => th.textContent && th.textContent.toLowerCase().includes('faculty evaluation status'));
-
-    if (!isEvalTable) return;
-
-    const semSelect = document.querySelector('select[ng-model*="SemesterId"], select');
-    let currentSemesterId = semSelect ? semSelect.value : null;
-
-    loadEvaluationFacultyData(currentSemesterId, () => {
-      updateEvaluationRows(table);
-    });
-
-    if (semSelect && !semSelect.dataset.ewuBound) {
-      semSelect.dataset.ewuBound = 'true';
-      semSelect.addEventListener('change', () => {
-        hasFetchedFacultyMap = false;
-        loadEvaluationFacultyData(semSelect.value, () => {
-          updateEvaluationRows(table);
-        });
-      });
-    }
-
-    let instructorColIdx = headers.findIndex(th => th.textContent.trim().toLowerCase() === 'instructor');
-    if (instructorColIdx === -1) {
-      const th = document.createElement('th');
-      th.textContent = 'Instructor';
-      th.className = 'ewu-instructor-header';
-      const courseIdx = headers.findIndex(h => h.textContent.trim().toLowerCase().includes('course'));
-      const targetHeader = courseIdx !== -1 ? headers[courseIdx] : headers[0];
-      targetHeader.parentElement.insertBefore(th, targetHeader.nextSibling);
-    }
-
-    const responsiveContainer = table.closest('.table-responsive') || table.parentElement;
-    if (responsiveContainer && !responsiveContainer.previousElementSibling?.classList.contains('ewu-eval-banner')) {
-      const banner = document.createElement('div');
-      banner.className = 'ewu-revealer-banner ewu-eval-banner';
-      banner.innerHTML = `
-        <div class="ewu-banner-left">
-          <span class="ewu-banner-pill">EWU-Toolkit</span>
-          <span class="ewu-banner-text">🎓 Faculty Evaluation: Instructor names revealed for your enrolled courses</span>
-        </div>
-        <div class="ewu-banner-right">
-          <a href="https://github.com/sowmiksudo/EWU-Toolkit" target="_blank" rel="noopener noreferrer" class="ewu-github-gesture" title="EWU-Toolkit on GitHub">
-            ⭐ <span>Open Source on GitHub ↗</span>
-          </a>
-        </div>
-      `;
-      responsiveContainer.parentElement.insertBefore(banner, responsiveContainer);
-    }
-
-    updateEvaluationRows(table);
-  }
-
-  function updateEvaluationRows(table) {
-    const rows = table.querySelectorAll('tbody tr');
-    rows.forEach((row) => {
-      const cells = row.querySelectorAll('td');
-      if (cells.length < 2) return;
-
-      const courseText = cells[0].textContent.trim();
-      const match = courseText.match(/([A-Za-z0-9]+)\s*\(\s*(\d+)\s*\)/);
-
-      let instructorCell = row.querySelector('.ewu-instructor-cell');
-      if (!instructorCell) {
-        instructorCell = document.createElement('td');
-        instructorCell.className = 'ewu-instructor-cell';
-        cells[0].parentElement.insertBefore(instructorCell, cells[0].nextSibling);
-      }
-
-      if (match) {
-        const code = match[1].toUpperCase();
-        const sec = match[2];
-        const key = `${code}-${sec}`;
-
-        if (facultyMap[key]) {
-          const info = facultyMap[key];
-          let badgeHtml = '';
-          if (info.initial) {
-            badgeHtml = `<span class="ewu-initial-badge" title="${info.email || ''}">${info.initial}</span>`;
-          }
-          instructorCell.innerHTML = `
-            <div class="ewu-instructor-container">
-              <span class="ewu-instructor-name">${info.name}</span>
-              ${badgeHtml}
-            </div>
-          `;
-        } else if (!hasFetchedFacultyMap) {
-          instructorCell.innerHTML = '<span class="ewu-loading-spinner">Loading instructor...</span>';
-        }
-      }
-    });
-  }
 
   // =========================================================================
   // FEATURE 4: Student Accounts Ledger Financial Summary & Breakdown
@@ -2025,12 +1873,7 @@
         processOfferedCourses(table);
       }
 
-      // 3. Faculty Evaluation
-      if (path.includes('facultyevaluation') || table.querySelector('[ng-repeat*="CourseList"]')) {
-        processFacultyEvaluation(table);
-      }
-
-      // 4. Student Accounts Ledger
+      // 3. Student Accounts Ledger
       if (path.includes('studentledger') || table.querySelector('[ng-repeat*="StudentLedgerlist"]')) {
         processStudentLedger(table);
       }
@@ -2052,7 +1895,6 @@
       if (msg.action === 'toggleFeature') {
         if (msg.feature === 'schedule') config.scheduleEnabled = msg.enabled;
         if (msg.feature === 'offered') config.offeredEnabled = msg.enabled;
-        if (msg.feature === 'eval') config.evalEnabled = msg.enabled;
         if (msg.feature === 'ledger') config.ledgerEnabled = msg.enabled;
         if (msg.feature === 'routine') config.routineEnabled = msg.enabled;
         runEnhancements();

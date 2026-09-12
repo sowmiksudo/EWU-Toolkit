@@ -38,6 +38,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Streamlined Footers & Cleaned Attribution**:
   - Removed redundant bottom and page footers (`.ewu-pdf-footer`, `.ewu-routine-footer-bar`, `.ewu-print-footer`), preserving only the single inter-table separator credit.
   - Normalized `@page` print margins to clean 8mm/10mm.
+- **Mobile Responsiveness & Bottom Sheet Export Menu**:
+  - Fixed mobile layout breakage on class schedule and weekly routine timetable across phones and tablets.
+  - Added horizontal touch scrolling with sticky Day column (`position: sticky`) so days remain visible while swiping through time slots.
+  - Converted Export dropdown into an intuitive mobile bottom sheet with grab handle, blurred backdrop, and touch-friendly action tiles on screens $\le$ 640px.
+  - Added swipe indicator (`⇄ Swipe horizontally to view full routine`) on mobile devices.
 - **Optimized Release Packaging**:
   - Streamlined `package_extension.py` to package only runtime extension assets and icons, reducing zip file size to ~36 KB.
 
@@ -58,8 +63,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Accounts Ledger Financial Summary**:
   - Added financial dashboard cards above ledger: Total Paid, Scholarships & Waivers, Total Tuition Billed, and Current Outstanding Due.
   - Semester breakdown table with `✓ Cleared` badges and due amount indicators.
-- **Faculty Evaluation Instructor Column**:
-  - Injected teacher initials and full names directly into course evaluation rows.
 
 ---
 

@@ -2,7 +2,7 @@
 // @name         EWU-Toolkit
 // @namespace    https://github.com/sowmiksudo/EWU-Toolkit
 // @version      1.3.0
-// @description  Complete student utility suite for EWU Portal: visual weekly class routine generator, 1-click Excel export, unhide faculty info, seat availability & filters, evaluation instructors, accounts ledger breakdown, and more.
+// @description  Complete student utility suite for EWU Portal: visual weekly class routine generator, 1-click Excel export, unhide faculty info, seat availability & filters, accounts ledger breakdown, and more.
 // @author       Sowmik
 // @match        https://portal.ewubd.edu/*
 // @match        http://portal.ewubd.edu/*
@@ -322,44 +322,6 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     display: none !important;
 }
 
-/* --------------------------------------------------------------------------
-   3. Faculty Evaluation: Instructor Column & Badges
-   -------------------------------------------------------------------------- */
-.ewu-instructor-cell {
-    font-size: 12.5px;
-    vertical-align: middle !important;
-}
-
-.ewu-instructor-container {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
-.ewu-instructor-name {
-    font-weight: 600;
-    color: #0f172a;
-}
-
-.ewu-instructor-badge {
-    display: inline-block;
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
-    color: #1e40af;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 2px 7px;
-    border-radius: 4px;
-    text-transform: uppercase;
-}
-
-.ewu-loading-spinner {
-    display: inline-block;
-    font-size: 11px;
-    color: #94a3b8;
-    font-style: italic;
-}
 
 /* --------------------------------------------------------------------------
    4. Student Ledger: Financial Summary & Semester Breakdown
@@ -530,7 +492,7 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     border-radius: 12px;
     box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.08);
     margin-bottom: 20px;
-    overflow: hidden;
+    overflow: visible;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
@@ -541,6 +503,7 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     color: #ffffff;
     padding: 14px 18px;
+    border-radius: 11px 11px 0 0;
     flex-wrap: wrap;
     gap: 12px;
 }
@@ -642,11 +605,36 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     transform: rotate(180deg);
 }
 
+.ewu-dropdown-backdrop {
+    display: none;
+}
+
+.ewu-dropdown-mobile-header {
+    display: none;
+}
+
+.ewu-mobile-scroll-hint {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: #eff6ff;
+    color: #1e40af;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 7px 12px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    border: 1px dashed #93c5fd;
+    user-select: none;
+}
+
 .ewu-dropdown-menu {
     position: absolute;
     top: calc(100% + 6px);
     right: 0;
     min-width: 250px;
+    max-width: calc(100vw - 32px);
     background: #ffffff;
     border: 1px solid #cbd5e1;
     border-radius: 10px;
@@ -774,16 +762,22 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
 .ewu-routine-body {
     padding: 14px;
     background: #f8fafc;
+    border-radius: 0 0 11px 11px;
 }
 
 .ewu-routine-table-responsive {
     margin: 0 !important;
     border-radius: 8px;
-    overflow-x: auto;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 .ewu-routine-grid {
     width: 100%;
+    min-width: 780px !important;
     margin-bottom: 0 !important;
     background: #ffffff;
     border: 1px solid #cbd5e1 !important;
@@ -1037,6 +1031,379 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
 .ewu-pdf-footer,
 .ewu-print-only {
     display: none;
+}
+
+/* --------------------------------------------------------------------------
+   6. Comprehensive Mobile & Responsive Optimization (@media (max-width: 768px))
+   -------------------------------------------------------------------------- */
+/* Responsive Table Wrappers */
+.ewu-schedule-table-responsive,
+.table-responsive {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    box-sizing: border-box !important;
+    position: relative;
+}
+
+.ewu-schedule-table-responsive > table,
+.table-responsive > table.table {
+    min-width: 780px;
+}
+
+@media (max-width: 768px) {
+    /* Notice Banner on Mobile */
+    .ewu-revealer-banner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 10px 12px;
+    }
+
+    .ewu-banner-left {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .ewu-banner-text {
+        font-size: 12px;
+        line-height: 1.35;
+    }
+
+    .ewu-banner-right {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        width: 100%;
+    }
+
+    .ewu-banner-excel-btn,
+    .ewu-banner-print-btn,
+    .ewu-github-gesture {
+        flex: 1 1 auto;
+        justify-content: center;
+        text-align: center;
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    /* Email cell wrap so it never forces giant column widths */
+    .ewu-email-container {
+        flex-wrap: wrap;
+        gap: 4px;
+        max-width: 220px;
+    }
+
+    .ewu-email-link {
+        word-break: break-all;
+        font-size: 11.5px;
+    }
+
+    .ewu-copy-btn {
+        padding: 2px 5px;
+        font-size: 10px;
+    }
+
+    /* Mobile scroll hint on routine */
+    .ewu-mobile-scroll-hint {
+        display: flex;
+    }
+
+    /* Routine Card Header on Mobile */
+    .ewu-routine-card {
+        border-radius: 8px;
+        margin-bottom: 16px;
+    }
+
+    .ewu-routine-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px 14px;
+        border-radius: 7px 7px 0 0;
+    }
+
+    .routine-title-wrap {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .routine-main-title {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .routine-main-title h2 {
+        font-size: 15px;
+    }
+
+    .routine-meta-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .routine-action-buttons {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .ewu-dropdown {
+        flex: 1;
+    }
+
+    .ewu-dropdown-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 7px 12px;
+        font-size: 12px;
+    }
+
+    .ewu-routine-body {
+        padding: 8px;
+        border-radius: 0 0 7px 7px;
+    }
+
+    .ewu-routine-table-responsive {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        display: block !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Keep routine grid from collapsing into narrow vertical text */
+    .ewu-routine-grid {
+        min-width: 780px !important;
+        width: max-content !important;
+        table-layout: fixed !important;
+    }
+
+    /* Sticky Day Column while scrolling time slots */
+    .ewu-routine-day-col,
+    .ewu-routine-day-cell {
+        position: sticky !important;
+        left: 0 !important;
+        z-index: 5 !important;
+        background: #f1f5f9 !important;
+        box-shadow: 2px 0 6px -1px rgba(0, 0, 0, 0.08);
+    }
+
+    th.ewu-routine-day-col {
+        z-index: 6 !important;
+    }
+
+    .ewu-routine-badge {
+        padding: 5px 6px;
+    }
+
+    .badge-title strong {
+        font-size: 11px;
+    }
+
+    .badge-room {
+        font-size: 10px;
+        margin-bottom: 3px;
+    }
+
+    .badge-initial {
+        font-size: 9.5px;
+    }
+
+    .badge-time {
+        font-size: 8.5px;
+    }
+
+    /* Inter-Table Watermark on Mobile */
+    .ewu-inter-table-watermark {
+        padding: 8px 12px;
+        margin: 6px 0 12px 0;
+    }
+
+    .ewu-inter-table-watermark .ewu-watermark-content {
+        flex-direction: column;
+        gap: 4px;
+        font-size: 10.5px;
+    }
+
+    .ewu-inter-table-watermark .watermark-bullet {
+        display: none;
+    }
+
+    /* Offered Courses Toolbar on Mobile */
+    .ewu-offered-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 10px 12px;
+    }
+
+    .ewu-toolbar-left {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .ewu-search-input {
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    /* Accounts Ledger Bento Cards on Mobile */
+    .ewu-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .ewu-kpi-card {
+        padding: 10px 12px;
+    }
+
+    .ewu-kpi-amount {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ewu-kpi-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Export Button Popup: Mobile Bottom Sheet (Screen <= 640px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+    .ewu-dropdown-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(15, 23, 42, 0.45);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        z-index: 999998;
+    }
+
+    .ewu-dropdown.show .ewu-dropdown-backdrop {
+        display: block;
+    }
+
+    .ewu-dropdown-menu {
+        position: fixed !important;
+        top: auto !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        min-width: 100vw !important;
+        border-radius: 20px 20px 0 0 !important;
+        padding: 16px 16px calc(20px + env(safe-area-inset-bottom, 0px)) 16px !important;
+        box-shadow: 0 -12px 35px rgba(0, 0, 0, 0.3) !important;
+        z-index: 999999 !important;
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        border-bottom: none !important;
+        box-sizing: border-box !important;
+        gap: 8px !important;
+        animation: ewuBottomSheetSlideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .ewu-dropdown-mobile-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 12px;
+        margin-bottom: 6px;
+        border-bottom: 1px solid #e2e8f0;
+        position: relative;
+    }
+
+    .ewu-bottom-sheet-handle {
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 4px;
+        background: #cbd5e1;
+        border-radius: 9999px;
+    }
+
+    .ewu-bottom-sheet-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .ewu-bottom-sheet-close {
+        background: #f1f5f9;
+        border: none;
+        color: #64748b;
+        font-size: 14px;
+        font-weight: 700;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .ewu-bottom-sheet-close:hover {
+        background: #e2e8f0;
+        color: #0f172a;
+    }
+
+    .ewu-dropdown-item {
+        padding: 12px 14px !important;
+        border-radius: 10px !important;
+        background: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+    }
+
+    .ewu-dropdown-item:active {
+        background: #e2e8f0 !important;
+        transform: scale(0.98);
+    }
+
+    .dropdown-item-title {
+        font-size: 13px !important;
+    }
+
+    .dropdown-item-desc {
+        font-size: 11px !important;
+    }
+}
+
+@keyframes ewuBottomSheetSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+    .ewu-dropdown-menu {
+        right: 0 !important;
+        left: auto !important;
+        max-width: calc(100vw - 32px) !important;
+    }
 }
 
 /* --------------------------------------------------------------------------
@@ -1596,7 +1963,6 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
   let config = {
     scheduleEnabled: true,
     offeredEnabled: true,
-    evalEnabled: true,
     ledgerEnabled: true,
     routineEnabled: true
   };
@@ -1605,13 +1971,11 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     chrome.storage.local.get({
       ewu_schedule_enabled: true,
       ewu_offered_enabled: true,
-      ewu_eval_enabled: true,
       ewu_ledger_enabled: true,
       ewu_routine_enabled: true
     }, (res) => {
       config.scheduleEnabled = res.ewu_schedule_enabled !== false;
       config.offeredEnabled = res.ewu_offered_enabled !== false;
-      config.evalEnabled = res.ewu_eval_enabled !== false;
       config.ledgerEnabled = res.ewu_ledger_enabled !== false;
       config.routineEnabled = res.ewu_routine_enabled !== false;
       runEnhancements();
@@ -1621,7 +1985,6 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
       if (area === 'local') {
         if (changes.ewu_schedule_enabled) config.scheduleEnabled = changes.ewu_schedule_enabled.newValue !== false;
         if (changes.ewu_offered_enabled) config.offeredEnabled = changes.ewu_offered_enabled.newValue !== false;
-        if (changes.ewu_eval_enabled) config.evalEnabled = changes.ewu_eval_enabled.newValue !== false;
         if (changes.ewu_ledger_enabled) config.ledgerEnabled = changes.ewu_ledger_enabled.newValue !== false;
         if (changes.ewu_routine_enabled) config.routineEnabled = changes.ewu_routine_enabled.newValue !== false;
         runEnhancements();
@@ -1759,6 +2122,9 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     });
 
     const responsiveContainer = table.closest('.table-responsive') || table.parentElement;
+    if (responsiveContainer) {
+      responsiveContainer.classList.add('ewu-schedule-table-responsive');
+    }
     let banner = responsiveContainer.parentElement.querySelector('.ewu-schedule-banner');
     if (responsiveContainer && !banner) {
       banner = document.createElement('div');
@@ -2981,7 +3347,13 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
             <button type="button" class="ewu-dropdown-btn" id="ewuExportDropdownBtn" title="Export Routine Options">
               <span>📥 Export</span> <span class="dropdown-caret">▾</span>
             </button>
+            <div class="ewu-dropdown-backdrop" id="ewuDropdownBackdrop"></div>
             <div class="ewu-dropdown-menu" id="ewuExportDropdownMenu">
+              <div class="ewu-dropdown-mobile-header">
+                <div class="ewu-bottom-sheet-handle"></div>
+                <div class="ewu-bottom-sheet-title">Export Routine Options</div>
+                <button type="button" class="ewu-bottom-sheet-close" id="ewuCloseDropdownBtn" title="Close">✕</button>
+              </div>
               <button type="button" class="ewu-dropdown-item" id="ewuExportImageBtn" title="Export as High-Resolution PNG Image">
                 <span class="dropdown-item-icon">🖼️</span>
                 <div class="dropdown-item-text">
@@ -3011,6 +3383,10 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
         </div>
       </div>
       <div class="ewu-routine-body" id="ewuRoutineBody">
+        <div class="ewu-mobile-scroll-hint">
+          <span class="hint-icon">⇄</span>
+          <span>Swipe horizontally to view full routine & time slots</span>
+        </div>
         <div class="table-responsive ewu-routine-table-responsive">
           <table class="table ewu-routine-grid">
             <thead>
@@ -3054,6 +3430,8 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
       routineCard.dataset.delegated = 'true';
       routineCard.addEventListener('click', (e) => {
         const dropdownBtn = e.target.closest('#ewuExportDropdownBtn');
+        const closeDropdownBtn = e.target.closest('#ewuCloseDropdownBtn');
+        const backdrop = e.target.closest('#ewuDropdownBackdrop');
         const exportImageBtn = e.target.closest('#ewuExportImageBtn');
         const exportExcelBtn = e.target.closest('#ewuExportExcelBtn');
         const printBtn = e.target.closest('#ewuPrintRoutineBtn');
@@ -3065,6 +3443,10 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
           e.preventDefault();
           e.stopPropagation();
           if (dropdown) dropdown.classList.toggle('show');
+        } else if (closeDropdownBtn || backdrop) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (dropdown) dropdown.classList.remove('show');
         } else if (exportImageBtn) {
           e.preventDefault();
           e.stopPropagation();
@@ -3268,174 +3650,7 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     });
   }
 
-  // =========================================================================
-  // FEATURE 3: Faculty Evaluation Instructor Names Revealer
-  // =========================================================================
-  const facultyMap = {};
-  let isFetchingFacultyMap = false;
-  let hasFetchedFacultyMap = false;
 
-  function loadEvaluationFacultyData(semesterId, callback) {
-    if (hasFetchedFacultyMap && Object.keys(facultyMap).length > 0) {
-      if (callback) callback();
-      return;
-    }
-    if (isFetchingFacultyMap) return;
-    isFetchingFacultyMap = true;
-
-    const advisingUrl = semesterId 
-      ? `/api/Advising/GetSemesterStudentWiseAdvisingCourseListStudent/${semesterId}`
-      : '/api/Advising/GetSemesterStudentWiseAdvisingCourseListStudent/141';
-
-    fetch(advisingUrl)
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          data.forEach(item => {
-            const code = (item.CourseCode || '').toUpperCase().trim();
-            const sec = String(item.SectionName || '').trim();
-            if (code && sec) {
-              const key = `${code}-${sec}`;
-              facultyMap[key] = {
-                name: item.FacultyName || item.FacFirstName || 'Instructor',
-                initial: item.ShortName || '',
-                email: item.Email || ''
-              };
-            }
-          });
-        }
-        hasFetchedFacultyMap = true;
-        isFetchingFacultyMap = false;
-        if (callback) callback();
-      })
-      .catch(() => {
-        const evalUrl = `/api/FacultyEvaluation/GetAdvisingCourseListBySemesterStudentinfoId?SemesterId=${semesterId || 141}`;
-        fetch(evalUrl)
-          .then(r => r.json())
-          .then(evalCourses => {
-            if (Array.isArray(evalCourses)) {
-              evalCourses.forEach(c => {
-                const code = (c.CourseCode || '').toUpperCase().trim();
-                const sec = String(c.SectionName || '').trim();
-                const secId = c.SectionId;
-                if (code && sec && secId) {
-                  const key = `${code}-${sec}`;
-                  fetch(`/api/FacultyEvaluation/GetCourseSectionInstructorSingle?SectionId=${secId}`)
-                    .then(r2 => r2.json())
-                    .then(instData => {
-                      facultyMap[key] = {
-                        name: instData.FacFirstName || instData.FacultyName || 'Instructor',
-                        initial: '',
-                        email: ''
-                      };
-                      if (callback) callback();
-                    });
-                }
-              });
-            }
-          })
-          .finally(() => {
-            hasFetchedFacultyMap = true;
-            isFetchingFacultyMap = false;
-          });
-      });
-  }
-
-  function processFacultyEvaluation(table) {
-    if (!config.evalEnabled) return;
-
-    const headers = Array.from(table.querySelectorAll('th'));
-    const isEvalTable = headers.some(th => th.textContent && th.textContent.toLowerCase().includes('faculty evaluation status'));
-
-    if (!isEvalTable) return;
-
-    const semSelect = document.querySelector('select[ng-model*="SemesterId"], select');
-    let currentSemesterId = semSelect ? semSelect.value : null;
-
-    loadEvaluationFacultyData(currentSemesterId, () => {
-      updateEvaluationRows(table);
-    });
-
-    if (semSelect && !semSelect.dataset.ewuBound) {
-      semSelect.dataset.ewuBound = 'true';
-      semSelect.addEventListener('change', () => {
-        hasFetchedFacultyMap = false;
-        loadEvaluationFacultyData(semSelect.value, () => {
-          updateEvaluationRows(table);
-        });
-      });
-    }
-
-    let instructorColIdx = headers.findIndex(th => th.textContent.trim().toLowerCase() === 'instructor');
-    if (instructorColIdx === -1) {
-      const th = document.createElement('th');
-      th.textContent = 'Instructor';
-      th.className = 'ewu-instructor-header';
-      const courseIdx = headers.findIndex(h => h.textContent.trim().toLowerCase().includes('course'));
-      const targetHeader = courseIdx !== -1 ? headers[courseIdx] : headers[0];
-      targetHeader.parentElement.insertBefore(th, targetHeader.nextSibling);
-    }
-
-    const responsiveContainer = table.closest('.table-responsive') || table.parentElement;
-    if (responsiveContainer && !responsiveContainer.previousElementSibling?.classList.contains('ewu-eval-banner')) {
-      const banner = document.createElement('div');
-      banner.className = 'ewu-revealer-banner ewu-eval-banner';
-      banner.innerHTML = `
-        <div class="ewu-banner-left">
-          <span class="ewu-banner-pill">EWU-Toolkit</span>
-          <span class="ewu-banner-text">🎓 Faculty Evaluation: Instructor names revealed for your enrolled courses</span>
-        </div>
-        <div class="ewu-banner-right">
-          <a href="https://github.com/sowmiksudo/EWU-Toolkit" target="_blank" rel="noopener noreferrer" class="ewu-github-gesture" title="EWU-Toolkit on GitHub">
-            ⭐ <span>Open Source on GitHub ↗</span>
-          </a>
-        </div>
-      `;
-      responsiveContainer.parentElement.insertBefore(banner, responsiveContainer);
-    }
-
-    updateEvaluationRows(table);
-  }
-
-  function updateEvaluationRows(table) {
-    const rows = table.querySelectorAll('tbody tr');
-    rows.forEach((row) => {
-      const cells = row.querySelectorAll('td');
-      if (cells.length < 2) return;
-
-      const courseText = cells[0].textContent.trim();
-      const match = courseText.match(/([A-Za-z0-9]+)\s*\(\s*(\d+)\s*\)/);
-
-      let instructorCell = row.querySelector('.ewu-instructor-cell');
-      if (!instructorCell) {
-        instructorCell = document.createElement('td');
-        instructorCell.className = 'ewu-instructor-cell';
-        cells[0].parentElement.insertBefore(instructorCell, cells[0].nextSibling);
-      }
-
-      if (match) {
-        const code = match[1].toUpperCase();
-        const sec = match[2];
-        const key = `${code}-${sec}`;
-
-        if (facultyMap[key]) {
-          const info = facultyMap[key];
-          let badgeHtml = '';
-          if (info.initial) {
-            badgeHtml = `<span class="ewu-initial-badge" title="${info.email || ''}">${info.initial}</span>`;
-          }
-          instructorCell.innerHTML = `
-            <div class="ewu-instructor-container">
-              <span class="ewu-instructor-name">${info.name}</span>
-              ${badgeHtml}
-            </div>
-          `;
-        } else if (!hasFetchedFacultyMap) {
-          instructorCell.innerHTML = '<span class="ewu-loading-spinner">Loading instructor...</span>';
-        }
-      }
-    });
-  }
 
   // =========================================================================
   // FEATURE 4: Student Accounts Ledger Financial Summary & Breakdown
@@ -3617,12 +3832,7 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
         processOfferedCourses(table);
       }
 
-      // 3. Faculty Evaluation
-      if (path.includes('facultyevaluation') || table.querySelector('[ng-repeat*="CourseList"]')) {
-        processFacultyEvaluation(table);
-      }
-
-      // 4. Student Accounts Ledger
+      // 3. Student Accounts Ledger
       if (path.includes('studentledger') || table.querySelector('[ng-repeat*="StudentLedgerlist"]')) {
         processStudentLedger(table);
       }
@@ -3644,7 +3854,6 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
       if (msg.action === 'toggleFeature') {
         if (msg.feature === 'schedule') config.scheduleEnabled = msg.enabled;
         if (msg.feature === 'offered') config.offeredEnabled = msg.enabled;
-        if (msg.feature === 'eval') config.evalEnabled = msg.enabled;
         if (msg.feature === 'ledger') config.ledgerEnabled = msg.enabled;
         if (msg.feature === 'routine') config.routineEnabled = msg.enabled;
         runEnhancements();

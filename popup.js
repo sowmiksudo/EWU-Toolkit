@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const toggleSchedule = document.getElementById('toggleSchedule');
   const toggleOffered = document.getElementById('toggleOffered');
-  const toggleEval = document.getElementById('toggleEval');
   const toggleLedger = document.getElementById('toggleLedger');
   const toggleRoutine = document.getElementById('toggleRoutine');
   const toggleLicenseBtn = document.getElementById('toggleLicenseBtn');
@@ -21,13 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.storage.local.get({
       ewu_schedule_enabled: true,
       ewu_offered_enabled: true,
-      ewu_eval_enabled: true,
       ewu_ledger_enabled: true,
       ewu_routine_enabled: true
     }, (res) => {
       toggleSchedule.checked = res.ewu_schedule_enabled !== false;
       toggleOffered.checked = res.ewu_offered_enabled !== false;
-      toggleEval.checked = res.ewu_eval_enabled !== false;
       toggleLedger.checked = res.ewu_ledger_enabled !== false;
       if (toggleRoutine) toggleRoutine.checked = res.ewu_routine_enabled !== false;
     });
@@ -52,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   handleToggle('ewu_schedule_enabled', 'schedule', toggleSchedule);
   handleToggle('ewu_offered_enabled', 'offered', toggleOffered);
-  handleToggle('ewu_eval_enabled', 'eval', toggleEval);
   handleToggle('ewu_ledger_enabled', 'ledger', toggleLedger);
   handleToggle('ewu_routine_enabled', 'routine', toggleRoutine);
 });

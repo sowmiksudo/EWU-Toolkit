@@ -86,12 +86,7 @@ If you prefer installing it directly as a browser extension without Tampermonkey
   * Adds a **"Show Open Sections Only"** checkbox at the top: check it, and all full courses disappear instantly so you only see what you can actually take!
   * Adds an **instant search bar** to filter courses by course code, room number, or time slot.
 
-### 4. ⭐ See Teacher Names in Faculty Evaluation
-* **The Problem:** When evaluating courses, the portal shows codes like `STA293(2)` without showing who the instructor is, making it easy to get confused.
-* **What EWU-Toolkit does:**
-  * Adds an **"Instructor"** column right in your evaluation list and shows the teacher's full name and initial, so you always know who you are reviewing.
-
-### 5. 📊 Understand Your Tuition Fees & Dues Easily
+### 4. 📊 Understand Your Tuition Fees & Dues Easily
 * **The Problem:** The student accounts ledger is a giant, confusing table of "Debit Notes" and "Credit Notes".
 * **What EWU-Toolkit does:**
   * Adds a clean **financial summary** right above the table:
@@ -101,10 +96,10 @@ If you prefer installing it directly as a browser extension without Tampermonkey
     * ⚠️ **Current Due:** Exactly how much you need to pay for the current semester.
   * Shows a neat **semester-by-semester table** with green `✓ Cleared` badges for completed semesters and clear amounts for pending terms.
 
-### 6. 🎛️ Extension Control Menu
+### 5. 🎛️ Extension Control Menu
 * Click the extension icon anytime to:
   * Turn individual features on or off.
-  * Quick-jump directly to Class Schedule, Offered Courses, Evaluation, or Accounts Ledger.
+  * Quick-jump directly to Class Schedule, Offered Courses, or Accounts Ledger.
   * Check version info and open the GitHub project.
 
 ---
