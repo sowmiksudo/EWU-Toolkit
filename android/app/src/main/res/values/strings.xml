@@ -4,4 +4,5 @@
     <string name="loading">Loading East West University Portal...</string>
     <string name="file_saved_title">Saved to Downloads</string>
     <string name="share_file">Share Routine / Document</string>
+    <string name="remote_script_url">https://raw.githubusercontent.com/sowmiksudo/EWU-Toolkit/main/ewu-toolkit.user.js</string>
 </resources>
