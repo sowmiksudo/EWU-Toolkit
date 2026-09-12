@@ -1,5 +1,9 @@
 # 🎓 EWU-Toolkit
 
+<p align="center">
+  <img src="icons/readme_cover.jpg" alt="EWU-Toolkit Cover Banner" width="100%">
+</p>
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-blue.svg)](https://developer.chrome.com/docs/extensions/mv3/intro/)
 [![Tampermonkey](https://img.shields.io/badge/Tampermonkey-Supported-brightgreen.svg)](https://www.tampermonkey.net/)
@@ -36,7 +40,7 @@
 If you prefer installing it directly as a browser extension without Tampermonkey:
 
 1. **Download the Extension:**
-   - Download the latest **`EWU-Toolkit-v1.2.0.zip`** from [Releases](https://github.com/sowmiksudo/EWU-Toolkit/releases).
+   - Download the latest **`EWU-Toolkit-v1.3.0.zip`** from [Releases](https://github.com/sowmiksudo/EWU-Toolkit/releases).
    - Unzip the downloaded folder on your computer.
 2. **Open Extensions in Chrome:**
    - Type `chrome://extensions` in your Chrome URL address bar and press Enter.
@@ -52,7 +56,19 @@ If you prefer installing it directly as a browser extension without Tampermonkey
 
 ## ✨ Features (Explained in Simple Words)
 
-### 1. 🔍 See Teacher Names & Emails on Your Class Schedule
+### 1. 📅 Visual Weekly Class Routine & 1-Click Export (Image, Excel, PDF)
+* **The Problem:** The advising slip is just a plain list of course rows without a calendar view, making it hard to see your breaks or daily routine.
+* **What EWU-Toolkit does:**
+  * Injects a **clean, colorful weekly timetable** right below your class schedule table.
+  * Organizes your classes by **Day** (Sunday through Thursday / Saturday) and **Time slots**.
+  * Shows course code, section, room number, faculty initial badge, and timings in distinct color cards.
+  * Automatically flags any **⚠️ schedule clashes / conflicts** if two classes overlap.
+  * Includes a sleek **"📥 Export ▾"** dropdown menu:
+    * 🖼️ **Export as Image (.png)**: High-resolution PNG snapshot with tight, compact borders — ready to share on Discord, WhatsApp, or mobile.
+    * 📊 **Export to Excel (.xlsx)**: Clean, styled native OpenXML workbook containing both your routine grid and course table.
+    * 🖨️ **Print / Save as PDF**: Print-ready (`Ctrl + P`) formatted advising slip with clean headers and no clutter.
+
+### 2. 🔍 See Teacher Names & Emails on Your Class Schedule
 * **The Problem:** The university portal hides faculty names, initials, and emails on your class schedule and advising slip.
 * **What EWU-Toolkit does:** 
   * Automatically reveals your teachers' **initials**, **full names**, and official **emails**.
@@ -60,7 +76,7 @@ If you prefer installing it directly as a browser extension without Tampermonkey
   * Clicking an email address opens your email app directly to write an email.
   * Everything stays visible when you press `Ctrl + P` to print or save your advising slip as a PDF.
 
-### 2. 💺 Know How Many Seats Are Left & Hide Full Courses
+### 3. 💺 Know How Many Seats Are Left & Hide Full Courses
 * **The Problem:** During advising rush, you have to read confusing numbers like `28 / 30` to guess how many seats are left, while scrolling through dozens of full sections.
 * **What EWU-Toolkit does:**
   * Displays easy color-coded badges for every course:
@@ -70,12 +86,12 @@ If you prefer installing it directly as a browser extension without Tampermonkey
   * Adds a **"Show Open Sections Only"** checkbox at the top: check it, and all full courses disappear instantly so you only see what you can actually take!
   * Adds an **instant search bar** to filter courses by course code, room number, or time slot.
 
-### 3. ⭐ See Teacher Names in Faculty Evaluation
+### 4. ⭐ See Teacher Names in Faculty Evaluation
 * **The Problem:** When evaluating courses, the portal shows codes like `STA293(2)` without showing who the instructor is, making it easy to get confused.
 * **What EWU-Toolkit does:**
   * Adds an **"Instructor"** column right in your evaluation list and shows the teacher's full name and initial, so you always know who you are reviewing.
 
-### 4. 📊 Understand Your Tuition Fees & Dues Easily
+### 5. 📊 Understand Your Tuition Fees & Dues Easily
 * **The Problem:** The student accounts ledger is a giant, confusing table of "Debit Notes" and "Credit Notes".
 * **What EWU-Toolkit does:**
   * Adds a clean **financial summary** right above the table:
@@ -85,7 +101,7 @@ If you prefer installing it directly as a browser extension without Tampermonkey
     * ⚠️ **Current Due:** Exactly how much you need to pay for the current semester.
   * Shows a neat **semester-by-semester table** with green `✓ Cleared` badges for completed semesters and clear amounts for pending terms.
 
-### 5. 🎛️ Extension Control Menu
+### 6. 🎛️ Extension Control Menu
 * Click the extension icon anytime to:
   * Turn individual features on or off.
   * Quick-jump directly to Class Schedule, Offered Courses, Evaluation, or Accounts Ledger.

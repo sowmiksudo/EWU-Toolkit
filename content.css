@@ -155,6 +155,49 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
+.ewu-banner-excel-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #ecfdf5;
+    border: 1px solid #6ee7b7;
+    color: #065f46;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.ewu-banner-excel-btn:hover {
+    background: #d1fae5;
+    border-color: #10b981;
+    color: #047857;
+    box-shadow: 0 1px 3px rgba(16, 185, 129, 0.2);
+}
+
+.ewu-banner-print-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    color: #334155;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.ewu-banner-print-btn:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+    color: #0f172a;
+}
+
 /* --------------------------------------------------------------------------
    2. Offered Courses: Seat Availability Badges & Smart Filter Bar
    -------------------------------------------------------------------------- */
@@ -458,22 +501,1067 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
 }
 
 /* --------------------------------------------------------------------------
-   5. Print Optimization
+   5. Interactive Class Routine Timetable & Excel Export
+   -------------------------------------------------------------------------- */
+.ewu-routine-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.08);
+    margin-bottom: 20px;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.ewu-routine-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #ffffff;
+    padding: 14px 18px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.routine-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.routine-main-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.routine-main-title h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0;
+    color: #ffffff;
+    letter-spacing: -0.2px;
+}
+
+.calendar-icon {
+    font-size: 18px;
+}
+
+.ewu-sem-pill {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.routine-meta-stats {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stat-tag {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #e2e8f0;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+}
+
+.stat-tag strong {
+    color: #ffffff;
+}
+
+.routine-action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ewu-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.ewu-dropdown-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(30, 64, 175, 0.25);
+    transition: all 0.15s ease;
+}
+
+.ewu-dropdown-btn:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(30, 64, 175, 0.35);
+}
+
+.dropdown-caret {
+    font-size: 10px;
+    transition: transform 0.2s ease;
+}
+
+.ewu-dropdown.show .dropdown-caret {
+    transform: rotate(180deg);
+}
+
+.ewu-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: 250px;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.18), 0 8px 10px -6px rgba(15, 23, 42, 0.1);
+    padding: 6px;
+    z-index: 99999;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    animation: ewuDropdownFadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ewu-dropdown.show .ewu-dropdown-menu {
+    display: flex;
+}
+
+@keyframes ewuDropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ewu-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 10px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    box-sizing: border-box;
+}
+
+.ewu-dropdown-item:hover {
+    background: #f1f5f9;
+}
+
+.dropdown-item-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.dropdown-item-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-item-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #0f172a;
+    line-height: 1.2;
+}
+
+.dropdown-item-desc {
+    font-size: 10px;
+    color: #64748b;
+    margin-top: 2px;
+    line-height: 1.2;
+}
+
+.ewu-excel-export-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.25);
+    transition: all 0.15s ease;
+}
+
+.ewu-excel-export-btn:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.35);
+}
+
+.ewu-routine-print-btn {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.ewu-routine-print-btn:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.ewu-routine-toggle-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #cbd5e1;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.ewu-routine-toggle-btn:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.ewu-routine-body {
+    padding: 14px;
+    background: #f8fafc;
+}
+
+.ewu-routine-table-responsive {
+    margin: 0 !important;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+.ewu-routine-grid {
+    width: 100%;
+    margin-bottom: 0 !important;
+    background: #ffffff;
+    border: 1px solid #cbd5e1 !important;
+    table-layout: fixed;
+}
+
+.ewu-routine-grid th {
+    background: #f1f5f9 !important;
+    color: #334155 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    padding: 10px 6px !important;
+    border: 1px solid #cbd5e1 !important;
+    letter-spacing: 0.2px;
+}
+
+.ewu-routine-day-col {
+    width: 100px;
+}
+
+.ewu-routine-day-cell {
+    background: #f1f5f9 !important;
+    color: #1e293b !important;
+    font-weight: 700 !important;
+    font-size: 12px !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+.ewu-routine-cell {
+    border: 1px solid #e2e8f0 !important;
+    padding: 6px !important;
+    vertical-align: top !important;
+    min-width: 130px;
+    background: #ffffff;
+}
+
+.ewu-routine-cell.empty {
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+.empty-dash {
+    color: #cbd5e1;
+    font-size: 13px;
+}
+
+/* Routine Course Badge */
+.ewu-routine-badge {
+    border-radius: 7px;
+    padding: 7px 9px;
+    margin-bottom: 5px;
+    border: 1px solid;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.ewu-routine-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.ewu-routine-badge:last-child {
+    margin-bottom: 0;
+}
+
+.badge-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 3px;
+}
+
+.badge-title strong {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.badge-sec {
+    font-size: 10px;
+    font-weight: 600;
+    opacity: 0.85;
+}
+
+.badge-room {
+    font-size: 11px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.badge-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.badge-initial {
+    display: inline-block;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.badge-time {
+    font-size: 9px;
+    opacity: 0.8;
+}
+
+/* Color Palettes */
+.ewu-routine-badge.indigo {
+    background: #eef2ff;
+    border-color: #c7d2fe;
+    color: #3730a3;
+}
+.ewu-routine-badge.indigo .badge-initial {
+    background: #e0e7ff;
+    color: #312e81;
+}
+
+.ewu-routine-badge.emerald {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+    color: #065f46;
+}
+.ewu-routine-badge.emerald .badge-initial {
+    background: #d1fae5;
+    color: #047857;
+}
+
+.ewu-routine-badge.violet {
+    background: #f5f3ff;
+    border-color: #ddd6fe;
+    color: #5b21b6;
+}
+.ewu-routine-badge.violet .badge-initial {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+.ewu-routine-badge.amber {
+    background: #fffbeb;
+    border-color: #fde68a;
+    color: #92400e;
+}
+.ewu-routine-badge.amber .badge-initial {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.ewu-routine-badge.rose {
+    background: #fff1f2;
+    border-color: #fecdd3;
+    color: #9f1239;
+}
+.ewu-routine-badge.rose .badge-initial {
+    background: #ffe4e6;
+    color: #be123c;
+}
+
+.ewu-routine-badge.cyan {
+    background: #ecfeff;
+    border-color: #a5f3fc;
+    color: #155e75;
+}
+.ewu-routine-badge.cyan .badge-initial {
+    background: #cffafe;
+    color: #0e7490;
+}
+
+.ewu-routine-badge.blue {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1e40af;
+}
+.ewu-routine-badge.blue .badge-initial {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.ewu-clash-warning {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   5.5. Inter-Table Watermark Website Citation
+   -------------------------------------------------------------------------- */
+.ewu-inter-table-watermark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 8px 0 16px 0;
+    padding: 7px 16px;
+    background: linear-gradient(90deg, #f8fafc 0%, #f1f5f9 50%, #f8fafc 100%);
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
+    font-size: 11.5px;
+    color: #64748b;
+    letter-spacing: 0.2px;
+}
+
+.ewu-inter-table-watermark .ewu-watermark-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.ewu-inter-table-watermark a {
+    color: #2563eb !important;
+    text-decoration: none !important;
+    font-weight: 600;
+}
+
+.ewu-inter-table-watermark a:hover {
+    color: #1d4ed8 !important;
+    text-decoration: underline !important;
+}
+
+.ewu-inter-table-watermark strong {
+    color: #334155;
+}
+
+.ewu-inter-table-watermark .watermark-bullet {
+    color: #94a3b8;
+}
+
+
+
+.ewu-print-header,
+.ewu-print-section-divider,
+.ewu-print-footer,
+.ewu-pdf-footer,
+.ewu-print-only {
+    display: none;
+}
+
+/* --------------------------------------------------------------------------
+   7. Comprehensive Print Optimization (@media print)
    -------------------------------------------------------------------------- */
 @media print {
+    /* 1. Complete Suppression of Portal Chrome, Sidebars, and Controls */
+    .navbar,
+    .navbar-default,
+    .navbar-fixed-top,
+    .navbar-top,
+    .top-nav,
+    .navbar-header,
+    .top-header,
+    .top-navbar,
+    .navbar-right,
+    .nav-user,
+    .dropdown-content,
+    .nav-notify,
+    .sidebar-inverse,
+    .side-navbar,
+    .side-navbar *,
+    nav,
+    aside,
+    footer,
+    .breadcumb,
+    .page-title,
+    #form_part_1,
+    #adminBaseUrl,
+    #StudentBaseUrl,
+    #StudentId,
+    #successmessageDiv,
+    #errormessageDiv,
+    .alert,
+    .modal,
+    .modal-backdrop,
+    .blackout,
+    #myloadingdiv,
+    #crisp-chatbox,
+    .crisp-client,
+    .ewu-revealer-banner,
+    .ewu-copy-btn,
+    .ewu-screen-only,
+    .ewu-offered-toolbar,
+    .routine-action-buttons,
+    .ewu-routine-toggle-btn,
+    .ewu-excel-export-btn,
+    .ewu-routine-print-btn,
+    .ewu-dropdown,
+    .ewu-dropdown-btn,
+    .ewu-dropdown-menu,
+    .ewu-dropdown-item,
+    .ewu-routine-footer-bar,
+    .btn {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+
+    /* Suppress automatic link URL expansion (e.g. Bootstrap's a[href]:after { content: " (" attr(href) ")" }) */
+    a:after,
+    a:before,
+    a[href]:after,
+    a[href]:before,
+    a[href^="mailto"]:after,
+    a[href^="mailto"]:before,
+    body a[href]:after,
+    html body a[href]:after,
+    html body .table a[href]:after,
+    .ewu-email-link:after,
+    .ewu-email-container a:after {
+        content: "" !important;
+        display: none !important;
+    }
+
+    .ewu-print-only {
+        display: inline !important;
+        visibility: visible !important;
+    }
+
+    @page {
+        size: A4 portrait;
+        margin: 8mm 10mm 8mm 10mm;
+    }
+
+    html, body {
+        width: 100% !important;
+        min-width: 100% !important;
+        height: auto !important;
+        min-height: 100% !important;
+        overflow: visible !important;
+        position: static !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+        font-size: 8pt !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .main-wrapper,
+    .body-container,
+    .body-container.left,
+    .common-container,
+    .body-content,
+    .col-lg-12,
+    .col-sm-12,
+    .col-xs-12,
+    .row {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+        position: static !important;
+        float: none !important;
+        display: block !important;
+    }
+
+    .table-responsive {
+        overflow: visible !important;
+        display: block !important;
+        width: 100% !important;
+        margin: 0 0 8px 0 !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+
+    /* 3. Official University Print Header */
+    .ewu-print-header {
+        display: block !important;
+        margin-bottom: 8px !important;
+        padding-bottom: 5px !important;
+        border-bottom: 2px solid #0f172a !important;
+    }
+
+    .ewu-print-header-top {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        margin-bottom: 5px !important;
+    }
+
+    .ewu-print-uni-title {
+        font-size: 15pt !important;
+        font-weight: 800 !important;
+        letter-spacing: 1.5px !important;
+        color: #0f172a !important;
+        margin: 0 0 2px 0 !important;
+        text-transform: uppercase !important;
+    }
+
+    .ewu-print-doc-title {
+        font-size: 9.5pt !important;
+        font-weight: 600 !important;
+        color: #475569 !important;
+        margin: 0 !important;
+    }
+
+    .ewu-print-meta-grid {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        background: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 4px !important;
+        padding: 4px 8px !important;
+        font-size: 7.5pt !important;
+        color: #334155 !important;
+    }
+
+    .ewu-print-meta-item strong {
+        color: #0f172a !important;
+    }
+
+    .ewu-print-section-divider {
+        display: block !important;
+        font-size: 8.5pt !important;
+        font-weight: 700 !important;
+        color: #0f172a !important;
+        margin: 8px 0 5px 0 !important;
+        padding-bottom: 3px !important;
+        border-bottom: 1px solid #94a3b8 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    /* 4. Advising Slip Table Styling */
+    table.table-bordered:not(.ewu-routine-grid) {
+        display: table !important;
+        visibility: visible !important;
+        width: 100% !important;
+        border-collapse: collapse !important;
+        border: 1px solid #64748b !important;
+        margin-bottom: 8px !important;
+        table-layout: fixed !important;
+    }
+
+    table.table-bordered:not(.ewu-routine-grid) thead {
+        display: table-header-group !important;
+    }
+
+    table.table-bordered:not(.ewu-routine-grid) tbody {
+        display: table-row-group !important;
+    }
+
+    table.table-bordered:not(.ewu-routine-grid) tr {
+        display: table-row !important;
+        visibility: visible !important;
+    }
+
+    table.table-bordered:not(.ewu-routine-grid) th,
+    table.table-bordered:not(.ewu-routine-grid) td {
+        display: table-cell !important;
+        visibility: visible !important;
+        border: 1px solid #94a3b8 !important;
+        padding: 4px 2px !important;
+        font-size: 7.2pt !important;
+        vertical-align: middle !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+
+    table.table-bordered:not(.ewu-routine-grid) th {
+        background: #f1f5f9 !important;
+        color: #0f172a !important;
+        font-weight: 700 !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+        white-space: normal !important;
+        line-height: 1.15 !important;
+    }
+
+    /* Precise column widths in Advising Slip to fit A4 cleanly with ZERO overlap (Sum: 100%) */
+    table.table-bordered:not(.ewu-routine-grid) th:nth-child(1),
+    table.table-bordered:not(.ewu-routine-grid) td:nth-child(1) { width: 4.5%; text-align: center; } /* Serial */
+
+    table.table-bordered:not(.ewu-routine-grid) th:nth-child(2),
+    table.table-bordered:not(.ewu-routine-grid) td:nth-child(2) { width: 10%; font-weight: 700; } /* Course */
+
+    table.table-bordered:not(.ewu-routine-grid) th:nth-child(3),
+    table.table-bordered:not(.ewu-routine-grid) td:nth-child(3) { width: 5%; text-align: center; } /* Section */
+
+    table.table-bordered:not(.ewu-routine-grid) th:nth-child(4),
+    table.table-bordered:not(.ewu-routine-grid) td:nth-child(4) { width: 5%; text-align: center; } /* Credits */
+
+    table.table-bordered:not(.ewu-routine-grid) th:nth-child(5),
+    table.table-bordered:not(.ewu-routine-grid) td:nth-child(5) { width: 16%; font-size: 7pt; } /* Timing */
+
+    table.table-bordered:not(.ewu-routine-grid) th:nth-child(6),
+    table.table-bordered:not(.ewu-routine-grid) td:nth-child(6) { width: 8%; text-align: center; } /* Room */
+
+    table.table-bordered:not(.ewu-routine-grid) th:nth-child(7),
+    table.table-bordered:not(.ewu-routine-grid) td:nth-child(7) { width: 7.5%; text-align: center; font-size: 7pt; } /* WithDraw */
+
+    table.table-bordered:not(.ewu-routine-grid) th:nth-child(8),
+    table.table-bordered:not(.ewu-routine-grid) td:nth-child(8) { width: 6.5%; text-align: center; font-size: 7pt; } /* Drop */
+
+    table.table-bordered:not(.ewu-routine-grid) th:nth-child(9),
+    table.table-bordered:not(.ewu-routine-grid) td:nth-child(9) { width: 8.5%; text-align: center; } /* Faculty Initial */
+
+    table.table-bordered:not(.ewu-routine-grid) th:nth-child(10),
+    table.table-bordered:not(.ewu-routine-grid) td:nth-child(10) { width: 15%; font-size: 7.2pt; } /* Faculty Name */
+
+    table.table-bordered:not(.ewu-routine-grid) th:nth-child(11),
+    table.table-bordered:not(.ewu-routine-grid) td:nth-child(11) { width: 14.5%; font-size: 6.8pt; word-break: break-all !important; } /* Email */
+
     th[ng-show*="Status"].ng-hide,
     td[ng-show*="Status"].ng-hide,
     th.ewu-revealed-col,
     td.ewu-revealed-col {
         display: table-cell !important;
     }
-    .ewu-copy-btn,
-    .ewu-revealer-banner,
-    .ewu-offered-toolbar {
-        display: none !important;
+
+    .ewu-initial-badge {
+        background: #e0e7ff !important;
+        color: #1e40af !important;
+        border: 1px solid #bfdbfe !important;
+        padding: 1px 4px !important;
+        font-size: 7pt !important;
+        font-weight: 700 !important;
+        display: inline-block !important;
     }
+
+    .ewu-email-text {
+        color: #0f172a !important;
+        font-size: 6.8pt !important;
+        font-weight: 500 !important;
+        word-break: break-all !important;
+    }
+
+    /* 4.5. Inter-Table Watermark Website Citation */
+    .ewu-inter-table-watermark {
+        display: block !important;
+        visibility: visible !important;
+        text-align: center !important;
+        margin: 4px 0 6px 0 !important;
+        padding: 3px 8px !important;
+        background: #f8fafc !important;
+        border: 1px dashed #94a3b8 !important;
+        border-radius: 4px !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    .ewu-inter-table-watermark .ewu-watermark-content {
+        display: flex !important;
+        visibility: visible !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 12px !important;
+        font-size: 6.8pt !important;
+        color: #475569 !important;
+        line-height: 1.25 !important;
+    }
+
+    .ewu-inter-table-watermark strong {
+        color: #0f172a !important;
+    }
+
+    .ewu-inter-table-watermark .watermark-toolkit strong {
+        color: #1e40af !important;
+    }
+
+    .ewu-inter-table-watermark .watermark-bullet {
+        color: #64748b !important;
+    }
+
+    /* 5. Routine Timetable Card on Print */
+    .ewu-routine-card {
+        display: block !important;
+        visibility: visible !important;
+        border: none !important;
+        box-shadow: none !important;
+        margin-top: 4px !important;
+        margin-bottom: 4px !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        background: transparent !important;
+        width: 100% !important;
+        overflow: visible !important;
+    }
+
+    .ewu-routine-header {
+        display: flex !important;
+        visibility: visible !important;
+        background: #f8fafc !important;
+        color: #0f172a !important;
+        border-bottom: 1px solid #94a3b8 !important;
+        padding: 4px 8px !important;
+    }
+
+    .routine-main-title h2 {
+        color: #0f172a !important;
+        font-size: 9.5pt !important;
+    }
+
+    .ewu-sem-pill {
+        background: #e0f2fe !important;
+        color: #0369a1 !important;
+        border: 1px solid #bae6fd !important;
+    }
+
+    .stat-tag {
+        background: #f1f5f9 !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #334155 !important;
+    }
+
+    .stat-tag strong {
+        color: #0f172a !important;
+    }
+
+    .ewu-routine-body {
+        display: block !important;
+        visibility: visible !important;
+        padding: 4px !important;
+        background: #ffffff !important;
+        overflow: visible !important;
+    }
+
+    .ewu-routine-table-responsive {
+        overflow: visible !important;
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+
+    .ewu-routine-grid {
+        display: table !important;
+        visibility: visible !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        border-collapse: collapse !important;
+        border: 1.5px solid #0f172a !important;
+        table-layout: fixed !important;
+        margin: 0 !important;
+    }
+
+    .ewu-routine-grid thead {
+        display: table-header-group !important;
+    }
+
+    .ewu-routine-grid tbody {
+        display: table-row-group !important;
+    }
+
+    .ewu-routine-grid tr {
+        display: table-row !important;
+        visibility: visible !important;
+    }
+
+    .ewu-routine-grid th,
+    .ewu-routine-grid td {
+        display: table-cell !important;
+        visibility: visible !important;
+        border: 1px solid #94a3b8 !important;
+        padding: 3px 2px !important;
+        vertical-align: top !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+
+    /* Day Column (11% width) */
+    .ewu-routine-grid th:first-child,
+    .ewu-routine-grid td.ewu-routine-day-cell {
+        width: 11% !important;
+        max-width: 11% !important;
+        min-width: 0 !important;
+        background: #f1f5f9 !important;
+        color: #0f172a !important;
+        font-size: 7pt !important;
+        font-weight: 700 !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+        padding: 2px !important;
+        white-space: nowrap !important;
+    }
+
+    /* All Time Slot Columns (Equal ~14.83% width each) */
+    .ewu-routine-grid th:not(:first-child) {
+        width: 14.83% !important;
+        max-width: 14.83% !important;
+        min-width: 0 !important;
+        background: #f1f5f9 !important;
+        color: #0f172a !important;
+        font-size: 6.2pt !important;
+        font-weight: 700 !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+        padding: 3px 2px !important;
+        white-space: normal !important;
+        line-height: 1.15 !important;
+    }
+
+    .ewu-routine-grid td.ewu-routine-cell {
+        width: 14.83% !important;
+        max-width: 14.83% !important;
+        min-width: 0 !important;
+        padding: 2px !important;
+        vertical-align: top !important;
+        background: #ffffff !important;
+    }
+
+    .ewu-routine-grid td.ewu-routine-cell.empty {
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+
+    .ewu-routine-grid td.ewu-routine-cell.empty .empty-dash {
+        color: #cbd5e1 !important;
+        font-size: 9pt !important;
+    }
+
+    /* Course Badge inside Routine Cell */
+    .ewu-routine-badge {
+        display: block !important;
+        padding: 3px 3px !important;
+        margin-bottom: 2px !important;
+        border-radius: 4px !important;
+        font-size: 6.5pt !important;
+        box-shadow: none !important;
+        border: 1px solid #94a3b8 !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .ewu-routine-badge .badge-title {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        margin-bottom: 2px !important;
+    }
+
+    .ewu-routine-badge .badge-title strong {
+        font-size: 7pt !important;
+        font-weight: 800 !important;
+    }
+
+    .ewu-routine-badge .badge-sec {
+        font-size: 6pt !important;
+        font-weight: 600 !important;
+    }
+
+    .ewu-routine-badge .badge-room {
+        font-size: 6pt !important;
+        margin-bottom: 2px !important;
+        display: block !important;
+    }
+
+    .ewu-routine-badge .badge-meta {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        gap: 1px !important;
+    }
+
+    .ewu-routine-badge .badge-initial {
+        font-size: 6pt !important;
+        font-weight: 700 !important;
+        padding: 1px 2px !important;
+        border-radius: 2px !important;
+    }
+
+    .ewu-routine-badge .badge-time {
+        font-size: 5.5pt !important;
+        white-space: nowrap !important;
+    }
+
     .ewu-ledger-summary-card {
         border: 1px solid #000;
         box-shadow: none;
     }
+
 }

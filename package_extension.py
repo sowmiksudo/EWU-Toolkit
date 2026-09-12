@@ -22,14 +22,19 @@ def package():
         'README.md'
     ]
 
+    extension_icons = [
+        os.path.join('icons', 'icon16.png'),
+        os.path.join('icons', 'icon48.png'),
+        os.path.join('icons', 'icon128.png')
+    ]
+
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
         for f in files_to_include:
             if os.path.exists(f):
                 zipf.write(f, arcname=f)
-        if os.path.exists('icons'):
-            for icon in os.listdir('icons'):
-                icon_path = os.path.join('icons', icon)
-                zipf.write(icon_path, arcname=icon_path)
+        for icon in extension_icons:
+            if os.path.exists(icon):
+                zipf.write(icon, arcname=icon)
 
     print(f'Done! Packaged: {zip_path} ({os.path.getsize(zip_path)} bytes)')
     print('Ready to attach to your GitHub Release.')

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "EWU-Toolkit",
-  "version": "1.2.0",
-  "description": "Complete student utility suite for EWU Portal: unhide faculty info, seat availability & filters, evaluation instructors, accounts ledger breakdown, and more.",
+  "version": "1.3.0",
+  "description": "Complete student utility suite for EWU Portal: visual weekly class routine generator, 1-click Excel export, unhide faculty info, seat availability & filters, evaluation instructors, and accounts ledger breakdown.",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
