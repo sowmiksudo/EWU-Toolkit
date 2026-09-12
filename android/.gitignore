@@ -10,3 +10,6 @@ captures/
 .cxx/
 *.apk
 output-metadata.json
+.jdk*/
+.android-sdk/
+.tools/
