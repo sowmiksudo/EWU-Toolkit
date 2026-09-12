@@ -2,6 +2,9 @@
 
 A clean, native, lightweight Android WebView application for **EWU-Toolkit**. It wraps the East West University student portal (`portal.ewubd.edu`) and injects the complete EWU-Toolkit suite with native Android optimizations.
 
+### 📥 Direct APK Download:
+👉 **[Download EWU-Toolkit Android App (v1.3.0 APK)](https://github.com/sowmiksudo/EWU-Toolkit/releases/download/v1.3.0/app-debug.apk)**
+
 ---
 
 ## ⚡ Key Highlights

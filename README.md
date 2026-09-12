@@ -7,6 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-blue.svg)](https://developer.chrome.com/docs/extensions/mv3/intro/)
 [![Tampermonkey](https://img.shields.io/badge/Tampermonkey-Supported-brightgreen.svg)](https://www.tampermonkey.net/)
+[![Android App](https://img.shields.io/badge/Android%20App-Download%20APK-brightgreen.svg?logo=android)](https://github.com/sowmiksudo/EWU-Toolkit/releases/download/v1.3.0/app-debug.apk)
 [![East West University](https://img.shields.io/badge/Portal-portal.ewubd.edu-003366.svg)](https://portal.ewubd.edu/)
 
 **EWU-Toolkit** is an open-source browser extension and userscript made by students, for students. It makes using the East West University student portal (`portal.ewubd.edu`) simpler, faster, and much more useful.
@@ -54,15 +55,18 @@ If you prefer installing it directly as a browser extension without Tampermonkey
 
 ---
 
-## 📱 Alternative: Native Android WebView App
+## 📱 Native Android App (Instant Download)
 
-EWU-Toolkit also comes with a dedicated, lightweight native Android application in [`android/`](android/):
+Prefer using an app on your Android phone instead of a browser extension? EWU-Toolkit includes a lightweight native Android app:
 
-* **Pre-injected Toolkit**: Loads `portal.ewubd.edu` with full EWU-Toolkit functionality already active.
-* **Native Android Integration**: Pull-to-refresh, hardware back button navigation, native system PDF printing (`PrintManager`), and direct file saving/sharing to Android's `Downloads` folder via the Android Share Sheet.
-* **Minimal Footprint**: Native Kotlin WebView with zero third-party bloatware (~2-3 MB APK).
-* **Automatic Script Sync**: Run `python build_userscript.py` or `./gradlew preBuild` to automatically sync the latest extension JavaScript into the Android app.
-* See [android/README.md](android/README.md) for build instructions.
+### 👉 **[Download EWU-Toolkit Android App (APK)](https://github.com/sowmiksudo/EWU-Toolkit/releases/download/v1.3.0/app-debug.apk)**
+
+* **1-Click Download**: Download the APK file (`app-debug.apk`) directly to your phone and install it (tap "Allow from this source" if prompted).
+* **Pre-injected Toolkit**: Automatically loads `portal.ewubd.edu` with faculty reveal, visual routine timetable, seat counts, and ledger breakdown fully working out-of-the-box.
+* **⚡ Dynamic Over-The-Air (OTA) Updates**: The app automatically fetches the latest toolkit scripts from GitHub in the background — no need to reinstall APKs for routine or style updates!
+* **Native Android Integration**: Pull-to-refresh, hardware back button navigation, native system PDF printing (`PrintManager`), and direct file saving/sharing to Android's `Downloads` folder via the native Share Sheet.
+* **Minimal Footprint**: Native Kotlin WebView with zero third-party bloatware (~5 MB).
+* For developers or building from source, see [android/README.md](android/README.md).
 
 ---
 
