@@ -35,10 +35,20 @@ header = '''// ==UserScript==
 })();
 '''
 
+import os
+import shutil
+
 with open('ewu-toolkit.user.js', 'w', encoding='utf-8') as f:
     f.write(header)
 
 with open('ewu-faculty-reveal.user.js', 'w', encoding='utf-8') as f:
     f.write(header)
 
+android_assets_dir = os.path.join('android', 'app', 'src', 'main', 'assets')
+if os.path.exists(android_assets_dir):
+    android_dest = os.path.join(android_assets_dir, 'ewu-toolkit.user.js')
+    shutil.copyfile('ewu-toolkit.user.js', android_dest)
+    print(f'Synced to Android WebView assets: {android_dest}')
+
 print('Updated ewu-toolkit.user.js and ewu-faculty-reveal.user.js successfully.')
+

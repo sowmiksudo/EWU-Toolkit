@@ -753,6 +753,22 @@
 
   function downloadBinaryFile(uint8Array, filename, mimeType) {
     const type = mimeType || 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+    if (window.AndroidBridge && typeof window.AndroidBridge.saveBase64File === 'function') {
+      try {
+        let binary = '';
+        const chunk = 8192;
+        for (let i = 0; i < uint8Array.length; i += chunk) {
+          binary += String.fromCharCode.apply(null, uint8Array.subarray(i, i + chunk));
+        }
+        const base64 = btoa(binary);
+        window.AndroidBridge.saveBase64File(base64, filename, type);
+        return;
+      } catch (e) {
+        console.warn('AndroidBridge file export error, falling back:', e);
+      }
+    }
+
     try {
       const blob = new Blob([uint8Array], { type });
       if (window.navigator && window.navigator.msSaveOrOpenBlob) {
@@ -1224,6 +1240,18 @@
 
     // Trigger PNG Download
     const filename = `EWU_Class_Routine_${cleanSem}.png`;
+
+    if (window.AndroidBridge && typeof window.AndroidBridge.saveBase64File === 'function') {
+      try {
+        const dataUrl = canvas.toDataURL('image/png');
+        const base64 = dataUrl.replace(/^data:image\/png;base64,/, '');
+        window.AndroidBridge.saveBase64File(base64, filename, 'image/png');
+        return;
+      } catch (e) {
+        console.warn('AndroidBridge image export error, falling back:', e);
+      }
+    }
+
     if (canvas.toBlob) {
       canvas.toBlob((blob) => {
         if (!blob) return;

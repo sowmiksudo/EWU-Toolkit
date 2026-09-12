@@ -54,6 +54,18 @@ If you prefer installing it directly as a browser extension without Tampermonkey
 
 ---
 
+## 📱 Alternative: Native Android WebView App
+
+EWU-Toolkit also comes with a dedicated, lightweight native Android application in [`android/`](android/):
+
+* **Pre-injected Toolkit**: Loads `portal.ewubd.edu` with full EWU-Toolkit functionality already active.
+* **Native Android Integration**: Pull-to-refresh, hardware back button navigation, native system PDF printing (`PrintManager`), and direct file saving/sharing to Android's `Downloads` folder via the Android Share Sheet.
+* **Minimal Footprint**: Native Kotlin WebView with zero third-party bloatware (~2-3 MB APK).
+* **Automatic Script Sync**: Run `python build_userscript.py` or `./gradlew preBuild` to automatically sync the latest extension JavaScript into the Android app.
+* See [android/README.md](android/README.md) for build instructions.
+
+---
+
 ## ✨ Features (Explained in Simple Words)
 
 ### 1. 📅 Visual Weekly Class Routine & 1-Click Export (Image, Excel, PDF)
