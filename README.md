@@ -84,6 +84,10 @@ Prefer using an app on your Android phone instead of a browser extension? EWU-To
     * 📊 **Export to Excel (.xlsx)**: Clean, styled native OpenXML workbook containing both your routine grid and course table.
     * 🖨️ **Print / Save as PDF**: Print-ready (`Ctrl + P`) formatted advising slip with clean headers and no clutter.
 
+<p align="center">
+  <img src="icons/EWU_Class_Routine_Fall-2026.png" alt="Weekly Class Routine Timetable Preview" width="100%">
+</p>
+
 ### 2. 🔍 See Teacher Names & Emails on Your Class Schedule
 * **The Problem:** The university portal hides faculty names, initials, and emails on your class schedule and advising slip.
 * **What EWU-Toolkit does:** 
@@ -91,6 +95,10 @@ Prefer using an app on your Android phone instead of a browser extension? EWU-To
   * Adds a handy **"📋 Copy"** button next to every email address so you can copy it in 1 click.
   * Clicking an email address opens your email app directly to write an email.
   * Everything stays visible when you press `Ctrl + P` to print or save your advising slip as a PDF.
+
+<p align="center">
+  <img src="icons/faculty name tab.png" alt="Unhidden Faculty Initials, Names and Emails" width="100%">
+</p>
 
 ### 3. 💺 Know How Many Seats Are Left & Hide Full Courses
 * **The Problem:** During advising rush, you have to read confusing numbers like `28 / 30` to guess how many seats are left, while scrolling through dozens of full sections.
@@ -102,6 +110,10 @@ Prefer using an app on your Android phone instead of a browser extension? EWU-To
   * Adds a **"Show Open Sections Only"** checkbox at the top: check it, and all full courses disappear instantly so you only see what you can actually take!
   * Adds an **instant search bar** to filter courses by course code, room number, or time slot.
 
+<p align="center">
+  <img src="icons/Screenshot 2026-09-12 171554.png" alt="Seat Availability Badges and Open Sections" width="100%">
+</p>
+
 ### 4. 📊 Understand Your Tuition Fees & Dues Easily
 * **The Problem:** The student accounts ledger is a giant, confusing table of "Debit Notes" and "Credit Notes".
 * **What EWU-Toolkit does:**
@@ -111,6 +123,10 @@ Prefer using an app on your Android phone instead of a browser extension? EWU-To
     * 💰 **Total Tuition Billed:** Total university fees charged across all semesters.
     * ⚠️ **Current Due:** Exactly how much you need to pay for the current semester.
   * Shows a neat **semester-by-semester table** with green `✓ Cleared` badges for completed semesters and clear amounts for pending terms.
+
+<p align="center">
+  <img src="icons/account ledger.png" alt="Accounts Ledger Breakdown and Bento Summary" width="100%">
+</p>
 
 ### 5. 🎛️ Extension Control Menu
 * Click the extension icon anytime to:
