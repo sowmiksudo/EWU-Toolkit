@@ -33,6 +33,39 @@
     });
   }
 
+  function ensureMobileViewport() {
+    try {
+      let meta = document.querySelector('meta[name="viewport"]');
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes';
+        document.head.appendChild(meta);
+      } else if (!meta.content || !meta.content.includes('width=device-width')) {
+        meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes';
+      }
+    } catch (e) {
+      // Ignore in non-standard environments
+    }
+  }
+
+  function ensureResponsiveTableWrapper(table, extraClass) {
+    let parent = table.parentElement;
+    if (parent && (parent.classList.contains('table-responsive') || parent.classList.contains('ewu-schedule-table-responsive'))) {
+      if (extraClass && !parent.classList.contains(extraClass)) {
+        parent.classList.add(extraClass);
+      }
+      return parent;
+    }
+    const wrapper = document.createElement('div');
+    wrapper.className = 'table-responsive' + (extraClass ? ' ' + extraClass : '');
+    parent.insertBefore(wrapper, table);
+    wrapper.appendChild(table);
+    return wrapper;
+  }
+
+  ensureMobileViewport();
+
   function copyToClipboard(text, btn) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(() => showCopied(btn)).catch(() => fallbackCopy(text, btn));
@@ -1619,7 +1652,7 @@
       }
     });
 
-    const container = table.closest('.table-responsive') || table.parentElement;
+    const container = ensureResponsiveTableWrapper(table, 'ewu-offered-table-responsive');
     let toolbar = container.parentElement.querySelector('.ewu-offered-toolbar');
     if (!toolbar) {
       toolbar = document.createElement('div');
@@ -1783,9 +1816,19 @@
 
     const netDue = Math.max(0, totalBilled - (totalPaid + totalWaiver));
 
-    // Inject Summary Card above table-wrapper
-    const tableWrapper = table.closest('.table-wrapper') || table.closest('.table-responsive') || table.parentElement;
-    let summaryCard = tableWrapper.parentElement.querySelector('.ewu-ledger-summary-card');
+    // Ensure raw ledger transaction table is wrapped in responsive scroll container
+    const responsiveWrapper = ensureResponsiveTableWrapper(table, 'ewu-ledger-table-responsive');
+
+    // Mobile scroll hint before raw ledger table
+    let scrollHint = responsiveWrapper.parentElement.querySelector('.ewu-ledger-scroll-hint');
+    if (!scrollHint) {
+      scrollHint = document.createElement('div');
+      scrollHint.className = 'ewu-mobile-scroll-hint ewu-ledger-scroll-hint';
+      scrollHint.innerHTML = '<span>👈 Swipe table horizontally to view full transaction ledger 👉</span>';
+      responsiveWrapper.parentElement.insertBefore(scrollHint, responsiveWrapper);
+    }
+
+    let summaryCard = responsiveWrapper.parentElement.querySelector('.ewu-ledger-summary-card');
 
     let rowsHtml = '';
     semesterOrder.forEach((sem) => {
@@ -1801,11 +1844,11 @@
 
       rowsHtml += `
         <tr>
-          <td><strong>${sem}</strong></td>
-          <td>${formatMoney(s.billed)}</td>
-          <td style="color: #15803d; font-weight: 600;">${formatMoney(s.paid)}</td>
-          <td style="color: #6d28d9; font-weight: 600;">${formatMoney(s.waiver)}</td>
-          <td>${statusBadge}</td>
+          <td class="sem-col"><strong>${sem}</strong></td>
+          <td class="num-col">${formatMoney(s.billed)}</td>
+          <td class="num-col" style="color: #15803d; font-weight: 600;">${formatMoney(s.paid)}</td>
+          <td class="num-col" style="color: #6d28d9; font-weight: 600;">${formatMoney(s.waiver)}</td>
+          <td class="status-col">${statusBadge}</td>
         </tr>
       `;
     });
@@ -1846,15 +1889,15 @@
       </div>
 
       <!-- Semester Table -->
-      <div class="table-responsive">
+      <div class="table-responsive ewu-summary-table-wrapper">
         <table class="table table-bordered table-striped ewu-summary-table">
           <thead>
             <tr>
-              <th>Semester</th>
-              <th>Billed (Charges)</th>
-              <th>Paid (Receipts)</th>
-              <th>Waivers / Credits</th>
-              <th>Semester Status</th>
+              <th class="sem-col">Semester</th>
+              <th class="num-col">Billed <span class="ewu-desktop-only">(Charges)</span></th>
+              <th class="num-col">Paid <span class="ewu-desktop-only">(Receipts)</span></th>
+              <th class="num-col">Waivers <span class="ewu-desktop-only">/ Credits</span></th>
+              <th class="status-col">Semester Status</th>
             </tr>
           </thead>
           <tbody>
@@ -1862,11 +1905,11 @@
           </tbody>
           <tfoot>
             <tr style="background: #f1f5f9; font-weight: 700;">
-              <td>Grand Total</td>
-              <td>${formatMoney(totalBilled)}</td>
-              <td style="color: #15803d;">${formatMoney(totalPaid)}</td>
-              <td style="color: #6d28d9;">${formatMoney(totalWaiver)}</td>
-              <td>${netDue <= 0 ? '<span class="ewu-status-badge cleared">✓ Cleared</span>' : `<span class="ewu-status-badge due">${formatMoney(netDue)} Due</span>`}</td>
+              <td class="sem-col">Grand Total</td>
+              <td class="num-col">${formatMoney(totalBilled)}</td>
+              <td class="num-col" style="color: #15803d;">${formatMoney(totalPaid)}</td>
+              <td class="num-col" style="color: #6d28d9;">${formatMoney(totalWaiver)}</td>
+              <td class="status-col">${netDue <= 0 ? '<span class="ewu-status-badge cleared">✓ Cleared</span>' : `<span class="ewu-status-badge due">${formatMoney(netDue)} Due</span>`}</td>
             </tr>
           </tfoot>
         </table>
@@ -1877,7 +1920,7 @@
       summaryCard = document.createElement('div');
       summaryCard.className = 'ewu-ledger-summary-card';
       summaryCard.innerHTML = summaryHtml;
-      tableWrapper.parentElement.insertBefore(summaryCard, tableWrapper);
+      responsiveWrapper.parentElement.insertBefore(summaryCard, scrollHint);
     } else {
       summaryCard.innerHTML = summaryHtml;
     }
@@ -1887,6 +1930,7 @@
   // Master Dispatcher
   // =========================================================================
   function runEnhancements() {
+    ensureMobileViewport();
     const path = window.location.pathname.toLowerCase();
     const tables = document.querySelectorAll('table');
 

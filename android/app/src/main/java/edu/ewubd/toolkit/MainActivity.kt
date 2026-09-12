@@ -68,7 +68,10 @@ class MainActivity : AppCompatActivity() {
             displayZoomControls = false
             cacheMode = WebSettings.LOAD_DEFAULT
             mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
+            textZoom = 100
+            layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
         }
+        webView.overScrollMode = View.OVER_SCROLL_IF_CONTENT_SCROLLS
 
         CookieManager.getInstance().apply {
             setAcceptCookie(true)
@@ -92,12 +95,14 @@ class MainActivity : AppCompatActivity() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
                 pageProgressBar.visibility = View.VISIBLE
+                injectViewportMeta(view)
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 swipeRefreshLayout.isRefreshing = false
                 pageProgressBar.visibility = View.GONE
+                injectViewportMeta(view)
 
                 if (url != null && (url.contains("portal.ewubd.edu") || url.contains("ewubd.edu"))) {
                     injectToolkitScript(view)
@@ -132,6 +137,21 @@ class MainActivity : AppCompatActivity() {
                 return false
             }
         }
+    }
+
+    private fun injectViewportMeta(view: WebView?) {
+        val viewportJs = """
+            (function() {
+                var meta = document.querySelector('meta[name="viewport"]');
+                if (!meta) {
+                    meta = document.createElement('meta');
+                    meta.name = 'viewport';
+                    document.head.appendChild(meta);
+                }
+                meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes';
+            })();
+        """.trimIndent()
+        view?.evaluateJavascript(viewportJs, null)
     }
 
     private fun injectToolkitScript(view: WebView?) {

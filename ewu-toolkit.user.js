@@ -445,10 +445,23 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
 }
 
 /* Semester Breakdown Table */
+.ewu-summary-table-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    box-sizing: border-box !important;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
 .ewu-summary-table {
-    width: 100%;
+    width: 100% !important;
+    min-width: 460px;
     margin-bottom: 0 !important;
     font-size: 13px;
+    border-collapse: collapse;
 }
 
 .ewu-summary-table th {
@@ -458,8 +471,59 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     border-bottom: 2px solid #cbd5e1 !important;
 }
 
+.ewu-summary-table th,
 .ewu-summary-table td {
+    padding: 8px 10px !important;
     vertical-align: middle !important;
+    white-space: nowrap;
+}
+
+.ewu-summary-table .sem-col,
+.ewu-summary-table td:first-child,
+.ewu-summary-table tfoot td:first-child {
+    position: sticky;
+    left: 0;
+    background: #ffffff;
+    z-index: 2;
+    font-weight: 600;
+    box-shadow: 2px 0 4px -2px rgba(0, 0, 0, 0.08);
+}
+
+.ewu-summary-table thead th:first-child {
+    background: #f8fafc !important;
+    z-index: 3;
+}
+
+.ewu-summary-table tfoot td:first-child {
+    background: #f1f5f9 !important;
+    z-index: 3;
+}
+
+.ewu-summary-table .num-col,
+.ewu-summary-table td:nth-child(2),
+.ewu-summary-table td:nth-child(3),
+.ewu-summary-table td:nth-child(4),
+.ewu-summary-table tfoot td:nth-child(2),
+.ewu-summary-table tfoot td:nth-child(3),
+.ewu-summary-table tfoot td:nth-child(4) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.ewu-summary-table .status-col,
+.ewu-summary-table td:last-child,
+.ewu-summary-table tfoot td:last-child {
+    text-align: center;
+}
+
+.ewu-desktop-only {
+    display: inline;
+}
+
+@media (max-width: 640px) {
+    .ewu-desktop-only {
+        display: none !important;
+    }
 }
 
 .ewu-status-badge {
@@ -1038,6 +1102,8 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
    -------------------------------------------------------------------------- */
 /* Responsive Table Wrappers */
 .ewu-schedule-table-responsive,
+.ewu-ledger-table-responsive,
+.ewu-offered-table-responsive,
 .table-responsive {
     width: 100% !important;
     max-width: 100% !important;
@@ -1048,11 +1114,42 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
 }
 
 .ewu-schedule-table-responsive > table,
-.table-responsive > table.table {
+.ewu-ledger-table-responsive > table,
+.ewu-offered-table-responsive > table,
+.table-responsive > table.table:not(.ewu-summary-table) {
     min-width: 780px;
 }
 
 @media (max-width: 768px) {
+    /* Mobile Viewport & Container Stabilization */
+    html, body {
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+    }
+
+    .container,
+    .container-fluid,
+    .body-content,
+    .body-container {
+        max-width: 100vw !important;
+        box-sizing: border-box !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    .row {
+        margin-left: -5px !important;
+        margin-right: -5px !important;
+    }
+
+    .row > [class*="col-"] {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
     /* Notice Banner on Mobile */
     .ewu-revealer-banner {
         flex-direction: column;
@@ -1256,24 +1353,78 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
         box-sizing: border-box;
     }
 
-    /* Accounts Ledger Bento Cards on Mobile */
+    /* Accounts Ledger Summary Card & Bento Cards on Mobile */
+    .ewu-ledger-summary-card {
+        padding: 12px !important;
+        border-radius: 8px !important;
+        margin-bottom: 14px !important;
+    }
+
+    .ewu-ledger-header {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+    }
+
+    .ewu-ledger-title {
+        font-size: 14px !important;
+        flex-wrap: wrap;
+    }
+
+    .ewu-ledger-header .ewu-github-gesture {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+        padding: 6px 10px !important;
+    }
+
     .ewu-kpi-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+        margin-bottom: 12px !important;
     }
 
     .ewu-kpi-card {
-        padding: 10px 12px;
+        padding: 9px 10px !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .ewu-kpi-label {
+        font-size: 10px !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .ewu-kpi-amount {
-        font-size: 16px;
+        font-size: 15px !important;
+        letter-spacing: -0.3px !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .ewu-kpi-desc {
+        font-size: 9.5px !important;
+        line-height: 1.25 !important;
+    }
+
+    .ewu-summary-table {
+        font-size: 11.5px !important;
+        min-width: 440px !important;
+    }
+
+    .ewu-summary-table th,
+    .ewu-summary-table td {
+        padding: 6px 8px !important;
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 400px) {
     .ewu-kpi-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
     }
 }
 
@@ -1991,6 +2142,39 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
       }
     });
   }
+
+  function ensureMobileViewport() {
+    try {
+      let meta = document.querySelector('meta[name="viewport"]');
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes';
+        document.head.appendChild(meta);
+      } else if (!meta.content || !meta.content.includes('width=device-width')) {
+        meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes';
+      }
+    } catch (e) {
+      // Ignore in non-standard environments
+    }
+  }
+
+  function ensureResponsiveTableWrapper(table, extraClass) {
+    let parent = table.parentElement;
+    if (parent && (parent.classList.contains('table-responsive') || parent.classList.contains('ewu-schedule-table-responsive'))) {
+      if (extraClass && !parent.classList.contains(extraClass)) {
+        parent.classList.add(extraClass);
+      }
+      return parent;
+    }
+    const wrapper = document.createElement('div');
+    wrapper.className = 'table-responsive' + (extraClass ? ' ' + extraClass : '');
+    parent.insertBefore(wrapper, table);
+    wrapper.appendChild(table);
+    return wrapper;
+  }
+
+  ensureMobileViewport();
 
   function copyToClipboard(text, btn) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -3578,7 +3762,7 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
       }
     });
 
-    const container = table.closest('.table-responsive') || table.parentElement;
+    const container = ensureResponsiveTableWrapper(table, 'ewu-offered-table-responsive');
     let toolbar = container.parentElement.querySelector('.ewu-offered-toolbar');
     if (!toolbar) {
       toolbar = document.createElement('div');
@@ -3742,9 +3926,19 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
 
     const netDue = Math.max(0, totalBilled - (totalPaid + totalWaiver));
 
-    // Inject Summary Card above table-wrapper
-    const tableWrapper = table.closest('.table-wrapper') || table.closest('.table-responsive') || table.parentElement;
-    let summaryCard = tableWrapper.parentElement.querySelector('.ewu-ledger-summary-card');
+    // Ensure raw ledger transaction table is wrapped in responsive scroll container
+    const responsiveWrapper = ensureResponsiveTableWrapper(table, 'ewu-ledger-table-responsive');
+
+    // Mobile scroll hint before raw ledger table
+    let scrollHint = responsiveWrapper.parentElement.querySelector('.ewu-ledger-scroll-hint');
+    if (!scrollHint) {
+      scrollHint = document.createElement('div');
+      scrollHint.className = 'ewu-mobile-scroll-hint ewu-ledger-scroll-hint';
+      scrollHint.innerHTML = '<span>👈 Swipe table horizontally to view full transaction ledger 👉</span>';
+      responsiveWrapper.parentElement.insertBefore(scrollHint, responsiveWrapper);
+    }
+
+    let summaryCard = responsiveWrapper.parentElement.querySelector('.ewu-ledger-summary-card');
 
     let rowsHtml = '';
     semesterOrder.forEach((sem) => {
@@ -3760,11 +3954,11 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
 
       rowsHtml += `
         <tr>
-          <td><strong>${sem}</strong></td>
-          <td>${formatMoney(s.billed)}</td>
-          <td style="color: #15803d; font-weight: 600;">${formatMoney(s.paid)}</td>
-          <td style="color: #6d28d9; font-weight: 600;">${formatMoney(s.waiver)}</td>
-          <td>${statusBadge}</td>
+          <td class="sem-col"><strong>${sem}</strong></td>
+          <td class="num-col">${formatMoney(s.billed)}</td>
+          <td class="num-col" style="color: #15803d; font-weight: 600;">${formatMoney(s.paid)}</td>
+          <td class="num-col" style="color: #6d28d9; font-weight: 600;">${formatMoney(s.waiver)}</td>
+          <td class="status-col">${statusBadge}</td>
         </tr>
       `;
     });
@@ -3805,15 +3999,15 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
       </div>
 
       <!-- Semester Table -->
-      <div class="table-responsive">
+      <div class="table-responsive ewu-summary-table-wrapper">
         <table class="table table-bordered table-striped ewu-summary-table">
           <thead>
             <tr>
-              <th>Semester</th>
-              <th>Billed (Charges)</th>
-              <th>Paid (Receipts)</th>
-              <th>Waivers / Credits</th>
-              <th>Semester Status</th>
+              <th class="sem-col">Semester</th>
+              <th class="num-col">Billed <span class="ewu-desktop-only">(Charges)</span></th>
+              <th class="num-col">Paid <span class="ewu-desktop-only">(Receipts)</span></th>
+              <th class="num-col">Waivers <span class="ewu-desktop-only">/ Credits</span></th>
+              <th class="status-col">Semester Status</th>
             </tr>
           </thead>
           <tbody>
@@ -3821,11 +4015,11 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
           </tbody>
           <tfoot>
             <tr style="background: #f1f5f9; font-weight: 700;">
-              <td>Grand Total</td>
-              <td>${formatMoney(totalBilled)}</td>
-              <td style="color: #15803d;">${formatMoney(totalPaid)}</td>
-              <td style="color: #6d28d9;">${formatMoney(totalWaiver)}</td>
-              <td>${netDue <= 0 ? '<span class="ewu-status-badge cleared">✓ Cleared</span>' : `<span class="ewu-status-badge due">${formatMoney(netDue)} Due</span>`}</td>
+              <td class="sem-col">Grand Total</td>
+              <td class="num-col">${formatMoney(totalBilled)}</td>
+              <td class="num-col" style="color: #15803d;">${formatMoney(totalPaid)}</td>
+              <td class="num-col" style="color: #6d28d9;">${formatMoney(totalWaiver)}</td>
+              <td class="status-col">${netDue <= 0 ? '<span class="ewu-status-badge cleared">✓ Cleared</span>' : `<span class="ewu-status-badge due">${formatMoney(netDue)} Due</span>`}</td>
             </tr>
           </tfoot>
         </table>
@@ -3836,7 +4030,7 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
       summaryCard = document.createElement('div');
       summaryCard.className = 'ewu-ledger-summary-card';
       summaryCard.innerHTML = summaryHtml;
-      tableWrapper.parentElement.insertBefore(summaryCard, tableWrapper);
+      responsiveWrapper.parentElement.insertBefore(summaryCard, scrollHint);
     } else {
       summaryCard.innerHTML = summaryHtml;
     }
@@ -3846,6 +4040,7 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
   // Master Dispatcher
   // =========================================================================
   function runEnhancements() {
+    ensureMobileViewport();
     const path = window.location.pathname.toLowerCase();
     const tables = document.querySelectorAll('table');
 
