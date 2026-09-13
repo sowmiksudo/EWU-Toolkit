@@ -13,3 +13,8 @@ RECOVERED_LAST_CONVERSATION.md
 *research*
 *scrape*
 scratch/
+/api_logs
+*.csv
+*.csv
+evaluate_endpoints.py
+run_student_endpoints.py

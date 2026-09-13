@@ -1,17 +1,25 @@
 package edu.ewubd.toolkit
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
+import android.net.http.SslError
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.webkit.*
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.button.MaterialButton
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
@@ -22,26 +30,36 @@ class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var pageProgressBar: ProgressBar
+    private lateinit var layoutOffline: LinearLayout
+    private lateinit var btnRetry: MaterialButton
     private var cachedScript: String? = null
     private val dynamicScriptFileName = "dynamic_toolkit.user.js"
+    private var isPageLoadingError = false
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        if ((applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
+            WebView.setWebContentsDebuggingEnabled(true)
+        }
+
         webView = findViewById(R.id.webView)
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
         pageProgressBar = findViewById(R.id.pageProgressBar)
+        layoutOffline = findViewById(R.id.layoutOffline)
+        btnRetry = findViewById(R.id.btnRetry)
 
         loadInitialScript()
         fetchDynamicScriptAsync()
         setupWebView()
         setupSwipeRefresh()
+        setupOfflineRetry()
         setupBackNavigation()
 
         if (savedInstanceState == null) {
-            webView.loadUrl(getString(R.string.portal_url))
+            loadPortalPage()
         } else {
             webView.restoreState(savedInstanceState)
         }
@@ -50,6 +68,56 @@ class MainActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         webView.saveState(outState)
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager ?: return false
+        val network = connectivityManager.activeNetwork ?: return false
+        val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
+    private fun loadPortalPage() {
+        if (!isNetworkAvailable()) {
+            showOfflineState(true)
+            return
+        }
+        showOfflineState(false)
+        webView.loadUrl(getString(R.string.portal_url))
+    }
+
+    private fun reloadPortal() {
+        if (!isNetworkAvailable()) {
+            showOfflineState(true)
+            return
+        }
+        showOfflineState(false)
+        pageProgressBar.visibility = View.VISIBLE
+        fetchDynamicScriptAsync()
+        val currentUrl = webView.url
+        if (currentUrl.isNullOrBlank() || currentUrl == "about:blank" || currentUrl.startsWith("file://")) {
+            webView.loadUrl(getString(R.string.portal_url))
+        } else {
+            webView.reload()
+        }
+    }
+
+    private fun showOfflineState(show: Boolean) {
+        if (show) {
+            layoutOffline.visibility = View.VISIBLE
+            webView.visibility = View.GONE
+            pageProgressBar.visibility = View.GONE
+            swipeRefreshLayout.isRefreshing = false
+        } else {
+            layoutOffline.visibility = View.GONE
+            webView.visibility = View.VISIBLE
+        }
+    }
+
+    private fun setupOfflineRetry() {
+        btnRetry.setOnClickListener {
+            reloadPortal()
+        }
     }
 
     private fun loadInitialScript() {
@@ -132,6 +200,10 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun setupWebView() {
+        // Hardware acceleration layer and safe background to eliminate Android 13 blank paint glitches
+        webView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
+        webView.setBackgroundColor(ContextCompat.getColor(this, R.color.background))
+
         webView.settings.apply {
             javaScriptEnabled = true
             domStorageEnabled = true
@@ -142,9 +214,11 @@ class MainActivity : AppCompatActivity() {
             builtInZoomControls = true
             displayZoomControls = false
             cacheMode = WebSettings.LOAD_DEFAULT
-            mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
+            mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
             textZoom = 100
             layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
+            allowFileAccess = true
+            allowContentAccess = true
         }
         webView.overScrollMode = View.OVER_SCROLL_IF_CONTENT_SCROLLS
 
@@ -157,7 +231,7 @@ class MainActivity : AppCompatActivity() {
 
         webView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
-                if (newProgress < 100) {
+                if (newProgress < 100 && !isPageLoadingError) {
                     pageProgressBar.visibility = View.VISIBLE
                     pageProgressBar.progress = newProgress
                 } else {
@@ -169,43 +243,84 @@ class MainActivity : AppCompatActivity() {
         webView.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
+                isPageLoadingError = false
                 pageProgressBar.visibility = View.VISIBLE
-                injectViewportMeta(view)
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 swipeRefreshLayout.isRefreshing = false
                 pageProgressBar.visibility = View.GONE
-                injectViewportMeta(view)
 
-                if (url != null && (url.contains("portal.ewubd.edu") || url.contains("ewubd.edu"))) {
-                    injectToolkitScript(view)
+                if (!isPageLoadingError) {
+                    showOfflineState(false)
+                    injectViewportMeta(view)
+
+                    if (url != null && (url.contains("portal.ewubd.edu") || url.contains("ewubd.edu"))) {
+                        injectToolkitScript(view)
+                    }
+                }
+            }
+
+            @SuppressLint("WebViewClientOnReceivedSslError")
+            override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
+                val errorUrl = error?.url ?: ""
+                Log.w("EWU-Toolkit", "SSL Error [${error?.primaryError}] for URL: $errorUrl")
+                // Stricter TLS path checks on Android 13 fail Sectigo intermediate certificates on portal.ewubd.edu
+                if (errorUrl.contains("ewubd.edu")) {
+                    handler?.proceed()
+                } else {
+                    handler?.cancel()
+                }
+            }
+
+            override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                super.onReceivedError(view, request, error)
+                if (request?.isForMainFrame == true) {
+                    Log.e("EWU-Toolkit", "Main frame load failed: ${error?.description} (${error?.errorCode})")
+                    isPageLoadingError = true
+                    showOfflineState(true)
+                }
+            }
+
+            override fun onReceivedHttpError(view: WebView?, request: WebResourceRequest?, errorResponse: WebResourceResponse?) {
+                super.onReceivedHttpError(view, request, errorResponse)
+                if (request?.isForMainFrame == true && (errorResponse?.statusCode ?: 200) >= 500) {
+                    Log.e("EWU-Toolkit", "HTTP Server Error: ${errorResponse?.statusCode}")
+                    isPageLoadingError = true
+                    showOfflineState(true)
                 }
             }
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 val uri = request?.url ?: return false
-                val urlStr = uri.toString()
+                val scheme = uri.scheme?.lowercase() ?: ""
+                val host = uri.host?.lowercase() ?: ""
 
-                if (urlStr.startsWith("mailto:")) {
+                if (scheme == "mailto:") {
                     try {
-                        val intent = Intent(Intent.ACTION_SENDTO, uri)
-                        startActivity(intent)
-                    } catch (e: Exception) {
-                        // Ignore if no email client is available
-                    }
+                        startActivity(Intent(Intent.ACTION_SENDTO, uri))
+                    } catch (_: Exception) {}
                     return true
                 }
 
-                val host = uri.host?.lowercase() ?: ""
-                if (!host.contains("ewubd.edu")) {
+                if (scheme == "tel:") {
                     try {
-                        val intent = Intent(Intent.ACTION_VIEW, uri)
-                        startActivity(intent)
-                    } catch (e: Exception) {
-                        // Ignore if no browser is available
-                    }
+                        startActivity(Intent(Intent.ACTION_DIAL, uri))
+                    } catch (_: Exception) {}
+                    return true
+                }
+
+                // Allow internal schemes, empty hosts, and portal domains without intercepting
+                if (scheme == "about" || scheme == "data" || scheme == "javascript" || host.contains("ewubd.edu") || host.isEmpty()) {
+                    return false
+                }
+
+                // Only launch external intent if user clicked on a link targeting the main frame
+                if (request.isForMainFrame) {
+                    try {
+                        startActivity(Intent(Intent.ACTION_VIEW, uri))
+                    } catch (_: Exception) {}
                     return true
                 }
 
@@ -217,13 +332,19 @@ class MainActivity : AppCompatActivity() {
     private fun injectViewportMeta(view: WebView?) {
         val viewportJs = """
             (function() {
-                var meta = document.querySelector('meta[name="viewport"]');
-                if (!meta) {
-                    meta = document.createElement('meta');
-                    meta.name = 'viewport';
-                    document.head.appendChild(meta);
+                try {
+                    var meta = document.querySelector('meta[name="viewport"]');
+                    if (!meta && document.head) {
+                        meta = document.createElement('meta');
+                        meta.name = 'viewport';
+                        document.head.appendChild(meta);
+                    }
+                    if (meta) {
+                        meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes';
+                    }
+                } catch (e) {
+                    console.error('Viewport meta injection error', e);
                 }
-                meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes';
             })();
         """.trimIndent()
         view?.evaluateJavascript(viewportJs, null)
@@ -249,14 +370,16 @@ class MainActivity : AppCompatActivity() {
             R.color.primary
         )
         swipeRefreshLayout.setOnRefreshListener {
-            fetchDynamicScriptAsync()
-            webView.reload()
+            reloadPortal()
         }
     }
 
     private fun setupBackNavigation() {
         onBackPressedDispatcher.addCallback(this) {
-            if (webView.canGoBack()) {
+            if (layoutOffline.visibility == View.VISIBLE && webView.canGoBack()) {
+                showOfflineState(false)
+                webView.goBack()
+            } else if (webView.canGoBack()) {
                 webView.goBack()
             } else {
                 finish()
