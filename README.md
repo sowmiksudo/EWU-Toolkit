@@ -60,7 +60,7 @@ If you prefer installing it directly as a browser extension without Tampermonkey
 
 Prefer using an app on your Android phone instead of a browser extension? EWU-Toolkit includes a lightweight native Android app:
 
-### 👉 **[Download EWU-Toolkit Android App (APK)](https://github.com/sowmiksudo/EWU-Toolkit/releases/download/v1.3.0/app-debug.apk)**
+### 👉 **[Download EWU-Toolkit Android App (APK)](https://github.com/sowmiksudo/EWU-Toolkit/releases/download/v1.4.0/EWU-Toolkit-v1.40.apk)**
 
 * **1-Click Download**: Download the APK file (`app-debug.apk`) directly to your phone and install it (tap "Allow from this source" if prompted).
 * **Pre-injected Toolkit**: Automatically loads `portal.ewubd.edu` with faculty reveal, visual routine timetable, seat counts, and ledger breakdown fully working out-of-the-box.
