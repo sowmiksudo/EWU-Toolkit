@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-blue.svg)](https://developer.chrome.com/docs/extensions/mv3/intro/)
 [![Tampermonkey](https://img.shields.io/badge/Tampermonkey-Supported-brightgreen.svg)](https://www.tampermonkey.net/)
-[![Android App](https://img.shields.io/badge/Android%20App-Download%20APK-brightgreen.svg?logo=android)](https://github.com/sowmiksudo/EWU-Toolkit/releases/download/v1.3.0/app-debug.apk)
+[![Android App](https://img.shields.io/badge/Android%20App-Download%20APK-brightgreen.svg?logo=android)](https://github.com/sowmiksudo/EWU-Toolkit/releases/download/v1.4.0/EWU-Toolkit-v1.40.apk)
 [![Faculty Explorer](https://img.shields.io/badge/Web%20App-Faculty%20Explorer-6366f1.svg?logo=azure)](https://ewu-faculty-explorer.azurewebsites.net/)
 [![East West University](https://img.shields.io/badge/Portal-portal.ewubd.edu-003366.svg)](https://portal.ewubd.edu/)
 
