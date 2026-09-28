@@ -50,8 +50,15 @@
   }
 
   function ensureResponsiveTableWrapper(table, extraClass) {
+    let existing = table.closest('.table-responsive');
+    if (existing) {
+      if (extraClass && !existing.classList.contains(extraClass)) {
+        existing.classList.add(extraClass);
+      }
+      return existing;
+    }
     let parent = table.parentElement;
-    if (parent && (parent.classList.contains('table-responsive') || parent.classList.contains('ewu-schedule-table-responsive'))) {
+    if (parent && parent.classList.contains('ewu-schedule-table-responsive')) {
       if (extraClass && !parent.classList.contains(extraClass)) {
         parent.classList.add(extraClass);
       }
@@ -62,6 +69,42 @@
     parent.insertBefore(wrapper, table);
     wrapper.appendChild(table);
     return wrapper;
+  }
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  function attachScrollableTouchShield(el) {
+    if (!el || el.dataset.touchShieldAttached) return;
+    el.dataset.touchShieldAttached = 'true';
+
+    el.addEventListener('touchstart', (e) => {
+      if (e.touches && e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    el.addEventListener('touchmove', (e) => {
+      if (e.touches && e.touches.length === 1) {
+        const dx = Math.abs(e.touches[0].clientX - touchStartX);
+        const dy = Math.abs(e.touches[0].clientY - touchStartY);
+        if (dx > dy && dx > 6) {
+          if (window.AndroidBridge && typeof window.AndroidBridge.setSwipeRefreshEnabled === 'function') {
+            window.AndroidBridge.setSwipeRefreshEnabled(false);
+          }
+        }
+      }
+    }, { passive: true });
+
+    const resetSwipe = () => {
+      if (window.AndroidBridge && typeof window.AndroidBridge.setSwipeRefreshEnabled === 'function') {
+        window.AndroidBridge.setSwipeRefreshEnabled(true);
+      }
+    };
+
+    el.addEventListener('touchend', resetSwipe, { passive: true });
+    el.addEventListener('touchcancel', resetSwipe, { passive: true });
   }
 
   ensureMobileViewport();
@@ -198,6 +241,7 @@
     const responsiveContainer = table.closest('.table-responsive') || table.parentElement;
     if (responsiveContainer) {
       responsiveContainer.classList.add('ewu-schedule-table-responsive');
+      attachScrollableTouchShield(responsiveContainer);
     }
     let banner = responsiveContainer.parentElement.querySelector('.ewu-schedule-banner');
     if (responsiveContainer && !banner) {
@@ -1653,6 +1697,7 @@
     });
 
     const container = ensureResponsiveTableWrapper(table, 'ewu-offered-table-responsive');
+    attachScrollableTouchShield(container);
     let toolbar = container.parentElement.querySelector('.ewu-offered-toolbar');
     if (!toolbar) {
       toolbar = document.createElement('div');
@@ -1818,6 +1863,8 @@
 
     // Ensure raw ledger transaction table is wrapped in responsive scroll container
     const responsiveWrapper = ensureResponsiveTableWrapper(table, 'ewu-ledger-table-responsive');
+    table.classList.add('ewu-ledger-table');
+    attachScrollableTouchShield(responsiveWrapper);
 
     // Mobile scroll hint before raw ledger table
     let scrollHint = responsiveWrapper.parentElement.querySelector('.ewu-ledger-scroll-hint');
@@ -1829,6 +1876,12 @@
     }
 
     let summaryCard = responsiveWrapper.parentElement.querySelector('.ewu-ledger-summary-card');
+
+    // Signature cache check: prevents wiping out DOM and breaking horizontal swipe on every MutationObserver tick
+    const currentSignature = `${rows.length}_${totalBilled}_${totalPaid}_${totalWaiver}_${netDue}_${semesterOrder.join('|')}`;
+    if (summaryCard && summaryCard.dataset.signature === currentSignature) {
+      return;
+    }
 
     let rowsHtml = '';
     semesterOrder.forEach((sem) => {
@@ -1919,10 +1972,17 @@
     if (!summaryCard) {
       summaryCard = document.createElement('div');
       summaryCard.className = 'ewu-ledger-summary-card';
+      summaryCard.dataset.signature = currentSignature;
       summaryCard.innerHTML = summaryHtml;
       responsiveWrapper.parentElement.insertBefore(summaryCard, scrollHint);
     } else {
+      summaryCard.dataset.signature = currentSignature;
       summaryCard.innerHTML = summaryHtml;
+    }
+
+    const summaryTableWrapper = summaryCard.querySelector('.ewu-summary-table-wrapper');
+    if (summaryTableWrapper) {
+      attachScrollableTouchShield(summaryTableWrapper);
     }
   }
 
@@ -1935,6 +1995,10 @@
     const tables = document.querySelectorAll('table');
 
     tables.forEach((table) => {
+      // Skip internal summary table
+      if (table.classList.contains('ewu-summary-table') || table.closest('.ewu-ledger-summary-card')) {
+        return;
+      }
       // 1. Class Schedule & Advising
       if (!path.includes('facultyevaluation') && !path.includes('offeredcourses') && !path.includes('studentledger')) {
         processClassSchedule(table);

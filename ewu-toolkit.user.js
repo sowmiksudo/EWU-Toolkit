@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         EWU-Toolkit
 // @namespace    https://github.com/sowmiksudo/EWU-Toolkit
-// @version      1.3.0
+// @version      1.3.1
 // @description  Complete student utility suite for EWU Portal: visual weekly class routine generator, 1-click Excel export, unhide faculty info, seat availability & filters, accounts ledger breakdown, and more.
 // @author       Sowmik
 // @match        https://portal.ewubd.edu/*
@@ -450,6 +450,9 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     max-width: 100% !important;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x pan-y !important;
+    overscroll-behavior-x: contain !important;
+    display: block !important;
     box-sizing: border-box !important;
     margin-top: 10px;
     border-radius: 8px;
@@ -458,10 +461,11 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
 
 .ewu-summary-table {
     width: 100% !important;
-    min-width: 460px;
+    min-width: 480px !important;
     margin-bottom: 0 !important;
     font-size: 13px;
-    border-collapse: collapse;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
 }
 
 .ewu-summary-table th {
@@ -476,6 +480,7 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     padding: 8px 10px !important;
     vertical-align: middle !important;
     white-space: nowrap;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .ewu-summary-table .sem-col,
@@ -487,16 +492,23 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     z-index: 2;
     font-weight: 600;
     box-shadow: 2px 0 4px -2px rgba(0, 0, 0, 0.08);
+    border-right: 1px solid #e2e8f0;
 }
 
 .ewu-summary-table thead th:first-child {
+    position: sticky;
+    left: 0;
     background: #f8fafc !important;
     z-index: 3;
+    border-right: 1px solid #cbd5e1;
 }
 
 .ewu-summary-table tfoot td:first-child {
+    position: sticky;
+    left: 0;
     background: #f1f5f9 !important;
     z-index: 3;
+    border-right: 1px solid #cbd5e1;
 }
 
 .ewu-summary-table .num-col,
@@ -1104,20 +1116,30 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
 .ewu-schedule-table-responsive,
 .ewu-ledger-table-responsive,
 .ewu-offered-table-responsive,
+.ewu-summary-table-wrapper,
 .table-responsive {
     width: 100% !important;
     max-width: 100% !important;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x pan-y !important;
+    overscroll-behavior-x: contain !important;
     box-sizing: border-box !important;
     position: relative;
+    display: block !important;
 }
 
 .ewu-schedule-table-responsive > table,
+.ewu-schedule-table-responsive table,
 .ewu-ledger-table-responsive > table,
+.ewu-ledger-table-responsive table,
 .ewu-offered-table-responsive > table,
-.table-responsive > table.table:not(.ewu-summary-table) {
-    min-width: 780px;
+.ewu-offered-table-responsive table,
+.table-responsive > table.table:not(.ewu-summary-table),
+.table-responsive table.table:not(.ewu-summary-table),
+table.ewu-ledger-table {
+    min-width: 820px !important;
+    width: 100% !important;
 }
 
 @media (max-width: 768px) {
@@ -1411,14 +1433,53 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
         line-height: 1.25 !important;
     }
 
+    .ewu-summary-table-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-x pan-y !important;
+        overscroll-behavior-x: contain !important;
+        display: block !important;
+        box-sizing: border-box !important;
+    }
+
     .ewu-summary-table {
         font-size: 11.5px !important;
-        min-width: 440px !important;
+        min-width: 460px !important;
+        width: max-content !important;
     }
 
     .ewu-summary-table th,
     .ewu-summary-table td {
         padding: 6px 8px !important;
+    }
+
+    /* Accounts Ledger Transaction Table on Mobile */
+    .ewu-ledger-table-responsive {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-x pan-y !important;
+        overscroll-behavior-x: contain !important;
+        display: block !important;
+        box-sizing: border-box !important;
+    }
+
+    .ewu-ledger-table-responsive table,
+    table.ewu-ledger-table {
+        min-width: 820px !important;
+        width: max-content !important;
+    }
+
+    .ewu-ledger-table-responsive table th,
+    .ewu-ledger-table-responsive table td,
+    table.ewu-ledger-table th,
+    table.ewu-ledger-table td {
+        white-space: nowrap !important;
+        padding: 6px 8px !important;
+        font-size: 11.5px !important;
     }
 }
 
@@ -2160,8 +2221,15 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
   }
 
   function ensureResponsiveTableWrapper(table, extraClass) {
+    let existing = table.closest('.table-responsive');
+    if (existing) {
+      if (extraClass && !existing.classList.contains(extraClass)) {
+        existing.classList.add(extraClass);
+      }
+      return existing;
+    }
     let parent = table.parentElement;
-    if (parent && (parent.classList.contains('table-responsive') || parent.classList.contains('ewu-schedule-table-responsive'))) {
+    if (parent && parent.classList.contains('ewu-schedule-table-responsive')) {
       if (extraClass && !parent.classList.contains(extraClass)) {
         parent.classList.add(extraClass);
       }
@@ -2172,6 +2240,42 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     parent.insertBefore(wrapper, table);
     wrapper.appendChild(table);
     return wrapper;
+  }
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  function attachScrollableTouchShield(el) {
+    if (!el || el.dataset.touchShieldAttached) return;
+    el.dataset.touchShieldAttached = 'true';
+
+    el.addEventListener('touchstart', (e) => {
+      if (e.touches && e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    el.addEventListener('touchmove', (e) => {
+      if (e.touches && e.touches.length === 1) {
+        const dx = Math.abs(e.touches[0].clientX - touchStartX);
+        const dy = Math.abs(e.touches[0].clientY - touchStartY);
+        if (dx > dy && dx > 6) {
+          if (window.AndroidBridge && typeof window.AndroidBridge.setSwipeRefreshEnabled === 'function') {
+            window.AndroidBridge.setSwipeRefreshEnabled(false);
+          }
+        }
+      }
+    }, { passive: true });
+
+    const resetSwipe = () => {
+      if (window.AndroidBridge && typeof window.AndroidBridge.setSwipeRefreshEnabled === 'function') {
+        window.AndroidBridge.setSwipeRefreshEnabled(true);
+      }
+    };
+
+    el.addEventListener('touchend', resetSwipe, { passive: true });
+    el.addEventListener('touchcancel', resetSwipe, { passive: true });
   }
 
   ensureMobileViewport();
@@ -2308,6 +2412,7 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     const responsiveContainer = table.closest('.table-responsive') || table.parentElement;
     if (responsiveContainer) {
       responsiveContainer.classList.add('ewu-schedule-table-responsive');
+      attachScrollableTouchShield(responsiveContainer);
     }
     let banner = responsiveContainer.parentElement.querySelector('.ewu-schedule-banner');
     if (responsiveContainer && !banner) {
@@ -3763,6 +3868,7 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     });
 
     const container = ensureResponsiveTableWrapper(table, 'ewu-offered-table-responsive');
+    attachScrollableTouchShield(container);
     let toolbar = container.parentElement.querySelector('.ewu-offered-toolbar');
     if (!toolbar) {
       toolbar = document.createElement('div');
@@ -3928,6 +4034,8 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
 
     // Ensure raw ledger transaction table is wrapped in responsive scroll container
     const responsiveWrapper = ensureResponsiveTableWrapper(table, 'ewu-ledger-table-responsive');
+    table.classList.add('ewu-ledger-table');
+    attachScrollableTouchShield(responsiveWrapper);
 
     // Mobile scroll hint before raw ledger table
     let scrollHint = responsiveWrapper.parentElement.querySelector('.ewu-ledger-scroll-hint');
@@ -3939,6 +4047,12 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     }
 
     let summaryCard = responsiveWrapper.parentElement.querySelector('.ewu-ledger-summary-card');
+
+    // Signature cache check: prevents wiping out DOM and breaking horizontal swipe on every MutationObserver tick
+    const currentSignature = `${rows.length}_${totalBilled}_${totalPaid}_${totalWaiver}_${netDue}_${semesterOrder.join('|')}`;
+    if (summaryCard && summaryCard.dataset.signature === currentSignature) {
+      return;
+    }
 
     let rowsHtml = '';
     semesterOrder.forEach((sem) => {
@@ -4029,10 +4143,17 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     if (!summaryCard) {
       summaryCard = document.createElement('div');
       summaryCard.className = 'ewu-ledger-summary-card';
+      summaryCard.dataset.signature = currentSignature;
       summaryCard.innerHTML = summaryHtml;
       responsiveWrapper.parentElement.insertBefore(summaryCard, scrollHint);
     } else {
+      summaryCard.dataset.signature = currentSignature;
       summaryCard.innerHTML = summaryHtml;
+    }
+
+    const summaryTableWrapper = summaryCard.querySelector('.ewu-summary-table-wrapper');
+    if (summaryTableWrapper) {
+      attachScrollableTouchShield(summaryTableWrapper);
     }
   }
 
@@ -4045,6 +4166,10 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     const tables = document.querySelectorAll('table');
 
     tables.forEach((table) => {
+      // Skip internal summary table
+      if (table.classList.contains('ewu-summary-table') || table.closest('.ewu-ledger-summary-card')) {
+        return;
+      }
       // 1. Class Schedule & Advising
       if (!path.includes('facultyevaluation') && !path.includes('offeredcourses') && !path.includes('studentledger')) {
         processClassSchedule(table);

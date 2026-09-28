@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.1] - 2026-09-28
+
+### 🛠️ Fixed & Improved
+- **Accounts Ledger Horizontal Swipe Glitch Resolved**:
+  - **Eliminated Infinite DOM Mutation Loop**: Added data signature caching to `processStudentLedger()` (`content.js`). Previously, updating `summaryCard.innerHTML` on every debounced tick triggered an infinite `MutationObserver` re-render cycle (~12 times/sec), which tore down and recreated the DOM during touch gestures, causing horizontal swiping to glitch, cancel, or freeze.
+  - **Fixed Sticky Column Rendering Bug**: Replaced `border-collapse: collapse` with `border-collapse: separate` and `border-spacing: 0` on `.ewu-summary-table`. In Chromium and Android WebView, `position: sticky` on table cells inside a collapsed border table causes jittery rendering and breaks horizontal swipe scrolling.
+  - **Nested Scroll Container Conflict Prevention**: Refactored `ensureResponsiveTableWrapper()` to detect existing ancestor `.table-responsive` containers via `closest()`, preventing nested `overflow-x: auto` wrappers from fighting over horizontal scroll gestures.
+  - **Mobile Touch Shielding & SwipeRefresh Protection**: Added `touch-action: pan-x pan-y !important` and `overscroll-behavior-x: contain !important` to table responsive wrappers, and added a touch shield listener with `AndroidBridge.setSwipeRefreshEnabled(false)` so horizontal swipes near the top of the screen cannot be accidentally stolen by Android's pull-to-refresh.
+  - **Ledger Table Width & No-Wrap Styling**: Enforced `min-width: 820px !important`, `width: max-content !important`, and `white-space: nowrap !important` on the raw ledger table so columns remain properly sized and smoothly swipeable on mobile.
+
+---
+
 ## [1.3.0] - 2026-09-12
 
 ### 🚀 Added

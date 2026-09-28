@@ -429,6 +429,9 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     max-width: 100% !important;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x pan-y !important;
+    overscroll-behavior-x: contain !important;
+    display: block !important;
     box-sizing: border-box !important;
     margin-top: 10px;
     border-radius: 8px;
@@ -437,10 +440,11 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
 
 .ewu-summary-table {
     width: 100% !important;
-    min-width: 460px;
+    min-width: 480px !important;
     margin-bottom: 0 !important;
     font-size: 13px;
-    border-collapse: collapse;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
 }
 
 .ewu-summary-table th {
@@ -455,6 +459,7 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     padding: 8px 10px !important;
     vertical-align: middle !important;
     white-space: nowrap;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .ewu-summary-table .sem-col,
@@ -466,16 +471,23 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
     z-index: 2;
     font-weight: 600;
     box-shadow: 2px 0 4px -2px rgba(0, 0, 0, 0.08);
+    border-right: 1px solid #e2e8f0;
 }
 
 .ewu-summary-table thead th:first-child {
+    position: sticky;
+    left: 0;
     background: #f8fafc !important;
     z-index: 3;
+    border-right: 1px solid #cbd5e1;
 }
 
 .ewu-summary-table tfoot td:first-child {
+    position: sticky;
+    left: 0;
     background: #f1f5f9 !important;
     z-index: 3;
+    border-right: 1px solid #cbd5e1;
 }
 
 .ewu-summary-table .num-col,
@@ -1083,20 +1095,30 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
 .ewu-schedule-table-responsive,
 .ewu-ledger-table-responsive,
 .ewu-offered-table-responsive,
+.ewu-summary-table-wrapper,
 .table-responsive {
     width: 100% !important;
     max-width: 100% !important;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x pan-y !important;
+    overscroll-behavior-x: contain !important;
     box-sizing: border-box !important;
     position: relative;
+    display: block !important;
 }
 
 .ewu-schedule-table-responsive > table,
+.ewu-schedule-table-responsive table,
 .ewu-ledger-table-responsive > table,
+.ewu-ledger-table-responsive table,
 .ewu-offered-table-responsive > table,
-.table-responsive > table.table:not(.ewu-summary-table) {
-    min-width: 780px;
+.ewu-offered-table-responsive table,
+.table-responsive > table.table:not(.ewu-summary-table),
+.table-responsive table.table:not(.ewu-summary-table),
+table.ewu-ledger-table {
+    min-width: 820px !important;
+    width: 100% !important;
 }
 
 @media (max-width: 768px) {
@@ -1390,14 +1412,53 @@ body.ewu-schedule-disabled .ewu-schedule-banner {
         line-height: 1.25 !important;
     }
 
+    .ewu-summary-table-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-x pan-y !important;
+        overscroll-behavior-x: contain !important;
+        display: block !important;
+        box-sizing: border-box !important;
+    }
+
     .ewu-summary-table {
         font-size: 11.5px !important;
-        min-width: 440px !important;
+        min-width: 460px !important;
+        width: max-content !important;
     }
 
     .ewu-summary-table th,
     .ewu-summary-table td {
         padding: 6px 8px !important;
+    }
+
+    /* Accounts Ledger Transaction Table on Mobile */
+    .ewu-ledger-table-responsive {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-x pan-y !important;
+        overscroll-behavior-x: contain !important;
+        display: block !important;
+        box-sizing: border-box !important;
+    }
+
+    .ewu-ledger-table-responsive table,
+    table.ewu-ledger-table {
+        min-width: 820px !important;
+        width: max-content !important;
+    }
+
+    .ewu-ledger-table-responsive table th,
+    .ewu-ledger-table-responsive table td,
+    table.ewu-ledger-table th,
+    table.ewu-ledger-table td {
+        white-space: nowrap !important;
+        padding: 6px 8px !important;
+        font-size: 11.5px !important;
     }
 }
 

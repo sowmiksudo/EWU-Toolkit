@@ -47,6 +47,16 @@ class WebAppInterface(
     }
 
     @JavascriptInterface
+    fun setSwipeRefreshEnabled(enabled: Boolean) {
+        activity.runOnUiThread {
+            try {
+                val srl = activity.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.swipeRefreshLayout)
+                srl?.isEnabled = enabled
+            } catch (_: Exception) {}
+        }
+    }
+
+    @JavascriptInterface
     fun saveBase64File(base64Data: String, filename: String, mimeType: String) {
         activity.runOnUiThread {
             Toast.makeText(activity, "Saving $filename...", Toast.LENGTH_SHORT).show()

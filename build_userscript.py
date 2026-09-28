@@ -9,7 +9,7 @@ with open('content.js', 'r', encoding='utf-8') as f:
 header = '''// ==UserScript==
 // @name         EWU-Toolkit
 // @namespace    https://github.com/sowmiksudo/EWU-Toolkit
-// @version      1.3.0
+// @version      1.3.1
 // @description  Complete student utility suite for EWU Portal: visual weekly class routine generator, 1-click Excel export, unhide faculty info, seat availability & filters, accounts ledger breakdown, and more.
 // @author       Sowmik
 // @match        https://portal.ewubd.edu/*

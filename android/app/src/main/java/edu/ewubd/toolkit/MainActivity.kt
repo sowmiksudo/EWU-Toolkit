@@ -372,6 +372,9 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout.setOnRefreshListener {
             reloadPortal()
         }
+        swipeRefreshLayout.setOnChildScrollUpCallback { _, _ ->
+            webView.scrollY > 5 || webView.canScrollVertically(-1)
+        }
     }
 
     private fun setupBackNavigation() {
