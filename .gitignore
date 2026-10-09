@@ -18,3 +18,4 @@ scratch/
 *.csv
 evaluate_endpoints.py
 run_student_endpoints.py
+/.vscode

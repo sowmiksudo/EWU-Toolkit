@@ -5,7 +5,8 @@
     scheduleEnabled: true,
     offeredEnabled: true,
     ledgerEnabled: true,
-    routineEnabled: true
+    routineEnabled: true,
+    captchaEnabled: true
   };
 
   if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
@@ -13,12 +14,14 @@
       ewu_schedule_enabled: true,
       ewu_offered_enabled: true,
       ewu_ledger_enabled: true,
-      ewu_routine_enabled: true
+      ewu_routine_enabled: true,
+      ewu_captcha_enabled: true
     }, (res) => {
       config.scheduleEnabled = res.ewu_schedule_enabled !== false;
       config.offeredEnabled = res.ewu_offered_enabled !== false;
       config.ledgerEnabled = res.ewu_ledger_enabled !== false;
       config.routineEnabled = res.ewu_routine_enabled !== false;
+      config.captchaEnabled = res.ewu_captcha_enabled !== false;
       runEnhancements();
     });
 
@@ -28,6 +31,7 @@
         if (changes.ewu_offered_enabled) config.offeredEnabled = changes.ewu_offered_enabled.newValue !== false;
         if (changes.ewu_ledger_enabled) config.ledgerEnabled = changes.ewu_ledger_enabled.newValue !== false;
         if (changes.ewu_routine_enabled) config.routineEnabled = changes.ewu_routine_enabled.newValue !== false;
+        if (changes.ewu_captcha_enabled) config.captchaEnabled = changes.ewu_captcha_enabled.newValue !== false;
         runEnhancements();
       }
     });
@@ -1987,10 +1991,154 @@
   }
 
   // =========================================================================
+  // FEATURE 5: Automatic Login Math Captcha Solver
+  // =========================================================================
+  function processLoginCaptcha() {
+    const answerInputs = document.querySelectorAll(
+      'input#lblcaptchaAnswer, input[name="Answer"], input#Answer, input[name*="Answer" i], input[id*="captcha" i], input[name*="captcha" i]'
+    );
+
+    if (answerInputs.length === 0) return;
+
+    answerInputs.forEach((answerInput) => {
+      // If disabled via settings, revert any styling/badge and exit
+      if (!config.captchaEnabled) {
+        if (answerInput.dataset.ewuSolved) {
+          delete answerInput.dataset.ewuSolved;
+          delete answerInput.dataset.ewuProblem;
+          delete answerInput.dataset.ewuUserEdited;
+          answerInput.classList.remove('ewu-captcha-solved-input');
+          const existingBadge = answerInput.parentElement ? answerInput.parentElement.querySelector('.ewu-captcha-badge') : null;
+          if (existingBadge) existingBadge.remove();
+        }
+        return;
+      }
+
+      const form = answerInput.closest('form') || document;
+
+      // 1. Try hidden inputs FirstNo and SecondNo within the same form/context
+      let num1 = NaN;
+      let num2 = NaN;
+
+      const hiddenFirst = form.querySelector('input[name="FirstNo"]');
+      const hiddenSecond = form.querySelector('input[name="SecondNo"]');
+      if (hiddenFirst && hiddenFirst.value !== '') {
+        num1 = parseInt(hiddenFirst.value.trim(), 10);
+      }
+      if (hiddenSecond && hiddenSecond.value !== '') {
+        num2 = parseInt(hiddenSecond.value.trim(), 10);
+      }
+
+      // 2. Try label IDs lblFirstNo and lblSecondNo
+      if (isNaN(num1)) {
+        const lblFirst = form.querySelector('#lblFirstNo') || document.getElementById('lblFirstNo');
+        if (lblFirst && lblFirst.textContent) {
+          num1 = parseInt(lblFirst.textContent.trim(), 10);
+        }
+      }
+      if (isNaN(num2)) {
+        const lblSecond = form.querySelector('#lblSecondNo') || document.getElementById('lblSecondNo');
+        if (lblSecond && lblSecond.textContent) {
+          num2 = parseInt(lblSecond.textContent.trim(), 10);
+        }
+      }
+
+      // 3. Fallback: regex search in parent group or form for "X + Y"
+      if (isNaN(num1) || isNaN(num2)) {
+        const container = answerInput.closest('.input-group') || form;
+        if (container) {
+          const text = container.textContent || '';
+          const match = text.match(/(\d+)\s*\+\s*(\d+)/);
+          if (match) {
+            num1 = parseInt(match[1], 10);
+            num2 = parseInt(match[2], 10);
+          }
+        }
+      }
+
+      if (isNaN(num1) || isNaN(num2)) return;
+
+      const sum = num1 + num2;
+      const answer = String(sum);
+      const problemKey = `${num1}+${num2}`;
+
+      // If already solved and matches current state, nothing to do
+      const existingBadge = answerInput.parentElement ? answerInput.parentElement.querySelector('.ewu-captcha-badge') : null;
+      if (answerInput.dataset.ewuProblem === problemKey && answerInput.dataset.ewuSolved === answer && answerInput.value === answer && existingBadge) {
+        return;
+      }
+
+      // If problem hasn't changed and user manually typed their own value, don't overwrite
+      if (answerInput.dataset.ewuProblem === problemKey && answerInput.dataset.ewuUserEdited === 'true') {
+        return;
+      }
+
+      // Set solved answer value
+      answerInput.value = answer;
+      answerInput.setAttribute('value', answer);
+      answerInput.dataset.ewuSolved = answer;
+      answerInput.dataset.ewuProblem = problemKey;
+      answerInput.dataset.ewuUserEdited = 'false';
+      answerInput.classList.add('ewu-captcha-solved-input');
+
+      // Dispatch change/input events for listeners
+      answerInput.dispatchEvent(new Event('input', { bubbles: true }));
+      answerInput.dispatchEvent(new Event('change', { bubbles: true }));
+
+      // Attach user edit listener once
+      if (!answerInput.dataset.ewuListenerAttached) {
+        answerInput.dataset.ewuListenerAttached = 'true';
+        answerInput.addEventListener('input', () => {
+          if (answerInput.value !== answerInput.dataset.ewuSolved) {
+            answerInput.dataset.ewuUserEdited = 'true';
+            const b = answerInput.parentElement ? answerInput.parentElement.querySelector('.ewu-captcha-badge') : null;
+            if (b) b.style.display = 'none';
+            answerInput.classList.remove('ewu-captcha-solved-input');
+          }
+        });
+      }
+
+      // Safety net: form submit listener ensures answer is filled before onsubmit check
+      const actualForm = answerInput.closest('form') || document.getElementById('loginform') || document.forms['myForm'];
+      if (actualForm && !actualForm.dataset.ewuCaptchaHooked) {
+        actualForm.dataset.ewuCaptchaHooked = 'true';
+        actualForm.addEventListener('submit', () => {
+          if (config.captchaEnabled && (!answerInput.value || answerInput.value.trim() === '')) {
+            answerInput.value = answer;
+            answerInput.setAttribute('value', answer);
+          }
+        }, true);
+      }
+
+      // Render or update badge
+      let badge = existingBadge;
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'ewu-captcha-badge';
+        badge.innerHTML = `
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor" style="display:inline-block;vertical-align:-1px;">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg> Auto-solved
+        `;
+        badge.title = `Captcha auto-solved by EWU-Toolkit (${num1} + ${num2} = ${sum})`;
+        if (answerInput.nextSibling) {
+          answerInput.parentNode.insertBefore(badge, answerInput.nextSibling);
+        } else {
+          answerInput.parentNode.appendChild(badge);
+        }
+      } else {
+        badge.style.display = '';
+        badge.title = `Captcha auto-solved by EWU-Toolkit (${num1} + ${num2} = ${sum})`;
+      }
+    });
+  }
+
+  // =========================================================================
   // Master Dispatcher
   // =========================================================================
   function runEnhancements() {
     ensureMobileViewport();
+    processLoginCaptcha();
     const path = window.location.pathname.toLowerCase();
     const tables = document.querySelectorAll('table');
 
@@ -2016,7 +2164,11 @@
     });
   }
 
-  runEnhancements();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', runEnhancements);
+  } else {
+    runEnhancements();
+  }
 
   let debounceTimer = null;
   const observer = new MutationObserver(() => {
@@ -2033,6 +2185,7 @@
         if (msg.feature === 'offered') config.offeredEnabled = msg.enabled;
         if (msg.feature === 'ledger') config.ledgerEnabled = msg.enabled;
         if (msg.feature === 'routine') config.routineEnabled = msg.enabled;
+        if (msg.feature === 'captcha') config.captchaEnabled = msg.enabled;
         runEnhancements();
         sendResponse({ success: true, config });
       }

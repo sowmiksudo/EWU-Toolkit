@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity() {
                     requestMethod = "GET"
                     connectTimeout = 10000
                     readTimeout = 15000
-                    setRequestProperty("User-Agent", "EWU-Toolkit-Android/1.3.0")
+                    setRequestProperty("User-Agent", "EWU-Toolkit-Android/${BuildConfig.VERSION_NAME}")
                     setRequestProperty("Cache-Control", "no-cache")
                     instanceFollowRedirects = true
                 }

@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.2] - 2026-10-09
+
+### 🚀 Added
+- **Automatic Login Math Captcha Solver**:
+  - Automatically parses two-number addition operands from student and portal login forms (`#lblFirstNo` / `#lblSecondNo`, `FirstNo` / `SecondNo` hidden fields, and arithmetic text patterns).
+  - Instantly computes the sum and populates the answer field (`#lblcaptchaAnswer` / `name="Answer"`), setting both DOM value property and HTML attribute.
+  - Injects a sleek, unobtrusive **`✓ Auto-solved`** visual status badge with informative calculation tooltip (`X + Y = Z`) and a clean green-tinted input border.
+  - Automatically triggers reactive `input` and `change` events and installs a pre-submit safety hook so standard `loginclick()` verification passes seamlessly.
+  - Includes user-edit preservation (hides badge and avoids overriding if student manually types a custom value) and auto-recalculation upon captcha regeneration or dynamic reloads.
+  - Added dedicated toggle control (**⚡ Auto Solve Captcha**) in the extension popup menu and full sync across Chrome extension, Tampermonkey userscript, and native Android app.
+
+---
+
 ## [1.3.1] - 2026-09-28
 
 ### 🛠️ Fixed & Improved
@@ -94,3 +107,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial release: **EWU Faculty Reveal**.
 - Revealed hidden teacher initials, full names, and official university email addresses on class schedule tables.
 - 1-click email copy button with tooltip feedback.
+
+[1.3.2]: https://github.com/sowmiksudo/EWU-Toolkit/compare/v1.3.1...v1.3.2
+[1.3.1]: https://github.com/sowmiksudo/EWU-Toolkit/compare/v1.3.0...v1.3.1
+[1.3.0]: https://github.com/sowmiksudo/EWU-Toolkit/compare/v1.1.0...v1.3.0
+[1.1.0]: https://github.com/sowmiksudo/EWU-Toolkit/compare/1.0...v1.1.0
+[1.0.0]: https://github.com/sowmiksudo/EWU-Toolkit/releases/tag/1.0

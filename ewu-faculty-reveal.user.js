@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name         EWU-Toolkit
 // @namespace    https://github.com/sowmiksudo/EWU-Toolkit
-// @version      1.3.1
-// @description  Complete student utility suite for EWU Portal: visual weekly class routine generator, 1-click Excel export, unhide faculty info, seat availability & filters, accounts ledger breakdown, and more.
+// @version      1.3.2
+// @description  Complete student utility suite for EWU Portal: visual weekly class routine generator, 1-click Excel export, unhide faculty info, seat availability & filters, accounts ledger breakdown, and auto login captcha solver.
 // @author       Sowmik
 // @match        https://portal.ewubd.edu/*
 // @match        http://portal.ewubd.edu/*
+// @match        https://faportal.ewubd.edu/*
+// @match        http://faportal.ewubd.edu/*
 // @icon         https://portal.ewubd.edu/favicon.ico
 // @grant        GM_setClipboard
 // @run-at       document-end
@@ -1619,6 +1621,45 @@ table.ewu-ledger-table {
 }
 
 /* --------------------------------------------------------------------------
+   6. Automatic Login Math Captcha Solver
+   -------------------------------------------------------------------------- */
+.ewu-captcha-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #047857 !important;
+    background: #ecfdf5 !important;
+    border: 1px solid #a7f3d0 !important;
+    border-radius: 4px !important;
+    padding: 2px 7px !important;
+    margin-left: 6px !important;
+    margin-top: 1px !important;
+    vertical-align: middle !important;
+    line-height: 1.25 !important;
+    letter-spacing: 0.2px !important;
+    white-space: nowrap !important;
+    user-select: none !important;
+    box-shadow: 0 1px 2px rgba(16, 185, 129, 0.1) !important;
+    animation: ewuFadeIn 0.25s ease-out !important;
+}
+
+.ewu-captcha-solved-input {
+    border-color: #10b981 !important;
+    background-color: #f0fdf4 !important;
+    color: #065f46 !important;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2) !important;
+    transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s !important;
+}
+
+.ewu-captcha-solved-input:focus {
+    border-color: #059669 !important;
+    background-color: #ffffff !important;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3) !important;
+}
+
+/* --------------------------------------------------------------------------
    7. Comprehensive Print Optimization (@media print)
    -------------------------------------------------------------------------- */
 @media print {
@@ -2176,7 +2217,8 @@ table.ewu-ledger-table {
     scheduleEnabled: true,
     offeredEnabled: true,
     ledgerEnabled: true,
-    routineEnabled: true
+    routineEnabled: true,
+    captchaEnabled: true
   };
 
   if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
@@ -2184,12 +2226,14 @@ table.ewu-ledger-table {
       ewu_schedule_enabled: true,
       ewu_offered_enabled: true,
       ewu_ledger_enabled: true,
-      ewu_routine_enabled: true
+      ewu_routine_enabled: true,
+      ewu_captcha_enabled: true
     }, (res) => {
       config.scheduleEnabled = res.ewu_schedule_enabled !== false;
       config.offeredEnabled = res.ewu_offered_enabled !== false;
       config.ledgerEnabled = res.ewu_ledger_enabled !== false;
       config.routineEnabled = res.ewu_routine_enabled !== false;
+      config.captchaEnabled = res.ewu_captcha_enabled !== false;
       runEnhancements();
     });
 
@@ -2199,6 +2243,7 @@ table.ewu-ledger-table {
         if (changes.ewu_offered_enabled) config.offeredEnabled = changes.ewu_offered_enabled.newValue !== false;
         if (changes.ewu_ledger_enabled) config.ledgerEnabled = changes.ewu_ledger_enabled.newValue !== false;
         if (changes.ewu_routine_enabled) config.routineEnabled = changes.ewu_routine_enabled.newValue !== false;
+        if (changes.ewu_captcha_enabled) config.captchaEnabled = changes.ewu_captcha_enabled.newValue !== false;
         runEnhancements();
       }
     });
@@ -4158,10 +4203,154 @@ table.ewu-ledger-table {
   }
 
   // =========================================================================
+  // FEATURE 5: Automatic Login Math Captcha Solver
+  // =========================================================================
+  function processLoginCaptcha() {
+    const answerInputs = document.querySelectorAll(
+      'input#lblcaptchaAnswer, input[name="Answer"], input#Answer, input[name*="Answer" i], input[id*="captcha" i], input[name*="captcha" i]'
+    );
+
+    if (answerInputs.length === 0) return;
+
+    answerInputs.forEach((answerInput) => {
+      // If disabled via settings, revert any styling/badge and exit
+      if (!config.captchaEnabled) {
+        if (answerInput.dataset.ewuSolved) {
+          delete answerInput.dataset.ewuSolved;
+          delete answerInput.dataset.ewuProblem;
+          delete answerInput.dataset.ewuUserEdited;
+          answerInput.classList.remove('ewu-captcha-solved-input');
+          const existingBadge = answerInput.parentElement ? answerInput.parentElement.querySelector('.ewu-captcha-badge') : null;
+          if (existingBadge) existingBadge.remove();
+        }
+        return;
+      }
+
+      const form = answerInput.closest('form') || document;
+
+      // 1. Try hidden inputs FirstNo and SecondNo within the same form/context
+      let num1 = NaN;
+      let num2 = NaN;
+
+      const hiddenFirst = form.querySelector('input[name="FirstNo"]');
+      const hiddenSecond = form.querySelector('input[name="SecondNo"]');
+      if (hiddenFirst && hiddenFirst.value !== '') {
+        num1 = parseInt(hiddenFirst.value.trim(), 10);
+      }
+      if (hiddenSecond && hiddenSecond.value !== '') {
+        num2 = parseInt(hiddenSecond.value.trim(), 10);
+      }
+
+      // 2. Try label IDs lblFirstNo and lblSecondNo
+      if (isNaN(num1)) {
+        const lblFirst = form.querySelector('#lblFirstNo') || document.getElementById('lblFirstNo');
+        if (lblFirst && lblFirst.textContent) {
+          num1 = parseInt(lblFirst.textContent.trim(), 10);
+        }
+      }
+      if (isNaN(num2)) {
+        const lblSecond = form.querySelector('#lblSecondNo') || document.getElementById('lblSecondNo');
+        if (lblSecond && lblSecond.textContent) {
+          num2 = parseInt(lblSecond.textContent.trim(), 10);
+        }
+      }
+
+      // 3. Fallback: regex search in parent group or form for "X + Y"
+      if (isNaN(num1) || isNaN(num2)) {
+        const container = answerInput.closest('.input-group') || form;
+        if (container) {
+          const text = container.textContent || '';
+          const match = text.match(/(\d+)\s*\+\s*(\d+)/);
+          if (match) {
+            num1 = parseInt(match[1], 10);
+            num2 = parseInt(match[2], 10);
+          }
+        }
+      }
+
+      if (isNaN(num1) || isNaN(num2)) return;
+
+      const sum = num1 + num2;
+      const answer = String(sum);
+      const problemKey = `${num1}+${num2}`;
+
+      // If already solved and matches current state, nothing to do
+      const existingBadge = answerInput.parentElement ? answerInput.parentElement.querySelector('.ewu-captcha-badge') : null;
+      if (answerInput.dataset.ewuProblem === problemKey && answerInput.dataset.ewuSolved === answer && answerInput.value === answer && existingBadge) {
+        return;
+      }
+
+      // If problem hasn't changed and user manually typed their own value, don't overwrite
+      if (answerInput.dataset.ewuProblem === problemKey && answerInput.dataset.ewuUserEdited === 'true') {
+        return;
+      }
+
+      // Set solved answer value
+      answerInput.value = answer;
+      answerInput.setAttribute('value', answer);
+      answerInput.dataset.ewuSolved = answer;
+      answerInput.dataset.ewuProblem = problemKey;
+      answerInput.dataset.ewuUserEdited = 'false';
+      answerInput.classList.add('ewu-captcha-solved-input');
+
+      // Dispatch change/input events for listeners
+      answerInput.dispatchEvent(new Event('input', { bubbles: true }));
+      answerInput.dispatchEvent(new Event('change', { bubbles: true }));
+
+      // Attach user edit listener once
+      if (!answerInput.dataset.ewuListenerAttached) {
+        answerInput.dataset.ewuListenerAttached = 'true';
+        answerInput.addEventListener('input', () => {
+          if (answerInput.value !== answerInput.dataset.ewuSolved) {
+            answerInput.dataset.ewuUserEdited = 'true';
+            const b = answerInput.parentElement ? answerInput.parentElement.querySelector('.ewu-captcha-badge') : null;
+            if (b) b.style.display = 'none';
+            answerInput.classList.remove('ewu-captcha-solved-input');
+          }
+        });
+      }
+
+      // Safety net: form submit listener ensures answer is filled before onsubmit check
+      const actualForm = answerInput.closest('form') || document.getElementById('loginform') || document.forms['myForm'];
+      if (actualForm && !actualForm.dataset.ewuCaptchaHooked) {
+        actualForm.dataset.ewuCaptchaHooked = 'true';
+        actualForm.addEventListener('submit', () => {
+          if (config.captchaEnabled && (!answerInput.value || answerInput.value.trim() === '')) {
+            answerInput.value = answer;
+            answerInput.setAttribute('value', answer);
+          }
+        }, true);
+      }
+
+      // Render or update badge
+      let badge = existingBadge;
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'ewu-captcha-badge';
+        badge.innerHTML = `
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor" style="display:inline-block;vertical-align:-1px;">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg> Auto-solved
+        `;
+        badge.title = `Captcha auto-solved by EWU-Toolkit (${num1} + ${num2} = ${sum})`;
+        if (answerInput.nextSibling) {
+          answerInput.parentNode.insertBefore(badge, answerInput.nextSibling);
+        } else {
+          answerInput.parentNode.appendChild(badge);
+        }
+      } else {
+        badge.style.display = '';
+        badge.title = `Captcha auto-solved by EWU-Toolkit (${num1} + ${num2} = ${sum})`;
+      }
+    });
+  }
+
+  // =========================================================================
   // Master Dispatcher
   // =========================================================================
   function runEnhancements() {
     ensureMobileViewport();
+    processLoginCaptcha();
     const path = window.location.pathname.toLowerCase();
     const tables = document.querySelectorAll('table');
 
@@ -4187,7 +4376,11 @@ table.ewu-ledger-table {
     });
   }
 
-  runEnhancements();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', runEnhancements);
+  } else {
+    runEnhancements();
+  }
 
   let debounceTimer = null;
   const observer = new MutationObserver(() => {
@@ -4204,6 +4397,7 @@ table.ewu-ledger-table {
         if (msg.feature === 'offered') config.offeredEnabled = msg.enabled;
         if (msg.feature === 'ledger') config.ledgerEnabled = msg.enabled;
         if (msg.feature === 'routine') config.routineEnabled = msg.enabled;
+        if (msg.feature === 'captcha') config.captchaEnabled = msg.enabled;
         runEnhancements();
         sendResponse({ success: true, config });
       }

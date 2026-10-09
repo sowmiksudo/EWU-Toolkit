@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const toggleOffered = document.getElementById('toggleOffered');
   const toggleLedger = document.getElementById('toggleLedger');
   const toggleRoutine = document.getElementById('toggleRoutine');
+  const toggleCaptcha = document.getElementById('toggleCaptcha');
   const toggleLicenseBtn = document.getElementById('toggleLicenseBtn');
   const licenseNotice = document.getElementById('licenseNotice');
 
@@ -21,12 +22,14 @@ document.addEventListener('DOMContentLoaded', () => {
       ewu_schedule_enabled: true,
       ewu_offered_enabled: true,
       ewu_ledger_enabled: true,
-      ewu_routine_enabled: true
+      ewu_routine_enabled: true,
+      ewu_captcha_enabled: true
     }, (res) => {
       toggleSchedule.checked = res.ewu_schedule_enabled !== false;
       toggleOffered.checked = res.ewu_offered_enabled !== false;
       toggleLedger.checked = res.ewu_ledger_enabled !== false;
       if (toggleRoutine) toggleRoutine.checked = res.ewu_routine_enabled !== false;
+      if (toggleCaptcha) toggleCaptcha.checked = res.ewu_captcha_enabled !== false;
     });
   }
 
@@ -51,4 +54,5 @@ document.addEventListener('DOMContentLoaded', () => {
   handleToggle('ewu_offered_enabled', 'offered', toggleOffered);
   handleToggle('ewu_ledger_enabled', 'ledger', toggleLedger);
   handleToggle('ewu_routine_enabled', 'routine', toggleRoutine);
+  handleToggle('ewu_captcha_enabled', 'captcha', toggleCaptcha);
 });

@@ -42,7 +42,7 @@
 If you prefer installing it directly as a browser extension without Tampermonkey:
 
 1. **Download the Extension:**
-   - Download the latest **`EWU-Toolkit-v1.3.0.zip`** from [Releases](https://github.com/sowmiksudo/EWU-Toolkit/releases).
+   - Download the latest **`EWU-Toolkit-v1.3.2.zip`** from [Releases](https://github.com/sowmiksudo/EWU-Toolkit/releases).
    - Unzip the downloaded folder on your computer.
 2. **Open Extensions in Chrome:**
    - Type `chrome://extensions` in your Chrome URL address bar and press Enter.
@@ -152,9 +152,18 @@ Looking for a dedicated web portal to browse, search, and plan course sections w
   <img src="icons/account ledger.png" alt="Accounts Ledger Breakdown and Bento Summary" width="100%">
 </p>
 
-### 5. 🎛️ Extension Control Menu
+### 5. ⚡ Automatic Math Captcha Solver on Student Login
+* **The Problem:** Every time you log into the EWU Student Portal (`portal.ewubd.edu`), you must manually calculate a random two-number math addition problem (e.g. `6 + 16 = ?`), slowing down login even when credentials are saved.
+* **What EWU-Toolkit does:**
+  * Instantly detects the math captcha operands on page load.
+  * Automatically calculates the sum and fills the answer field in milliseconds.
+  * Adds a subtle, sleek **`✓ Auto-solved`** status badge and green border indicator.
+  * Enables instant 1-click or Enter-key sign-in when browser credentials are saved.
+  * Intelligently respects manual typing if you edit the field, and recalculates whenever a new captcha is generated.
+
+### 6. 🎛️ Extension Control Menu
 * Click the extension icon anytime to:
-  * Turn individual features on or off.
+  * Turn individual features on or off (Schedule reveal, Seat badges, Ledger breakdown, Timetable routine, and Auto-captcha).
   * Quick-jump directly to Class Schedule, Offered Courses, or Accounts Ledger.
   * Check version info and open the GitHub project.
 
