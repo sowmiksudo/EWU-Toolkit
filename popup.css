@@ -149,6 +149,20 @@ body {
   border-radius: 4px;
 }
 
+.beta-tag {
+  background: #f59e0b;
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 9999px;
+  margin-left: 5px;
+  vertical-align: middle;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
 .repo-link {
   color: #38bdf8;
   text-decoration: none;

@@ -7,6 +7,10 @@
    -------------------------------------------------------------------------- */
 th[ng-show*="Status"].ng-hide,
 td[ng-show*="Status"].ng-hide,
+th[ng-show*="isTBA"].ng-hide,
+td[ng-show*="isTBA"].ng-hide,
+th[ng-show*="isTBA"],
+td[ng-show*="isTBA"],
 th.ewu-revealed-col,
 td.ewu-revealed-col {
     display: table-cell !important;
@@ -1912,6 +1916,10 @@ table.ewu-ledger-table {
 
     th[ng-show*="Status"].ng-hide,
     td[ng-show*="Status"].ng-hide,
+    th[ng-show*="isTBA"].ng-hide,
+    td[ng-show*="isTBA"].ng-hide,
+    th[ng-show*="isTBA"],
+    td[ng-show*="isTBA"],
     th.ewu-revealed-col,
     td.ewu-revealed-col {
         display: table-cell !important;
@@ -2183,3 +2191,2008 @@ table.ewu-ledger-table {
     }
 
 }
+
+/* ==========================================================================
+   8. In-Portal Sidebar Settings Navigation & Modal Overlay (v1.4.0)
+   ========================================================================== */
+.ewu-sidebar-settings-item {
+    position: relative;
+    list-style: none;
+}
+
+.ewu-sidebar-settings-link {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 10px 16px !important;
+    color: #4f46e5 !important;
+    background: rgba(99, 102, 241, 0.08) !important;
+    font-weight: 700 !important;
+    border-radius: 6px !important;
+    margin: 4px 8px !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+    border: 1px dashed rgba(99, 102, 241, 0.35) !important;
+}
+
+.ewu-sidebar-settings-link:hover {
+    background: rgba(99, 102, 241, 0.18) !important;
+    color: #3730a3 !important;
+    border-color: #6366f1 !important;
+    transform: translateX(3px);
+}
+
+.ewu-sidebar-badge {
+    margin-left: auto !important;
+    background: #4f46e5 !important;
+    color: #ffffff !important;
+    font-size: 10px !important;
+    padding: 2px 7px !important;
+    border-radius: 9999px !important;
+    font-weight: 700 !important;
+}
+
+/* Floating Settings Button */
+.ewu-floating-settings-btn {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    z-index: 99998;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 15px;
+    background: #0f172a;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 9999px;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.4), 0 0 0 1px rgba(99, 102, 241, 0.3);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ewu-floating-settings-btn:hover {
+    background: #1e1b4b;
+    border-color: #6366f1;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 14px 30px -5px rgba(99, 102, 241, 0.45);
+}
+
+/* Settings Modal */
+.ewu-settings-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: ewuModalFadeIn 0.2s ease-out;
+}
+
+@keyframes ewuModalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.ewu-settings-modal-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    animation: ewuModalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes ewuModalSlideUp {
+    from { transform: translateY(20px) scale(0.97); }
+    to { transform: translateY(0) scale(1); }
+}
+
+.ewu-settings-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px;
+    border-bottom: 1px solid #f1f5f9;
+    background: #f8fafc;
+}
+
+.ewu-settings-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ewu-settings-brand-icon {
+    font-size: 26px;
+}
+
+.ewu-settings-title-group h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 800;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ewu-settings-title-group p {
+    margin: 2px 0 0;
+    font-size: 11.5px;
+    color: #64748b;
+}
+
+.ewu-settings-close-btn {
+    background: #f1f5f9;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 9999px;
+    color: #475569;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.ewu-settings-close-btn:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+.ewu-settings-modal-body {
+    padding: 20px 22px;
+    overflow-y: auto;
+    max-height: calc(90vh - 120px);
+}
+
+.ewu-settings-section-title {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    margin: 18px 0 10px;
+}
+
+.ewu-settings-section-title:first-child {
+    margin-top: 0;
+}
+
+.ewu-settings-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    transition: all 0.2s;
+}
+
+.ewu-settings-toggle-row:hover {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.ewu-settings-toggle-info {
+    flex: 1;
+    padding-right: 14px;
+}
+
+.ewu-settings-toggle-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 2px;
+}
+
+.ewu-settings-toggle-desc {
+    font-size: 11px;
+    color: #64748b;
+    line-height: 1.35;
+}
+
+.ewu-beta-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1.2;
+    background: #f59e0b;
+    color: #ffffff;
+    padding: 2px 6px;
+    border-radius: 9999px;
+    margin-left: 6px;
+    vertical-align: middle;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+body.ewu-dark-mode .ewu-beta-tag {
+    background: #d97706 !important;
+    color: #ffffff !important;
+}
+
+/* Switch Styles */
+.ewu-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.ewu-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.ewu-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e1;
+    transition: .3s;
+    border-radius: 34px;
+}
+
+.ewu-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+input:checked + .ewu-slider {
+    background-color: #4f46e5;
+}
+
+input:checked + .ewu-slider:before {
+    transform: translateX(20px);
+}
+
+/* Settings Links Grid */
+.ewu-settings-links-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.ewu-settings-link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none !important;
+    text-align: center;
+    transition: all 0.2s;
+    border: 1px solid #e2e8f0;
+}
+
+.ewu-settings-link-btn.primary {
+    background: #0f172a;
+    color: #ffffff !important;
+    border-color: #0f172a;
+}
+
+.ewu-settings-link-btn.primary:hover {
+    background: #1e293b;
+    transform: translateY(-1px);
+}
+
+.ewu-settings-link-btn.secondary {
+    background: #f8fafc;
+    color: #334155 !important;
+}
+
+.ewu-settings-link-btn.secondary:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+/* ==========================================================================
+   9. Mobile-Friendly Dynamic Routine & Day Agenda Layout (v1.4.0)
+   ========================================================================== */
+.ewu-view-mode-switcher {
+    display: inline-flex;
+    align-items: center;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+    margin-left: 8px;
+}
+
+.ewu-view-btn {
+    border: none;
+    background: transparent;
+    padding: 5px 11px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.ewu-view-btn:hover {
+    color: #1e293b;
+}
+
+.ewu-view-btn.active {
+    background: #ffffff;
+    color: #4f46e5;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Day Agenda View Container */
+.ewu-routine-agenda-container {
+    padding: 14px 18px 20px;
+}
+
+.ewu-agenda-tabs-strip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid #f1f5f9;
+    scrollbar-width: none;
+}
+
+.ewu-agenda-tabs-strip::-webkit-scrollbar {
+    display: none;
+}
+
+.ewu-agenda-day-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 9999px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.ewu-agenda-day-pill:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #0f172a;
+}
+
+.ewu-agenda-day-pill.active {
+    background: #4f46e5;
+    border-color: #4f46e5;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+}
+
+.ewu-agenda-day-pill .day-count-badge {
+    background: rgba(0, 0, 0, 0.08);
+    color: inherit;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 9999px;
+}
+
+.ewu-agenda-day-pill.active .day-count-badge {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+}
+
+/* Agenda Cards List */
+.ewu-agenda-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ewu-agenda-card {
+    display: flex;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    transition: all 0.2s ease;
+}
+
+.ewu-agenda-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    border-color: #cbd5e1;
+}
+
+.ewu-agenda-time-col {
+    background: #f8fafc;
+    border-right: 1px solid #f1f5f9;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 120px;
+    text-align: center;
+}
+
+.ewu-agenda-time-start {
+    font-size: 13px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.ewu-agenda-time-duration {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #64748b;
+    margin-top: 3px;
+}
+
+.ewu-agenda-card-body {
+    flex: 1;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 4px solid #6366f1;
+}
+
+.ewu-agenda-course-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.ewu-agenda-course-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ewu-agenda-sec-badge {
+    background: #e0e7ff;
+    color: #3730a3;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.ewu-agenda-room-badge {
+    background: #f1f5f9;
+    color: #334155;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.ewu-agenda-faculty-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 12px;
+    color: #475569;
+}
+
+.ewu-agenda-faculty-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ewu-agenda-initial-badge {
+    background: #dbeafe;
+    color: #1e40af;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 4px;
+}
+
+.ewu-agenda-email-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ewu-agenda-empty-day {
+    padding: 36px 20px;
+    text-align: center;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+    color: #64748b;
+}
+
+.ewu-agenda-empty-icon {
+    font-size: 28px;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* Hide floating button during print */
+@media print {
+    .ewu-floating-settings-btn,
+    .ewu-settings-modal-backdrop,
+    .ewu-view-mode-switcher,
+    .ewu-agenda-tabs-strip {
+        display: none !important;
+    }
+}
+
+/* Mobile responsive view adjustments */
+@media (max-width: 768px) {
+    .ewu-routine-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+    }
+    .routine-action-buttons {
+        width: 100% !important;
+        justify-content: space-between !important;
+    }
+    .ewu-view-mode-switcher {
+        margin-left: 0 !important;
+    }
+    .ewu-agenda-card {
+        flex-direction: column !important;
+    }
+    .ewu-agenda-time-col {
+        border-right: none !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+        padding: 10px 14px !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+    }
+}
+
+/* ==========================================================================
+   2. Dark Mode Theme for EWU Student Portal (v1.5.0)
+   ========================================================================== */
+html.ewu-dark-mode,
+body.ewu-dark-mode {
+    background-color: #0b1120 !important;
+    color: #e2e8f0 !important;
+}
+
+body.ewu-dark-mode .page,
+body.ewu-dark-mode .content-inner,
+body.ewu-dark-mode .card,
+body.ewu-dark-mode .panel,
+body.ewu-dark-mode .box,
+body.ewu-dark-mode .well,
+body.ewu-dark-mode .modal-content,
+body.ewu-dark-mode .dropdown-menu {
+    background-color: #1e293b !important;
+    color: #f1f5f9 !important;
+    border-color: #334155 !important;
+}
+
+body.ewu-dark-mode .card-header,
+body.ewu-dark-mode .panel-heading,
+body.ewu-dark-mode .box-header {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+body.ewu-dark-mode .side-navbar,
+body.ewu-dark-mode .sidebar,
+body.ewu-dark-mode .sidebar-inverse,
+body.ewu-dark-mode .sidebar-menu,
+body.ewu-dark-mode .navbar,
+body.ewu-dark-mode header.header {
+    background-color: #0f172a !important;
+    border-color: #1e293b !important;
+}
+
+body.ewu-dark-mode .side-navbar a,
+body.ewu-dark-mode .sidebar a,
+body.ewu-dark-mode .sidebar-menu a {
+    color: #cbd5e1 !important;
+}
+
+body.ewu-dark-mode .side-navbar a:hover,
+body.ewu-dark-mode .sidebar a:hover {
+    background-color: #1e293b !important;
+    color: #ffffff !important;
+}
+
+/* Breadcrumbs & Page Headers */
+body.ewu-dark-mode .breadcrumb,
+body.ewu-dark-mode ul.breadcrumb,
+body.ewu-dark-mode ol.breadcrumb,
+body.ewu-dark-mode .breadcrumb-holder,
+body.ewu-dark-mode .content-header,
+body.ewu-dark-mode .page-header,
+body.ewu-dark-mode .breadcrumb-container {
+    background-color: #0f172a !important;
+    background: #0f172a !important;
+    color: #94a3b8 !important;
+    border-color: #1e293b !important;
+}
+
+body.ewu-dark-mode .breadcrumb a,
+body.ewu-dark-mode .breadcrumb-item a,
+body.ewu-dark-mode .breadcrumb > li a {
+    color: #60a5fa !important;
+}
+
+body.ewu-dark-mode .breadcrumb > li + li:before,
+body.ewu-dark-mode .breadcrumb-item + .breadcrumb-item::before {
+    color: #64748b !important;
+}
+
+body.ewu-dark-mode .breadcrumb .active,
+body.ewu-dark-mode .breadcrumb-item.active {
+    color: #cbd5e1 !important;
+}
+
+/* All Portal Tables & Grids */
+body.ewu-dark-mode table,
+body.ewu-dark-mode table.table,
+body.ewu-dark-mode .table,
+body.ewu-dark-mode .table-responsive table,
+body.ewu-dark-mode .table-bordered,
+body.ewu-dark-mode .table-striped {
+    background-color: #1e293b !important;
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+}
+
+body.ewu-dark-mode table th,
+body.ewu-dark-mode table.table th,
+body.ewu-dark-mode .table > thead > tr > th,
+body.ewu-dark-mode .table > tbody > tr > th,
+body.ewu-dark-mode .table > tfoot > tr > th {
+    background-color: #0f172a !important;
+    color: #94a3b8 !important;
+    border-color: #334155 !important;
+}
+
+body.ewu-dark-mode table td,
+body.ewu-dark-mode table.table td,
+body.ewu-dark-mode .table > thead > tr > td,
+body.ewu-dark-mode .table > tbody > tr > td,
+body.ewu-dark-mode .table > tfoot > tr > td {
+    background-color: #1e293b !important;
+    color: #f1f5f9 !important;
+    border-color: #334155 !important;
+}
+
+body.ewu-dark-mode table tbody tr:nth-of-type(odd),
+body.ewu-dark-mode .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: rgba(15, 23, 42, 0.5) !important;
+}
+
+body.ewu-dark-mode table tbody tr:nth-of-type(even),
+body.ewu-dark-mode .table-striped > tbody > tr:nth-of-type(even) {
+    background-color: #1e293b !important;
+}
+
+body.ewu-dark-mode table tbody tr:hover,
+body.ewu-dark-mode .table-hover > tbody > tr:hover {
+    background-color: rgba(51, 65, 85, 0.5) !important;
+}
+
+body.ewu-dark-mode table tfoot tr,
+body.ewu-dark-mode table tfoot td,
+body.ewu-dark-mode .ewu-ledger-tfoot-row,
+body.ewu-dark-mode .ewu-summary-table tfoot tr,
+body.ewu-dark-mode .ewu-summary-table tfoot td {
+    background-color: #0f172a !important;
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+/* Sticky Semester Column & Tables */
+body.ewu-dark-mode .ewu-summary-table .sem-col,
+body.ewu-dark-mode .ewu-summary-table td:first-child {
+    background: #1e293b !important;
+    color: #f1f5f9 !important;
+    border-color: #334155 !important;
+}
+
+body.ewu-dark-mode .ewu-summary-table thead th:first-child,
+body.ewu-dark-mode .ewu-summary-table tfoot td:first-child {
+    background: #0f172a !important;
+    color: #94a3b8 !important;
+    border-color: #334155 !important;
+}
+
+/* Bento KPI Cards */
+body.ewu-dark-mode .ewu-kpi-card {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+body.ewu-dark-mode .ewu-kpi-card .ewu-kpi-label { color: #94a3b8 !important; }
+body.ewu-dark-mode .ewu-kpi-card .ewu-kpi-desc { color: #64748b !important; }
+body.ewu-dark-mode .ewu-kpi-card.paid { border-left: 4px solid #10b981 !important; }
+body.ewu-dark-mode .ewu-kpi-card.paid .ewu-kpi-amount { color: #34d399 !important; }
+body.ewu-dark-mode .ewu-kpi-card.waiver { border-left: 4px solid #8b5cf6 !important; }
+body.ewu-dark-mode .ewu-kpi-card.waiver .ewu-kpi-amount { color: #c084fc !important; }
+body.ewu-dark-mode .ewu-kpi-card.billed { border-left: 4px solid #3b82f6 !important; }
+body.ewu-dark-mode .ewu-kpi-card.billed .ewu-kpi-amount { color: #93c5fd !important; }
+body.ewu-dark-mode .ewu-kpi-card.due.cleared { border-left: 4px solid #10b981 !important; }
+body.ewu-dark-mode .ewu-kpi-card.due.cleared .ewu-kpi-amount { color: #34d399 !important; }
+body.ewu-dark-mode .ewu-kpi-card.due:not(.cleared) { border-left: 4px solid #ef4444 !important; }
+body.ewu-dark-mode .ewu-kpi-card.due:not(.cleared) .ewu-kpi-amount { color: #f87171 !important; }
+
+/* Offered Courses Controls & Filters */
+body.ewu-dark-mode .ewu-filter-label {
+    color: #e2e8f0 !important;
+}
+body.ewu-dark-mode .ewu-search-input {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+}
+body.ewu-dark-mode .ewu-search-input::placeholder {
+    color: #64748b !important;
+}
+body.ewu-dark-mode .ewu-stats-pill {
+    background: #0f172a !important;
+    color: #94a3b8 !important;
+    border-color: #334155 !important;
+}
+
+/* Category Headers / Alerts in Degree Review */
+body.ewu-dark-mode .alert,
+body.ewu-dark-mode .alert-info,
+body.ewu-dark-mode .well,
+body.ewu-dark-mode .bg-info,
+body.ewu-dark-mode .panel-info > .panel-heading {
+    background-color: #172554 !important;
+    background: #172554 !important;
+    color: #bfdbfe !important;
+    border-color: #1e40af !important;
+}
+
+/* Form Inputs, Selects & Textareas */
+body.ewu-dark-mode input,
+body.ewu-dark-mode select,
+body.ewu-dark-mode textarea,
+body.ewu-dark-mode input.form-control,
+body.ewu-dark-mode select.form-control,
+body.ewu-dark-mode textarea.form-control {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+}
+
+body.ewu-dark-mode select option {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+body.ewu-dark-mode input.form-control:focus,
+body.ewu-dark-mode select.form-control:focus,
+body.ewu-dark-mode input:focus,
+body.ewu-dark-mode select:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+}
+
+body.ewu-dark-mode .ewu-routine-card,
+body.ewu-dark-mode .ewu-agenda-container,
+body.ewu-dark-mode .ewu-cgpa-card,
+body.ewu-dark-mode .ewu-basket-drawer,
+body.ewu-dark-mode .ewu-offered-toolbar,
+body.ewu-dark-mode .ewu-ledger-summary-card {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.ewu-dark-mode .ewu-agenda-card {
+    background-color: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+body.ewu-dark-mode .ewu-agenda-tab {
+    background-color: #0f172a !important;
+    color: #94a3b8 !important;
+    border-color: #334155 !important;
+}
+
+body.ewu-dark-mode .ewu-agenda-tab.active {
+    background: #4f46e5 !important;
+    color: #ffffff !important;
+    border-color: #4f46e5 !important;
+}
+
+/* Floating Quick Dark Toggle Button */
+.ewu-floating-dark-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 175px;
+    z-index: 9998;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #1e293b;
+    color: #f59e0b;
+    border: 1px solid #334155;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 18px;
+}
+
+.ewu-floating-dark-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    background: #334155;
+    color: #fbbf24;
+}
+
+@media print {
+    .ewu-floating-dark-btn {
+        display: none !important;
+    }
+}
+
+/* ==========================================================================
+   3. Advising Window: Faculty, Preemptive Clash & Seat Status (v1.5.0)
+   ========================================================================== */
+.ewu-advising-faculty-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1e40af;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+body.ewu-dark-mode .ewu-advising-faculty-badge {
+    background: rgba(59, 130, 246, 0.2) !important;
+    color: #93c5fd !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+/* Preemptive Time Clash Rows & Pills */
+tr.ewu-row-clash {
+    background-color: rgba(254, 226, 226, 0.4) !important;
+    border-left: 4px solid #ef4444 !important;
+}
+
+body.ewu-dark-mode tr.ewu-row-clash {
+    background-color: rgba(127, 29, 29, 0.25) !important;
+    border-left: 4px solid #f87171 !important;
+}
+
+.ewu-clash-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 7px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #991b1b;
+    background: #fee2e2;
+    border: 1px solid #f87171;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+body.ewu-dark-mode .ewu-clash-pill {
+    background: rgba(185, 28, 28, 0.25) !important;
+    color: #fca5a5 !important;
+    border-color: #b91c1c !important;
+}
+
+/* Enrolled Course Rows & Pills */
+tr.ewu-row-enrolled {
+    background-color: rgba(239, 246, 255, 0.5) !important;
+    border-left: 4px solid #3b82f6 !important;
+}
+
+body.ewu-dark-mode tr.ewu-row-enrolled {
+    background-color: rgba(30, 58, 138, 0.25) !important;
+    border-left: 4px solid #60a5fa !important;
+}
+
+.ewu-enrolled-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 7px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1e40af;
+    background: #eff6ff;
+    border: 1px solid #93c5fd;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+body.ewu-dark-mode .ewu-enrolled-pill {
+    background: rgba(30, 58, 138, 0.35) !important;
+    color: #93c5fd !important;
+    border-color: #3b82f6 !important;
+}
+
+/* Preemptive Seat Capacity Status */
+tr.ewu-row-full {
+    opacity: 0.55 !important;
+    background-color: rgba(248, 250, 252, 0.5) !important;
+}
+
+body.ewu-dark-mode tr.ewu-row-full {
+    opacity: 0.5 !important;
+    background-color: rgba(15, 23, 42, 0.5) !important;
+}
+
+.ewu-seat-pill {
+    display: inline-block;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 4px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.ewu-seat-pill.full {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+}
+
+body.ewu-dark-mode .ewu-seat-pill.full {
+    background: rgba(185, 28, 28, 0.2) !important;
+    color: #fca5a5 !important;
+    border-color: #b91c1c !important;
+}
+
+.ewu-seat-pill.low {
+    background: #fffbeb;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+
+body.ewu-dark-mode .ewu-seat-pill.low {
+    background: rgba(180, 83, 9, 0.2) !important;
+    color: #fcd34d !important;
+    border-color: #d97706 !important;
+}
+
+.ewu-seat-pill.open {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #86efac;
+}
+
+body.ewu-dark-mode .ewu-seat-pill.open {
+    background: rgba(22, 101, 52, 0.2) !important;
+    color: #86efac !important;
+    border-color: #16a34a !important;
+}
+
+/* Advising Course Browser Dynamic Toolbar & Filtering */
+.ewu-advising-toolbar {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin: 8px 0 12px 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+body.ewu-dark-mode .ewu-advising-toolbar {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.ewu-advising-toolbar-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.ewu-advising-search-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 220px;
+}
+
+.ewu-advising-search-icon {
+    position: absolute;
+    left: 10px;
+    font-size: 14px;
+    color: #94a3b8;
+    pointer-events: none;
+    line-height: 1;
+}
+
+.ewu-advising-search-input {
+    width: 100%;
+    padding: 7px 32px 7px 32px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    outline: none;
+    background: #ffffff;
+    color: #0f172a;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+body.ewu-dark-mode .ewu-advising-search-input {
+    background: #0f172a !important;
+    border-color: #475569 !important;
+    color: #f8fafc !important;
+}
+
+.ewu-advising-search-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.ewu-advising-clear-btn {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    line-height: 1;
+}
+
+.ewu-advising-clear-btn:hover {
+    color: #475569;
+    background: #f1f5f9;
+}
+
+body.ewu-dark-mode .ewu-advising-clear-btn:hover {
+    color: #e2e8f0 !important;
+    background: #334155 !important;
+}
+
+.ewu-advising-toggles {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.ewu-adv-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 9px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #334155;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.15s ease;
+}
+
+body.ewu-dark-mode .ewu-adv-toggle {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+.ewu-adv-toggle input[type="checkbox"] {
+    accent-color: #2563eb;
+    cursor: pointer;
+    margin: 0;
+}
+
+.ewu-adv-toggle:has(input:checked) {
+    background: #eff6ff;
+    border-color: #93c5fd;
+    color: #1d4ed8;
+}
+
+body.ewu-dark-mode .ewu-adv-toggle:has(input:checked) {
+    background: rgba(30, 58, 138, 0.4) !important;
+    border-color: #3b82f6 !important;
+    color: #93c5fd !important;
+}
+
+.ewu-advising-stats-pill {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+body.ewu-dark-mode .ewu-advising-stats-pill {
+    background: #0f172a !important;
+    color: #94a3b8 !important;
+}
+
+.ewu-advising-toolbar-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #f1f5f9;
+    flex-wrap: wrap;
+}
+
+body.ewu-dark-mode .ewu-advising-toolbar-bottom {
+    border-top-color: #334155 !important;
+}
+
+.ewu-adv-chip-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.ewu-adv-chip-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 2px;
+}
+
+body.ewu-dark-mode .ewu-adv-chip-label {
+    color: #64748b !important;
+}
+
+.ewu-adv-chip {
+    padding: 3px 8px;
+    font-size: 11.5px;
+    font-weight: 600;
+    border-radius: 5px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    line-height: 1.2;
+}
+
+body.ewu-dark-mode .ewu-adv-chip {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #94a3b8 !important;
+}
+
+.ewu-adv-chip:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #1e293b;
+}
+
+body.ewu-dark-mode .ewu-adv-chip:hover {
+    background: #1e293b !important;
+    border-color: #475569 !important;
+    color: #f1f5f9 !important;
+}
+
+.ewu-adv-chip.active {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.25);
+}
+
+body.ewu-dark-mode .ewu-adv-chip.active {
+    background: #3b82f6 !important;
+    border-color: #3b82f6 !important;
+    color: #ffffff !important;
+}
+
+.ewu-adv-empty-state {
+    padding: 24px 16px;
+    text-align: center;
+    color: #64748b;
+    font-size: 13px;
+    background: #f8fafc;
+    border-radius: 8px;
+    margin: 10px 0;
+    border: 1px dashed #cbd5e1;
+}
+
+body.ewu-dark-mode .ewu-adv-empty-state {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #94a3b8 !important;
+}
+
+.ewu-adv-reset-btn {
+    margin-top: 8px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.ewu-adv-reset-btn:hover {
+    background: #1d4ed8;
+}
+
+/* ==========================================================================
+   4. Interactive "What-If" CGPA & Target Planner (v1.5.0)
+   ========================================================================== */
+.ewu-cgpa-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin: 16px 0 20px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body.ewu-dark-mode .ewu-cgpa-card {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    color: #f8fafc !important;
+}
+
+.ewu-cgpa-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+body.ewu-dark-mode .ewu-cgpa-header {
+    border-bottom-color: #334155 !important;
+}
+
+.ewu-cgpa-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ewu-cgpa-title-group h3 {
+    margin: 0;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+body.ewu-dark-mode .ewu-cgpa-title-group h3 {
+    color: #f8fafc !important;
+}
+
+.ewu-cgpa-header-pills {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.ewu-cgpa-stat-pill {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 11.5px;
+    font-weight: 600;
+}
+
+body.ewu-dark-mode .ewu-cgpa-stat-pill {
+    background: rgba(59, 130, 246, 0.15) !important;
+    border-color: rgba(59, 130, 246, 0.3) !important;
+    color: #93c5fd !important;
+}
+
+.ewu-cgpa-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.ewu-cgpa-tab-btn {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+body.ewu-dark-mode .ewu-cgpa-tab-btn {
+    background: #0f172a !important;
+    color: #94a3b8 !important;
+    border-color: #334155 !important;
+}
+
+.ewu-cgpa-tab-btn.active {
+    background: #4f46e5 !important;
+    color: #ffffff !important;
+    border-color: #4f46e5 !important;
+}
+
+.ewu-cgpa-pane {
+    display: none;
+}
+
+.ewu-cgpa-pane.active {
+    display: block;
+}
+
+.ewu-cgpa-retake-controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.ewu-cgpa-retake-controls select,
+.ewu-cgpa-retake-controls input {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    font-size: 12.5px;
+    background: #ffffff;
+    color: #0f172a;
+}
+
+body.ewu-dark-mode .ewu-cgpa-retake-controls select,
+body.ewu-dark-mode .ewu-cgpa-retake-controls input {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+}
+
+.ewu-cgpa-add-btn {
+    background: #10b981;
+    color: #ffffff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 12.5px;
+    transition: background 0.15s ease;
+}
+
+.ewu-cgpa-add-btn:hover {
+    background: #059669;
+}
+
+.ewu-cgpa-simulated-banner {
+    padding: 8px 12px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-radius: 8px;
+    color: #065f46;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+body.ewu-dark-mode .ewu-cgpa-simulated-banner {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #34d399 !important;
+    border-color: rgba(16, 185, 129, 0.4) !important;
+}
+
+.ewu-cgpa-target-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.ewu-cgpa-field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 6px;
+}
+
+body.ewu-dark-mode .ewu-cgpa-field label {
+    color: #94a3b8 !important;
+}
+
+.ewu-cgpa-field input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    box-sizing: border-box;
+}
+
+.ewu-cgpa-target-result {
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.ewu-cgpa-target-result.success {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #065f46;
+}
+
+body.ewu-dark-mode .ewu-cgpa-target-result.success {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #34d399 !important;
+}
+
+.ewu-cgpa-target-result.warning {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #92400e;
+}
+
+body.ewu-dark-mode .ewu-cgpa-target-result.warning {
+    background: rgba(245, 158, 11, 0.15) !important;
+    color: #fbbf24 !important;
+}
+
+/* ==========================================================================
+   5. Advising Course Basket & Schedule Conflict Sandbox (v1.5.0)
+   ========================================================================== */
+.ewu-draft-btn {
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 6px;
+    border: 1px solid #4f46e5;
+    background: #eff6ff;
+    color: #4f46e5;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.ewu-draft-btn:hover {
+    background: #4f46e5;
+    color: #ffffff;
+}
+
+.ewu-draft-btn.in-basket {
+    background: #10b981;
+    border-color: #10b981;
+    color: #ffffff;
+}
+
+.ewu-draft-btn.in-basket:hover {
+    background: #ef4444;
+    border-color: #ef4444;
+}
+
+.ewu-basket-drawer {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 440px;
+    max-width: calc(100vw - 32px);
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-bottom: none;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.18);
+    z-index: 9995;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.ewu-basket-drawer.collapsed {
+    transform: translateX(-50%) translateY(calc(100% - 48px));
+}
+
+@media (max-width: 768px) {
+    .ewu-basket-drawer {
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100vw;
+        transform: none;
+        border-radius: 16px 16px 0 0;
+    }
+    .ewu-basket-drawer.collapsed {
+        transform: translateY(calc(100% - 48px));
+    }
+    body.has-ewu-basket .ewu-floating-settings-btn {
+        bottom: 58px !important;
+    }
+    body.has-ewu-basket .ewu-floating-dark-btn {
+        bottom: 56px !important;
+    }
+}
+
+.ewu-basket-header {
+    height: 48px;
+    padding: 0 16px;
+    background: #1e293b;
+    color: #ffffff;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+}
+
+.ewu-basket-header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.ewu-basket-header-badges {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ewu-basket-badge-clash {
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    animation: ewu-pulse 1.5s infinite;
+}
+
+@keyframes ewu-pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.85; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.ewu-basket-body {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 16px;
+    background: #f8fafc;
+}
+
+body.ewu-dark-mode .ewu-basket-body {
+    background: #0f172a !important;
+}
+
+.ewu-basket-plan-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.ewu-basket-presets {
+    display: flex;
+    gap: 6px;
+}
+
+.ewu-basket-preset-btn {
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.ewu-basket-preset-btn.active {
+    background: #4f46e5;
+    color: #ffffff;
+    border-color: #4f46e5;
+}
+
+.ewu-basket-clash-alert {
+    padding: 10px 14px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-radius: 8px;
+    color: #b91c1c;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+body.ewu-dark-mode .ewu-basket-clash-alert {
+    background: rgba(239, 68, 68, 0.2) !important;
+    color: #f87171 !important;
+    border-color: rgba(239, 68, 68, 0.5) !important;
+}
+
+.ewu-basket-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.15s ease;
+}
+
+body.ewu-dark-mode .ewu-basket-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+.ewu-basket-card.clashing {
+    border-color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.05) !important;
+}
+
+.ewu-basket-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.ewu-basket-course-code {
+    font-size: 13px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+body.ewu-dark-mode .ewu-basket-course-code {
+    color: #f8fafc !important;
+}
+
+.ewu-basket-meta {
+    font-size: 11px;
+    color: #64748b;
+}
+
+.ewu-basket-remove-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px;
+    transition: color 0.15s;
+}
+
+.ewu-basket-remove-btn:hover {
+    color: #ef4444;
+}
+
+/* Highlight clashing table rows in Offered Courses */
+tr.ewu-table-row-clash {
+    background-color: rgba(239, 68, 68, 0.08) !important;
+    border-left: 4px solid #ef4444 !important;
+}
+
+/* ==========================================================================
+   6. Smart Offered Courses Filter Chips & Spotlight Modal (v1.5.0)
+   ========================================================================== */
+.ewu-filter-chips-container {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e2e8f0;
+}
+
+body.ewu-dark-mode .ewu-filter-chips-container {
+    border-top-color: #334155 !important;
+}
+
+.ewu-filter-chip-group {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.ewu-filter-chip-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    margin-right: 4px;
+    text-transform: uppercase;
+}
+
+.ewu-filter-chip {
+    padding: 4px 10px;
+    border-radius: 9999px;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+body.ewu-dark-mode .ewu-filter-chip {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+.ewu-filter-chip:hover {
+    border-color: #94a3b8;
+    background: #e2e8f0;
+}
+
+.ewu-filter-chip.active {
+    background: #4f46e5 !important;
+    color: #ffffff !important;
+    border-color: #4f46e5 !important;
+}
+
+.ewu-spotlight-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+body.ewu-dark-mode .ewu-spotlight-btn {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+.ewu-spotlight-btn:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+}
+
+.ewu-spotlight-btn kbd {
+    background: #e2e8f0;
+    color: #475569;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-family: monospace;
+}
+
+body.ewu-dark-mode .ewu-spotlight-btn kbd {
+    background: #334155 !important;
+    color: #94a3b8 !important;
+}
+
+/* Spotlight Search Modal Overlay */
+.ewu-spotlight-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 100000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 10vh;
+    box-sizing: border-box;
+}
+
+.ewu-spotlight-modal {
+    width: 580px;
+    max-width: calc(100vw - 32px);
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body.ewu-dark-mode .ewu-spotlight-modal {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+.ewu-spotlight-input-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    gap: 12px;
+}
+
+body.ewu-dark-mode .ewu-spotlight-input-wrapper {
+    border-bottom-color: #334155 !important;
+}
+
+.ewu-spotlight-icon {
+    font-size: 20px;
+    color: #94a3b8;
+}
+
+.ewu-spotlight-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #0f172a;
+    background: transparent;
+}
+
+body.ewu-dark-mode .ewu-spotlight-input {
+    color: #f8fafc !important;
+}
+
+.ewu-spotlight-results {
+    max-height: 380px;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.ewu-spotlight-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.ewu-spotlight-item:hover,
+.ewu-spotlight-item.selected {
+    background: #f1f5f9;
+}
+
+body.ewu-dark-mode .ewu-spotlight-item:hover,
+body.ewu-dark-mode .ewu-spotlight-item.selected {
+    background: #334155 !important;
+}
+
+.ewu-spotlight-item-code {
+    font-weight: 800;
+    font-size: 14px;
+    color: #4f46e5;
+}
+
+body.ewu-dark-mode .ewu-spotlight-item-code {
+    color: #818cf8 !important;
+}
+
+.ewu-spotlight-item-meta {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.ewu-spotlight-footer {
+    padding: 10px 16px;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #64748b;
+}
+
+body.ewu-dark-mode .ewu-spotlight-footer {
+    background: #0f172a !important;
+    border-top-color: #334155 !important;
+}
+

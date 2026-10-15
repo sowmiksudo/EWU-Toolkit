@@ -9,8 +9,8 @@ with open('content.js', 'r', encoding='utf-8') as f:
 header = '''// ==UserScript==
 // @name         EWU-Toolkit
 // @namespace    https://github.com/sowmiksudo/EWU-Toolkit
-// @version      1.3.2
-// @description  Complete student utility suite for EWU Portal: visual weekly class routine generator, 1-click Excel export, unhide faculty info, seat availability & filters, accounts ledger breakdown, and auto login captcha solver.
+// @version      1.5.1
+// @description  Complete student utility suite for EWU Portal: visual & mobile routine, Google Calendar sync, course basket & clash sandbox, What-If CGPA planner, advising faculty revealer, dark mode, and captcha solver.
 // @author       Sowmik
 // @match        https://portal.ewubd.edu/*
 // @match        http://portal.ewubd.edu/*

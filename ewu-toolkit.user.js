@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         EWU-Toolkit
 // @namespace    https://github.com/sowmiksudo/EWU-Toolkit
-// @version      1.3.2
-// @description  Complete student utility suite for EWU Portal: visual weekly class routine generator, 1-click Excel export, unhide faculty info, seat availability & filters, accounts ledger breakdown, and auto login captcha solver.
+// @version      1.5.1
+// @description  Complete student utility suite for EWU Portal: visual & mobile routine, Google Calendar sync, course basket & clash sandbox, What-If CGPA planner, advising faculty revealer, dark mode, and captcha solver.
 // @author       Sowmik
 // @match        https://portal.ewubd.edu/*
 // @match        http://portal.ewubd.edu/*
@@ -30,6 +30,10 @@
    -------------------------------------------------------------------------- */
 th[ng-show*="Status"].ng-hide,
 td[ng-show*="Status"].ng-hide,
+th[ng-show*="isTBA"].ng-hide,
+td[ng-show*="isTBA"].ng-hide,
+th[ng-show*="isTBA"],
+td[ng-show*="isTBA"],
 th.ewu-revealed-col,
 td.ewu-revealed-col {
     display: table-cell !important;
@@ -1935,6 +1939,10 @@ table.ewu-ledger-table {
 
     th[ng-show*="Status"].ng-hide,
     td[ng-show*="Status"].ng-hide,
+    th[ng-show*="isTBA"].ng-hide,
+    td[ng-show*="isTBA"].ng-hide,
+    th[ng-show*="isTBA"],
+    td[ng-show*="isTBA"],
     th.ewu-revealed-col,
     td.ewu-revealed-col {
         display: table-cell !important;
@@ -2206,6 +2214,2011 @@ table.ewu-ledger-table {
     }
 
 }
+
+/* ==========================================================================
+   8. In-Portal Sidebar Settings Navigation & Modal Overlay (v1.4.0)
+   ========================================================================== */
+.ewu-sidebar-settings-item {
+    position: relative;
+    list-style: none;
+}
+
+.ewu-sidebar-settings-link {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 10px 16px !important;
+    color: #4f46e5 !important;
+    background: rgba(99, 102, 241, 0.08) !important;
+    font-weight: 700 !important;
+    border-radius: 6px !important;
+    margin: 4px 8px !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+    border: 1px dashed rgba(99, 102, 241, 0.35) !important;
+}
+
+.ewu-sidebar-settings-link:hover {
+    background: rgba(99, 102, 241, 0.18) !important;
+    color: #3730a3 !important;
+    border-color: #6366f1 !important;
+    transform: translateX(3px);
+}
+
+.ewu-sidebar-badge {
+    margin-left: auto !important;
+    background: #4f46e5 !important;
+    color: #ffffff !important;
+    font-size: 10px !important;
+    padding: 2px 7px !important;
+    border-radius: 9999px !important;
+    font-weight: 700 !important;
+}
+
+/* Floating Settings Button */
+.ewu-floating-settings-btn {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    z-index: 99998;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 15px;
+    background: #0f172a;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 9999px;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.4), 0 0 0 1px rgba(99, 102, 241, 0.3);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ewu-floating-settings-btn:hover {
+    background: #1e1b4b;
+    border-color: #6366f1;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 14px 30px -5px rgba(99, 102, 241, 0.45);
+}
+
+/* Settings Modal */
+.ewu-settings-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: ewuModalFadeIn 0.2s ease-out;
+}
+
+@keyframes ewuModalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.ewu-settings-modal-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    animation: ewuModalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes ewuModalSlideUp {
+    from { transform: translateY(20px) scale(0.97); }
+    to { transform: translateY(0) scale(1); }
+}
+
+.ewu-settings-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px;
+    border-bottom: 1px solid #f1f5f9;
+    background: #f8fafc;
+}
+
+.ewu-settings-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ewu-settings-brand-icon {
+    font-size: 26px;
+}
+
+.ewu-settings-title-group h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 800;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ewu-settings-title-group p {
+    margin: 2px 0 0;
+    font-size: 11.5px;
+    color: #64748b;
+}
+
+.ewu-settings-close-btn {
+    background: #f1f5f9;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 9999px;
+    color: #475569;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.ewu-settings-close-btn:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+.ewu-settings-modal-body {
+    padding: 20px 22px;
+    overflow-y: auto;
+    max-height: calc(90vh - 120px);
+}
+
+.ewu-settings-section-title {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    margin: 18px 0 10px;
+}
+
+.ewu-settings-section-title:first-child {
+    margin-top: 0;
+}
+
+.ewu-settings-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    transition: all 0.2s;
+}
+
+.ewu-settings-toggle-row:hover {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.ewu-settings-toggle-info {
+    flex: 1;
+    padding-right: 14px;
+}
+
+.ewu-settings-toggle-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 2px;
+}
+
+.ewu-settings-toggle-desc {
+    font-size: 11px;
+    color: #64748b;
+    line-height: 1.35;
+}
+
+.ewu-beta-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1.2;
+    background: #f59e0b;
+    color: #ffffff;
+    padding: 2px 6px;
+    border-radius: 9999px;
+    margin-left: 6px;
+    vertical-align: middle;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+body.ewu-dark-mode .ewu-beta-tag {
+    background: #d97706 !important;
+    color: #ffffff !important;
+}
+
+/* Switch Styles */
+.ewu-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.ewu-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.ewu-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e1;
+    transition: .3s;
+    border-radius: 34px;
+}
+
+.ewu-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+input:checked + .ewu-slider {
+    background-color: #4f46e5;
+}
+
+input:checked + .ewu-slider:before {
+    transform: translateX(20px);
+}
+
+/* Settings Links Grid */
+.ewu-settings-links-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.ewu-settings-link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none !important;
+    text-align: center;
+    transition: all 0.2s;
+    border: 1px solid #e2e8f0;
+}
+
+.ewu-settings-link-btn.primary {
+    background: #0f172a;
+    color: #ffffff !important;
+    border-color: #0f172a;
+}
+
+.ewu-settings-link-btn.primary:hover {
+    background: #1e293b;
+    transform: translateY(-1px);
+}
+
+.ewu-settings-link-btn.secondary {
+    background: #f8fafc;
+    color: #334155 !important;
+}
+
+.ewu-settings-link-btn.secondary:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+/* ==========================================================================
+   9. Mobile-Friendly Dynamic Routine & Day Agenda Layout (v1.4.0)
+   ========================================================================== */
+.ewu-view-mode-switcher {
+    display: inline-flex;
+    align-items: center;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+    margin-left: 8px;
+}
+
+.ewu-view-btn {
+    border: none;
+    background: transparent;
+    padding: 5px 11px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.ewu-view-btn:hover {
+    color: #1e293b;
+}
+
+.ewu-view-btn.active {
+    background: #ffffff;
+    color: #4f46e5;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Day Agenda View Container */
+.ewu-routine-agenda-container {
+    padding: 14px 18px 20px;
+}
+
+.ewu-agenda-tabs-strip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid #f1f5f9;
+    scrollbar-width: none;
+}
+
+.ewu-agenda-tabs-strip::-webkit-scrollbar {
+    display: none;
+}
+
+.ewu-agenda-day-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 9999px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.ewu-agenda-day-pill:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #0f172a;
+}
+
+.ewu-agenda-day-pill.active {
+    background: #4f46e5;
+    border-color: #4f46e5;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+}
+
+.ewu-agenda-day-pill .day-count-badge {
+    background: rgba(0, 0, 0, 0.08);
+    color: inherit;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 9999px;
+}
+
+.ewu-agenda-day-pill.active .day-count-badge {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+}
+
+/* Agenda Cards List */
+.ewu-agenda-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ewu-agenda-card {
+    display: flex;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    transition: all 0.2s ease;
+}
+
+.ewu-agenda-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    border-color: #cbd5e1;
+}
+
+.ewu-agenda-time-col {
+    background: #f8fafc;
+    border-right: 1px solid #f1f5f9;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 120px;
+    text-align: center;
+}
+
+.ewu-agenda-time-start {
+    font-size: 13px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.ewu-agenda-time-duration {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #64748b;
+    margin-top: 3px;
+}
+
+.ewu-agenda-card-body {
+    flex: 1;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 4px solid #6366f1;
+}
+
+.ewu-agenda-course-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.ewu-agenda-course-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ewu-agenda-sec-badge {
+    background: #e0e7ff;
+    color: #3730a3;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.ewu-agenda-room-badge {
+    background: #f1f5f9;
+    color: #334155;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.ewu-agenda-faculty-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 12px;
+    color: #475569;
+}
+
+.ewu-agenda-faculty-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ewu-agenda-initial-badge {
+    background: #dbeafe;
+    color: #1e40af;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 4px;
+}
+
+.ewu-agenda-email-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ewu-agenda-empty-day {
+    padding: 36px 20px;
+    text-align: center;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+    color: #64748b;
+}
+
+.ewu-agenda-empty-icon {
+    font-size: 28px;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* Hide floating button during print */
+@media print {
+    .ewu-floating-settings-btn,
+    .ewu-settings-modal-backdrop,
+    .ewu-view-mode-switcher,
+    .ewu-agenda-tabs-strip {
+        display: none !important;
+    }
+}
+
+/* Mobile responsive view adjustments */
+@media (max-width: 768px) {
+    .ewu-routine-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+    }
+    .routine-action-buttons {
+        width: 100% !important;
+        justify-content: space-between !important;
+    }
+    .ewu-view-mode-switcher {
+        margin-left: 0 !important;
+    }
+    .ewu-agenda-card {
+        flex-direction: column !important;
+    }
+    .ewu-agenda-time-col {
+        border-right: none !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+        padding: 10px 14px !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+    }
+}
+
+/* ==========================================================================
+   2. Dark Mode Theme for EWU Student Portal (v1.5.0)
+   ========================================================================== */
+html.ewu-dark-mode,
+body.ewu-dark-mode {
+    background-color: #0b1120 !important;
+    color: #e2e8f0 !important;
+}
+
+body.ewu-dark-mode .page,
+body.ewu-dark-mode .content-inner,
+body.ewu-dark-mode .card,
+body.ewu-dark-mode .panel,
+body.ewu-dark-mode .box,
+body.ewu-dark-mode .well,
+body.ewu-dark-mode .modal-content,
+body.ewu-dark-mode .dropdown-menu {
+    background-color: #1e293b !important;
+    color: #f1f5f9 !important;
+    border-color: #334155 !important;
+}
+
+body.ewu-dark-mode .card-header,
+body.ewu-dark-mode .panel-heading,
+body.ewu-dark-mode .box-header {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+body.ewu-dark-mode .side-navbar,
+body.ewu-dark-mode .sidebar,
+body.ewu-dark-mode .sidebar-inverse,
+body.ewu-dark-mode .sidebar-menu,
+body.ewu-dark-mode .navbar,
+body.ewu-dark-mode header.header {
+    background-color: #0f172a !important;
+    border-color: #1e293b !important;
+}
+
+body.ewu-dark-mode .side-navbar a,
+body.ewu-dark-mode .sidebar a,
+body.ewu-dark-mode .sidebar-menu a {
+    color: #cbd5e1 !important;
+}
+
+body.ewu-dark-mode .side-navbar a:hover,
+body.ewu-dark-mode .sidebar a:hover {
+    background-color: #1e293b !important;
+    color: #ffffff !important;
+}
+
+/* Breadcrumbs & Page Headers */
+body.ewu-dark-mode .breadcrumb,
+body.ewu-dark-mode ul.breadcrumb,
+body.ewu-dark-mode ol.breadcrumb,
+body.ewu-dark-mode .breadcrumb-holder,
+body.ewu-dark-mode .content-header,
+body.ewu-dark-mode .page-header,
+body.ewu-dark-mode .breadcrumb-container {
+    background-color: #0f172a !important;
+    background: #0f172a !important;
+    color: #94a3b8 !important;
+    border-color: #1e293b !important;
+}
+
+body.ewu-dark-mode .breadcrumb a,
+body.ewu-dark-mode .breadcrumb-item a,
+body.ewu-dark-mode .breadcrumb > li a {
+    color: #60a5fa !important;
+}
+
+body.ewu-dark-mode .breadcrumb > li + li:before,
+body.ewu-dark-mode .breadcrumb-item + .breadcrumb-item::before {
+    color: #64748b !important;
+}
+
+body.ewu-dark-mode .breadcrumb .active,
+body.ewu-dark-mode .breadcrumb-item.active {
+    color: #cbd5e1 !important;
+}
+
+/* All Portal Tables & Grids */
+body.ewu-dark-mode table,
+body.ewu-dark-mode table.table,
+body.ewu-dark-mode .table,
+body.ewu-dark-mode .table-responsive table,
+body.ewu-dark-mode .table-bordered,
+body.ewu-dark-mode .table-striped {
+    background-color: #1e293b !important;
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+}
+
+body.ewu-dark-mode table th,
+body.ewu-dark-mode table.table th,
+body.ewu-dark-mode .table > thead > tr > th,
+body.ewu-dark-mode .table > tbody > tr > th,
+body.ewu-dark-mode .table > tfoot > tr > th {
+    background-color: #0f172a !important;
+    color: #94a3b8 !important;
+    border-color: #334155 !important;
+}
+
+body.ewu-dark-mode table td,
+body.ewu-dark-mode table.table td,
+body.ewu-dark-mode .table > thead > tr > td,
+body.ewu-dark-mode .table > tbody > tr > td,
+body.ewu-dark-mode .table > tfoot > tr > td {
+    background-color: #1e293b !important;
+    color: #f1f5f9 !important;
+    border-color: #334155 !important;
+}
+
+body.ewu-dark-mode table tbody tr:nth-of-type(odd),
+body.ewu-dark-mode .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: rgba(15, 23, 42, 0.5) !important;
+}
+
+body.ewu-dark-mode table tbody tr:nth-of-type(even),
+body.ewu-dark-mode .table-striped > tbody > tr:nth-of-type(even) {
+    background-color: #1e293b !important;
+}
+
+body.ewu-dark-mode table tbody tr:hover,
+body.ewu-dark-mode .table-hover > tbody > tr:hover {
+    background-color: rgba(51, 65, 85, 0.5) !important;
+}
+
+body.ewu-dark-mode table tfoot tr,
+body.ewu-dark-mode table tfoot td,
+body.ewu-dark-mode .ewu-ledger-tfoot-row,
+body.ewu-dark-mode .ewu-summary-table tfoot tr,
+body.ewu-dark-mode .ewu-summary-table tfoot td {
+    background-color: #0f172a !important;
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+/* Sticky Semester Column & Tables */
+body.ewu-dark-mode .ewu-summary-table .sem-col,
+body.ewu-dark-mode .ewu-summary-table td:first-child {
+    background: #1e293b !important;
+    color: #f1f5f9 !important;
+    border-color: #334155 !important;
+}
+
+body.ewu-dark-mode .ewu-summary-table thead th:first-child,
+body.ewu-dark-mode .ewu-summary-table tfoot td:first-child {
+    background: #0f172a !important;
+    color: #94a3b8 !important;
+    border-color: #334155 !important;
+}
+
+/* Bento KPI Cards */
+body.ewu-dark-mode .ewu-kpi-card {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+body.ewu-dark-mode .ewu-kpi-card .ewu-kpi-label { color: #94a3b8 !important; }
+body.ewu-dark-mode .ewu-kpi-card .ewu-kpi-desc { color: #64748b !important; }
+body.ewu-dark-mode .ewu-kpi-card.paid { border-left: 4px solid #10b981 !important; }
+body.ewu-dark-mode .ewu-kpi-card.paid .ewu-kpi-amount { color: #34d399 !important; }
+body.ewu-dark-mode .ewu-kpi-card.waiver { border-left: 4px solid #8b5cf6 !important; }
+body.ewu-dark-mode .ewu-kpi-card.waiver .ewu-kpi-amount { color: #c084fc !important; }
+body.ewu-dark-mode .ewu-kpi-card.billed { border-left: 4px solid #3b82f6 !important; }
+body.ewu-dark-mode .ewu-kpi-card.billed .ewu-kpi-amount { color: #93c5fd !important; }
+body.ewu-dark-mode .ewu-kpi-card.due.cleared { border-left: 4px solid #10b981 !important; }
+body.ewu-dark-mode .ewu-kpi-card.due.cleared .ewu-kpi-amount { color: #34d399 !important; }
+body.ewu-dark-mode .ewu-kpi-card.due:not(.cleared) { border-left: 4px solid #ef4444 !important; }
+body.ewu-dark-mode .ewu-kpi-card.due:not(.cleared) .ewu-kpi-amount { color: #f87171 !important; }
+
+/* Offered Courses Controls & Filters */
+body.ewu-dark-mode .ewu-filter-label {
+    color: #e2e8f0 !important;
+}
+body.ewu-dark-mode .ewu-search-input {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+}
+body.ewu-dark-mode .ewu-search-input::placeholder {
+    color: #64748b !important;
+}
+body.ewu-dark-mode .ewu-stats-pill {
+    background: #0f172a !important;
+    color: #94a3b8 !important;
+    border-color: #334155 !important;
+}
+
+/* Category Headers / Alerts in Degree Review */
+body.ewu-dark-mode .alert,
+body.ewu-dark-mode .alert-info,
+body.ewu-dark-mode .well,
+body.ewu-dark-mode .bg-info,
+body.ewu-dark-mode .panel-info > .panel-heading {
+    background-color: #172554 !important;
+    background: #172554 !important;
+    color: #bfdbfe !important;
+    border-color: #1e40af !important;
+}
+
+/* Form Inputs, Selects & Textareas */
+body.ewu-dark-mode input,
+body.ewu-dark-mode select,
+body.ewu-dark-mode textarea,
+body.ewu-dark-mode input.form-control,
+body.ewu-dark-mode select.form-control,
+body.ewu-dark-mode textarea.form-control {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+}
+
+body.ewu-dark-mode select option {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+body.ewu-dark-mode input.form-control:focus,
+body.ewu-dark-mode select.form-control:focus,
+body.ewu-dark-mode input:focus,
+body.ewu-dark-mode select:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+}
+
+body.ewu-dark-mode .ewu-routine-card,
+body.ewu-dark-mode .ewu-agenda-container,
+body.ewu-dark-mode .ewu-cgpa-card,
+body.ewu-dark-mode .ewu-basket-drawer,
+body.ewu-dark-mode .ewu-offered-toolbar,
+body.ewu-dark-mode .ewu-ledger-summary-card {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.ewu-dark-mode .ewu-agenda-card {
+    background-color: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+body.ewu-dark-mode .ewu-agenda-tab {
+    background-color: #0f172a !important;
+    color: #94a3b8 !important;
+    border-color: #334155 !important;
+}
+
+body.ewu-dark-mode .ewu-agenda-tab.active {
+    background: #4f46e5 !important;
+    color: #ffffff !important;
+    border-color: #4f46e5 !important;
+}
+
+/* Floating Quick Dark Toggle Button */
+.ewu-floating-dark-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 175px;
+    z-index: 9998;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #1e293b;
+    color: #f59e0b;
+    border: 1px solid #334155;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 18px;
+}
+
+.ewu-floating-dark-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    background: #334155;
+    color: #fbbf24;
+}
+
+@media print {
+    .ewu-floating-dark-btn {
+        display: none !important;
+    }
+}
+
+/* ==========================================================================
+   3. Advising Window: Faculty, Preemptive Clash & Seat Status (v1.5.0)
+   ========================================================================== */
+.ewu-advising-faculty-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1e40af;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+body.ewu-dark-mode .ewu-advising-faculty-badge {
+    background: rgba(59, 130, 246, 0.2) !important;
+    color: #93c5fd !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+/* Preemptive Time Clash Rows & Pills */
+tr.ewu-row-clash {
+    background-color: rgba(254, 226, 226, 0.4) !important;
+    border-left: 4px solid #ef4444 !important;
+}
+
+body.ewu-dark-mode tr.ewu-row-clash {
+    background-color: rgba(127, 29, 29, 0.25) !important;
+    border-left: 4px solid #f87171 !important;
+}
+
+.ewu-clash-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 7px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #991b1b;
+    background: #fee2e2;
+    border: 1px solid #f87171;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+body.ewu-dark-mode .ewu-clash-pill {
+    background: rgba(185, 28, 28, 0.25) !important;
+    color: #fca5a5 !important;
+    border-color: #b91c1c !important;
+}
+
+/* Enrolled Course Rows & Pills */
+tr.ewu-row-enrolled {
+    background-color: rgba(239, 246, 255, 0.5) !important;
+    border-left: 4px solid #3b82f6 !important;
+}
+
+body.ewu-dark-mode tr.ewu-row-enrolled {
+    background-color: rgba(30, 58, 138, 0.25) !important;
+    border-left: 4px solid #60a5fa !important;
+}
+
+.ewu-enrolled-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 7px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1e40af;
+    background: #eff6ff;
+    border: 1px solid #93c5fd;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+body.ewu-dark-mode .ewu-enrolled-pill {
+    background: rgba(30, 58, 138, 0.35) !important;
+    color: #93c5fd !important;
+    border-color: #3b82f6 !important;
+}
+
+/* Preemptive Seat Capacity Status */
+tr.ewu-row-full {
+    opacity: 0.55 !important;
+    background-color: rgba(248, 250, 252, 0.5) !important;
+}
+
+body.ewu-dark-mode tr.ewu-row-full {
+    opacity: 0.5 !important;
+    background-color: rgba(15, 23, 42, 0.5) !important;
+}
+
+.ewu-seat-pill {
+    display: inline-block;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 4px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.ewu-seat-pill.full {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+}
+
+body.ewu-dark-mode .ewu-seat-pill.full {
+    background: rgba(185, 28, 28, 0.2) !important;
+    color: #fca5a5 !important;
+    border-color: #b91c1c !important;
+}
+
+.ewu-seat-pill.low {
+    background: #fffbeb;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+
+body.ewu-dark-mode .ewu-seat-pill.low {
+    background: rgba(180, 83, 9, 0.2) !important;
+    color: #fcd34d !important;
+    border-color: #d97706 !important;
+}
+
+.ewu-seat-pill.open {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #86efac;
+}
+
+body.ewu-dark-mode .ewu-seat-pill.open {
+    background: rgba(22, 101, 52, 0.2) !important;
+    color: #86efac !important;
+    border-color: #16a34a !important;
+}
+
+/* Advising Course Browser Dynamic Toolbar & Filtering */
+.ewu-advising-toolbar {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin: 8px 0 12px 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+body.ewu-dark-mode .ewu-advising-toolbar {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.ewu-advising-toolbar-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.ewu-advising-search-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 220px;
+}
+
+.ewu-advising-search-icon {
+    position: absolute;
+    left: 10px;
+    font-size: 14px;
+    color: #94a3b8;
+    pointer-events: none;
+    line-height: 1;
+}
+
+.ewu-advising-search-input {
+    width: 100%;
+    padding: 7px 32px 7px 32px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    outline: none;
+    background: #ffffff;
+    color: #0f172a;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+body.ewu-dark-mode .ewu-advising-search-input {
+    background: #0f172a !important;
+    border-color: #475569 !important;
+    color: #f8fafc !important;
+}
+
+.ewu-advising-search-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.ewu-advising-clear-btn {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    line-height: 1;
+}
+
+.ewu-advising-clear-btn:hover {
+    color: #475569;
+    background: #f1f5f9;
+}
+
+body.ewu-dark-mode .ewu-advising-clear-btn:hover {
+    color: #e2e8f0 !important;
+    background: #334155 !important;
+}
+
+.ewu-advising-toggles {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.ewu-adv-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 9px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #334155;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.15s ease;
+}
+
+body.ewu-dark-mode .ewu-adv-toggle {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+.ewu-adv-toggle input[type="checkbox"] {
+    accent-color: #2563eb;
+    cursor: pointer;
+    margin: 0;
+}
+
+.ewu-adv-toggle:has(input:checked) {
+    background: #eff6ff;
+    border-color: #93c5fd;
+    color: #1d4ed8;
+}
+
+body.ewu-dark-mode .ewu-adv-toggle:has(input:checked) {
+    background: rgba(30, 58, 138, 0.4) !important;
+    border-color: #3b82f6 !important;
+    color: #93c5fd !important;
+}
+
+.ewu-advising-stats-pill {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+body.ewu-dark-mode .ewu-advising-stats-pill {
+    background: #0f172a !important;
+    color: #94a3b8 !important;
+}
+
+.ewu-advising-toolbar-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #f1f5f9;
+    flex-wrap: wrap;
+}
+
+body.ewu-dark-mode .ewu-advising-toolbar-bottom {
+    border-top-color: #334155 !important;
+}
+
+.ewu-adv-chip-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.ewu-adv-chip-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 2px;
+}
+
+body.ewu-dark-mode .ewu-adv-chip-label {
+    color: #64748b !important;
+}
+
+.ewu-adv-chip {
+    padding: 3px 8px;
+    font-size: 11.5px;
+    font-weight: 600;
+    border-radius: 5px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    line-height: 1.2;
+}
+
+body.ewu-dark-mode .ewu-adv-chip {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #94a3b8 !important;
+}
+
+.ewu-adv-chip:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #1e293b;
+}
+
+body.ewu-dark-mode .ewu-adv-chip:hover {
+    background: #1e293b !important;
+    border-color: #475569 !important;
+    color: #f1f5f9 !important;
+}
+
+.ewu-adv-chip.active {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.25);
+}
+
+body.ewu-dark-mode .ewu-adv-chip.active {
+    background: #3b82f6 !important;
+    border-color: #3b82f6 !important;
+    color: #ffffff !important;
+}
+
+.ewu-adv-empty-state {
+    padding: 24px 16px;
+    text-align: center;
+    color: #64748b;
+    font-size: 13px;
+    background: #f8fafc;
+    border-radius: 8px;
+    margin: 10px 0;
+    border: 1px dashed #cbd5e1;
+}
+
+body.ewu-dark-mode .ewu-adv-empty-state {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #94a3b8 !important;
+}
+
+.ewu-adv-reset-btn {
+    margin-top: 8px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.ewu-adv-reset-btn:hover {
+    background: #1d4ed8;
+}
+
+/* ==========================================================================
+   4. Interactive "What-If" CGPA & Target Planner (v1.5.0)
+   ========================================================================== */
+.ewu-cgpa-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin: 16px 0 20px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body.ewu-dark-mode .ewu-cgpa-card {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    color: #f8fafc !important;
+}
+
+.ewu-cgpa-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+body.ewu-dark-mode .ewu-cgpa-header {
+    border-bottom-color: #334155 !important;
+}
+
+.ewu-cgpa-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ewu-cgpa-title-group h3 {
+    margin: 0;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+body.ewu-dark-mode .ewu-cgpa-title-group h3 {
+    color: #f8fafc !important;
+}
+
+.ewu-cgpa-header-pills {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.ewu-cgpa-stat-pill {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 11.5px;
+    font-weight: 600;
+}
+
+body.ewu-dark-mode .ewu-cgpa-stat-pill {
+    background: rgba(59, 130, 246, 0.15) !important;
+    border-color: rgba(59, 130, 246, 0.3) !important;
+    color: #93c5fd !important;
+}
+
+.ewu-cgpa-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.ewu-cgpa-tab-btn {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+body.ewu-dark-mode .ewu-cgpa-tab-btn {
+    background: #0f172a !important;
+    color: #94a3b8 !important;
+    border-color: #334155 !important;
+}
+
+.ewu-cgpa-tab-btn.active {
+    background: #4f46e5 !important;
+    color: #ffffff !important;
+    border-color: #4f46e5 !important;
+}
+
+.ewu-cgpa-pane {
+    display: none;
+}
+
+.ewu-cgpa-pane.active {
+    display: block;
+}
+
+.ewu-cgpa-retake-controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.ewu-cgpa-retake-controls select,
+.ewu-cgpa-retake-controls input {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    font-size: 12.5px;
+    background: #ffffff;
+    color: #0f172a;
+}
+
+body.ewu-dark-mode .ewu-cgpa-retake-controls select,
+body.ewu-dark-mode .ewu-cgpa-retake-controls input {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+}
+
+.ewu-cgpa-add-btn {
+    background: #10b981;
+    color: #ffffff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 12.5px;
+    transition: background 0.15s ease;
+}
+
+.ewu-cgpa-add-btn:hover {
+    background: #059669;
+}
+
+.ewu-cgpa-simulated-banner {
+    padding: 8px 12px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-radius: 8px;
+    color: #065f46;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+body.ewu-dark-mode .ewu-cgpa-simulated-banner {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #34d399 !important;
+    border-color: rgba(16, 185, 129, 0.4) !important;
+}
+
+.ewu-cgpa-target-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.ewu-cgpa-field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 6px;
+}
+
+body.ewu-dark-mode .ewu-cgpa-field label {
+    color: #94a3b8 !important;
+}
+
+.ewu-cgpa-field input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    box-sizing: border-box;
+}
+
+.ewu-cgpa-target-result {
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.ewu-cgpa-target-result.success {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #065f46;
+}
+
+body.ewu-dark-mode .ewu-cgpa-target-result.success {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #34d399 !important;
+}
+
+.ewu-cgpa-target-result.warning {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #92400e;
+}
+
+body.ewu-dark-mode .ewu-cgpa-target-result.warning {
+    background: rgba(245, 158, 11, 0.15) !important;
+    color: #fbbf24 !important;
+}
+
+/* ==========================================================================
+   5. Advising Course Basket & Schedule Conflict Sandbox (v1.5.0)
+   ========================================================================== */
+.ewu-draft-btn {
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 6px;
+    border: 1px solid #4f46e5;
+    background: #eff6ff;
+    color: #4f46e5;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.ewu-draft-btn:hover {
+    background: #4f46e5;
+    color: #ffffff;
+}
+
+.ewu-draft-btn.in-basket {
+    background: #10b981;
+    border-color: #10b981;
+    color: #ffffff;
+}
+
+.ewu-draft-btn.in-basket:hover {
+    background: #ef4444;
+    border-color: #ef4444;
+}
+
+.ewu-basket-drawer {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 440px;
+    max-width: calc(100vw - 32px);
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-bottom: none;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.18);
+    z-index: 9995;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.ewu-basket-drawer.collapsed {
+    transform: translateX(-50%) translateY(calc(100% - 48px));
+}
+
+@media (max-width: 768px) {
+    .ewu-basket-drawer {
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100vw;
+        transform: none;
+        border-radius: 16px 16px 0 0;
+    }
+    .ewu-basket-drawer.collapsed {
+        transform: translateY(calc(100% - 48px));
+    }
+    body.has-ewu-basket .ewu-floating-settings-btn {
+        bottom: 58px !important;
+    }
+    body.has-ewu-basket .ewu-floating-dark-btn {
+        bottom: 56px !important;
+    }
+}
+
+.ewu-basket-header {
+    height: 48px;
+    padding: 0 16px;
+    background: #1e293b;
+    color: #ffffff;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+}
+
+.ewu-basket-header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.ewu-basket-header-badges {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ewu-basket-badge-clash {
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    animation: ewu-pulse 1.5s infinite;
+}
+
+@keyframes ewu-pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.85; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.ewu-basket-body {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 16px;
+    background: #f8fafc;
+}
+
+body.ewu-dark-mode .ewu-basket-body {
+    background: #0f172a !important;
+}
+
+.ewu-basket-plan-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.ewu-basket-presets {
+    display: flex;
+    gap: 6px;
+}
+
+.ewu-basket-preset-btn {
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.ewu-basket-preset-btn.active {
+    background: #4f46e5;
+    color: #ffffff;
+    border-color: #4f46e5;
+}
+
+.ewu-basket-clash-alert {
+    padding: 10px 14px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-radius: 8px;
+    color: #b91c1c;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+body.ewu-dark-mode .ewu-basket-clash-alert {
+    background: rgba(239, 68, 68, 0.2) !important;
+    color: #f87171 !important;
+    border-color: rgba(239, 68, 68, 0.5) !important;
+}
+
+.ewu-basket-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.15s ease;
+}
+
+body.ewu-dark-mode .ewu-basket-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+.ewu-basket-card.clashing {
+    border-color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.05) !important;
+}
+
+.ewu-basket-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.ewu-basket-course-code {
+    font-size: 13px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+body.ewu-dark-mode .ewu-basket-course-code {
+    color: #f8fafc !important;
+}
+
+.ewu-basket-meta {
+    font-size: 11px;
+    color: #64748b;
+}
+
+.ewu-basket-remove-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px;
+    transition: color 0.15s;
+}
+
+.ewu-basket-remove-btn:hover {
+    color: #ef4444;
+}
+
+/* Highlight clashing table rows in Offered Courses */
+tr.ewu-table-row-clash {
+    background-color: rgba(239, 68, 68, 0.08) !important;
+    border-left: 4px solid #ef4444 !important;
+}
+
+/* ==========================================================================
+   6. Smart Offered Courses Filter Chips & Spotlight Modal (v1.5.0)
+   ========================================================================== */
+.ewu-filter-chips-container {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e2e8f0;
+}
+
+body.ewu-dark-mode .ewu-filter-chips-container {
+    border-top-color: #334155 !important;
+}
+
+.ewu-filter-chip-group {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.ewu-filter-chip-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    margin-right: 4px;
+    text-transform: uppercase;
+}
+
+.ewu-filter-chip {
+    padding: 4px 10px;
+    border-radius: 9999px;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+body.ewu-dark-mode .ewu-filter-chip {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+.ewu-filter-chip:hover {
+    border-color: #94a3b8;
+    background: #e2e8f0;
+}
+
+.ewu-filter-chip.active {
+    background: #4f46e5 !important;
+    color: #ffffff !important;
+    border-color: #4f46e5 !important;
+}
+
+.ewu-spotlight-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+body.ewu-dark-mode .ewu-spotlight-btn {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+.ewu-spotlight-btn:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+}
+
+.ewu-spotlight-btn kbd {
+    background: #e2e8f0;
+    color: #475569;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-family: monospace;
+}
+
+body.ewu-dark-mode .ewu-spotlight-btn kbd {
+    background: #334155 !important;
+    color: #94a3b8 !important;
+}
+
+/* Spotlight Search Modal Overlay */
+.ewu-spotlight-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 100000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 10vh;
+    box-sizing: border-box;
+}
+
+.ewu-spotlight-modal {
+    width: 580px;
+    max-width: calc(100vw - 32px);
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body.ewu-dark-mode .ewu-spotlight-modal {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+.ewu-spotlight-input-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    gap: 12px;
+}
+
+body.ewu-dark-mode .ewu-spotlight-input-wrapper {
+    border-bottom-color: #334155 !important;
+}
+
+.ewu-spotlight-icon {
+    font-size: 20px;
+    color: #94a3b8;
+}
+
+.ewu-spotlight-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #0f172a;
+    background: transparent;
+}
+
+body.ewu-dark-mode .ewu-spotlight-input {
+    color: #f8fafc !important;
+}
+
+.ewu-spotlight-results {
+    max-height: 380px;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.ewu-spotlight-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.ewu-spotlight-item:hover,
+.ewu-spotlight-item.selected {
+    background: #f1f5f9;
+}
+
+body.ewu-dark-mode .ewu-spotlight-item:hover,
+body.ewu-dark-mode .ewu-spotlight-item.selected {
+    background: #334155 !important;
+}
+
+.ewu-spotlight-item-code {
+    font-weight: 800;
+    font-size: 14px;
+    color: #4f46e5;
+}
+
+body.ewu-dark-mode .ewu-spotlight-item-code {
+    color: #818cf8 !important;
+}
+
+.ewu-spotlight-item-meta {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.ewu-spotlight-footer {
+    padding: 10px 16px;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #64748b;
+}
+
+body.ewu-dark-mode .ewu-spotlight-footer {
+    background: #0f172a !important;
+    border-top-color: #334155 !important;
+}
+
 `;
   document.head.appendChild(style);
 
@@ -2213,37 +4226,119 @@ table.ewu-ledger-table {
 (function () {
   'use strict';
 
+  try {
+    document.documentElement.setAttribute('data-ewu-toolkit-installed', '1.5.0');
+    window.__EWU_TOOLKIT_ACTIVE__ = true;
+    console.log('[EWU-Toolkit] Content script loaded successfully v1.5.0 on ' + window.location.href);
+  } catch(e) {}
+
   let config = {
     scheduleEnabled: true,
-    offeredEnabled: true,
+    offeredEnabled: false, // Default: OFF (BETA)
     ledgerEnabled: true,
     routineEnabled: true,
-    captchaEnabled: true
+    captchaEnabled: true,
+    routineViewMode: (window.innerWidth <= 768) ? 'agenda' : 'grid',
+    darkModeEnabled: false,
+    cgpaEnabled: true,
+    basketEnabled: false, // Default: OFF (BETA)
+    advisingFacultyEnabled: true
   };
 
-  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-    chrome.storage.local.get({
-      ewu_schedule_enabled: true,
-      ewu_offered_enabled: true,
-      ewu_ledger_enabled: true,
-      ewu_routine_enabled: true,
-      ewu_captcha_enabled: true
-    }, (res) => {
-      config.scheduleEnabled = res.ewu_schedule_enabled !== false;
-      config.offeredEnabled = res.ewu_offered_enabled !== false;
-      config.ledgerEnabled = res.ewu_ledger_enabled !== false;
-      config.routineEnabled = res.ewu_routine_enabled !== false;
-      config.captchaEnabled = res.ewu_captcha_enabled !== false;
-      runEnhancements();
-    });
+  function applyTheme() {
+    if (config.darkModeEnabled) {
+      document.documentElement.classList.add('ewu-dark-mode');
+      if (document.body) document.body.classList.add('ewu-dark-mode');
+    } else {
+      document.documentElement.classList.remove('ewu-dark-mode');
+      if (document.body) document.body.classList.remove('ewu-dark-mode');
+    }
+  }
 
+  function loadStoredConfig(cb) {
+    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+      chrome.storage.local.get({
+        ewu_schedule_enabled: true,
+        ewu_offered_enabled: false,
+        ewu_ledger_enabled: true,
+        ewu_routine_enabled: true,
+        ewu_captcha_enabled: true,
+        ewu_routine_view_mode: (window.innerWidth <= 768) ? 'agenda' : 'grid',
+        ewu_dark_mode_enabled: false,
+        ewu_cgpa_enabled: true,
+        ewu_basket_enabled: false,
+        ewu_advising_faculty_enabled: true
+      }, (res) => {
+        config.scheduleEnabled = res.ewu_schedule_enabled !== false;
+        config.offeredEnabled = res.ewu_offered_enabled === true;
+        config.ledgerEnabled = res.ewu_ledger_enabled !== false;
+        config.routineEnabled = res.ewu_routine_enabled !== false;
+        config.captchaEnabled = res.ewu_captcha_enabled !== false;
+        if (res.ewu_routine_view_mode) config.routineViewMode = res.ewu_routine_view_mode;
+        config.darkModeEnabled = res.ewu_dark_mode_enabled === true;
+        config.cgpaEnabled = res.ewu_cgpa_enabled !== false;
+        config.basketEnabled = res.ewu_basket_enabled === true;
+        config.advisingFacultyEnabled = res.ewu_advising_faculty_enabled !== false;
+        applyTheme();
+        if (cb) cb();
+      });
+    } else {
+      try {
+        const sched = localStorage.getItem('ewu_schedule_enabled');
+        const off = localStorage.getItem('ewu_offered_enabled');
+        const ledg = localStorage.getItem('ewu_ledger_enabled');
+        const rout = localStorage.getItem('ewu_routine_enabled');
+        const cap = localStorage.getItem('ewu_captcha_enabled');
+        const vmode = localStorage.getItem('ewu_routine_view_mode');
+        const dark = localStorage.getItem('ewu_dark_mode_enabled');
+        const cgpa = localStorage.getItem('ewu_cgpa_enabled');
+        const bsk = localStorage.getItem('ewu_basket_enabled');
+        const advf = localStorage.getItem('ewu_advising_faculty_enabled');
+
+        config.scheduleEnabled = sched !== 'false';
+        config.offeredEnabled = off === 'true'; // OFF by default
+        config.ledgerEnabled = ledg !== 'false';
+        config.routineEnabled = rout !== 'false';
+        config.captchaEnabled = cap !== 'false';
+        if (vmode) config.routineViewMode = vmode;
+        config.darkModeEnabled = dark === 'true';
+        config.cgpaEnabled = cgpa !== 'false';
+        config.basketEnabled = bsk === 'true'; // OFF by default
+        config.advisingFacultyEnabled = advf !== 'false';
+        applyTheme();
+      } catch (e) {}
+      if (cb) cb();
+    }
+  }
+
+  function saveStoredConfig(key, val) {
+    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+      chrome.storage.local.set({ [key]: val });
+    }
+    try {
+      localStorage.setItem(key, String(val));
+    } catch (e) {}
+  }
+
+  loadStoredConfig(() => {
+    applyTheme();
+    runEnhancements();
+  });
+
+  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.onChanged) {
     chrome.storage.onChanged.addListener((changes, area) => {
       if (area === 'local') {
         if (changes.ewu_schedule_enabled) config.scheduleEnabled = changes.ewu_schedule_enabled.newValue !== false;
-        if (changes.ewu_offered_enabled) config.offeredEnabled = changes.ewu_offered_enabled.newValue !== false;
+        if (changes.ewu_offered_enabled) config.offeredEnabled = changes.ewu_offered_enabled.newValue === true;
         if (changes.ewu_ledger_enabled) config.ledgerEnabled = changes.ewu_ledger_enabled.newValue !== false;
         if (changes.ewu_routine_enabled) config.routineEnabled = changes.ewu_routine_enabled.newValue !== false;
         if (changes.ewu_captcha_enabled) config.captchaEnabled = changes.ewu_captcha_enabled.newValue !== false;
+        if (changes.ewu_routine_view_mode) config.routineViewMode = changes.ewu_routine_view_mode.newValue;
+        if (changes.ewu_dark_mode_enabled) config.darkModeEnabled = changes.ewu_dark_mode_enabled.newValue === true;
+        if (changes.ewu_cgpa_enabled) config.cgpaEnabled = changes.ewu_cgpa_enabled.newValue !== false;
+        if (changes.ewu_basket_enabled) config.basketEnabled = changes.ewu_basket_enabled.newValue === true;
+        if (changes.ewu_advising_faculty_enabled) config.advisingFacultyEnabled = changes.ewu_advising_faculty_enabled.newValue !== false;
+        applyTheme();
         runEnhancements();
       }
     });
@@ -2361,6 +4456,270 @@ table.ewu-ledger-table {
 
   function formatMoney(amount) {
     return '৳ ' + Number(amount).toLocaleString('en-IN');
+  }
+
+  // =========================================================================
+  // FEATURE 0: In-Portal Sidebar Settings Navigation & Modal Overlay (v1.4.0)
+  // =========================================================================
+  function injectPortalSidebarSettings() {
+    const sidebar = document.querySelector('.side-navbar ul, .sidebar-inverse ul, aside ul.nav, .sidebar-menu, nav ul.nav, #side-menu');
+    if (sidebar && !sidebar.querySelector('.ewu-sidebar-settings-item')) {
+      const li = document.createElement('li');
+      li.className = 'ewu-sidebar-settings-item';
+      li.innerHTML = `
+        <a href="javascript:void(0)" id="ewuSidebarSettingsLink" class="ewu-sidebar-settings-link" title="Open EWU-Toolkit Extension Settings">
+          <span style="font-size: 15px;">⚙️</span>
+          <span class="ewu-nav-label">EWU-Toolkit</span>
+          <span class="ewu-sidebar-badge">v1.5.0</span>
+        </a>
+      `;
+      sidebar.appendChild(li);
+      const link = li.querySelector('#ewuSidebarSettingsLink');
+      if (link) {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          openSettingsModal();
+        });
+      }
+    }
+
+    if (!document.getElementById('ewuFloatingDarkBtn')) {
+      const darkBtn = document.createElement('button');
+      darkBtn.type = 'button';
+      darkBtn.id = 'ewuFloatingDarkBtn';
+      darkBtn.className = 'ewu-floating-dark-btn';
+      darkBtn.title = 'Toggle Dark Mode';
+      darkBtn.innerHTML = config.darkModeEnabled ? '☀️' : '🌙';
+      darkBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        config.darkModeEnabled = !config.darkModeEnabled;
+        darkBtn.innerHTML = config.darkModeEnabled ? '☀️' : '🌙';
+        saveStoredConfig('ewu_dark_mode_enabled', config.darkModeEnabled);
+        applyTheme();
+        runEnhancements();
+      });
+      document.body.appendChild(darkBtn);
+    }
+
+    if (!document.getElementById('ewuFloatingSettingsBtn')) {
+      const floatBtn = document.createElement('button');
+      floatBtn.type = 'button';
+      floatBtn.id = 'ewuFloatingSettingsBtn';
+      floatBtn.className = 'ewu-floating-settings-btn';
+      floatBtn.title = 'Open EWU-Toolkit Settings';
+      floatBtn.innerHTML = `
+        <span class="float-icon">⚙️</span>
+        <span class="float-text">EWU-Toolkit</span>
+      `;
+      floatBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openSettingsModal();
+      });
+      document.body.appendChild(floatBtn);
+    }
+  }
+
+  function openSettingsModal() {
+    let backdrop = document.getElementById('ewuSettingsModalBackdrop');
+    if (backdrop) {
+      backdrop.remove();
+    }
+
+    backdrop = document.createElement('div');
+    backdrop.id = 'ewuSettingsModalBackdrop';
+    backdrop.className = 'ewu-settings-modal-backdrop';
+    backdrop.innerHTML = `
+      <div class="ewu-settings-modal-card" role="dialog" aria-modal="true" aria-labelledby="ewuModalTitle">
+        <div class="ewu-settings-modal-header">
+          <div class="ewu-settings-brand">
+            <span class="ewu-settings-brand-icon">🎓</span>
+            <div class="ewu-settings-title-group">
+              <h2 id="ewuModalTitle">EWU-Toolkit Settings</h2>
+              <p>Student Utility Suite &bull; <span class="version-badge">v1.5.0</span></p>
+            </div>
+          </div>
+          <button type="button" class="ewu-settings-close-btn" id="ewuModalCloseBtn" title="Close Settings">✕</button>
+        </div>
+
+        <div class="ewu-settings-modal-body">
+          <div class="ewu-settings-section-title">Active Superpowers</div>
+
+          <!-- Feature 1 -->
+          <div class="ewu-settings-toggle-row">
+            <div class="ewu-settings-toggle-info">
+              <div class="ewu-settings-toggle-name">🎓 Schedule Faculty Info</div>
+              <div class="ewu-settings-toggle-desc">Unhide Initial, Name & Email on Class Schedule & Advising Slip</div>
+            </div>
+            <label class="ewu-switch">
+              <input type="checkbox" id="ewuModalToggleSchedule" ${config.scheduleEnabled ? 'checked' : ''}>
+              <span class="ewu-slider"></span>
+            </label>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="ewu-settings-toggle-row">
+            <div class="ewu-settings-toggle-info">
+              <div class="ewu-settings-toggle-name">📅 Visual Routine & Mobile Agenda</div>
+              <div class="ewu-settings-toggle-desc">Weekly Class Timetable, Day Agenda, Excel, Image & Google Calendar Export</div>
+            </div>
+            <label class="ewu-switch">
+              <input type="checkbox" id="ewuModalToggleRoutine" ${config.routineEnabled ? 'checked' : ''}>
+              <span class="ewu-slider"></span>
+            </label>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="ewu-settings-toggle-row">
+            <div class="ewu-settings-toggle-info">
+              <div class="ewu-settings-toggle-name">
+                💺 Smart Seat Badges & Filters
+                <span class="ewu-beta-tag">BETA</span>
+              </div>
+              <div class="ewu-settings-toggle-desc">Offered Courses Open Seats Counter, Day & Time Filter Chips & Spotlight (Experimental)</div>
+            </div>
+            <label class="ewu-switch">
+              <input type="checkbox" id="ewuModalToggleOffered" ${config.offeredEnabled ? 'checked' : ''}>
+              <span class="ewu-slider"></span>
+            </label>
+          </div>
+
+          <!-- Feature 4: Course Basket & Sandbox -->
+          <div class="ewu-settings-toggle-row">
+            <div class="ewu-settings-toggle-info">
+              <div class="ewu-settings-toggle-name">
+                🛒 Advising Basket & Sandbox
+                <span class="ewu-beta-tag">BETA</span>
+              </div>
+              <div class="ewu-settings-toggle-desc">Draft Offered Courses & Detect Real-Time Schedule Clashes (Plan A vs Plan B) (Experimental)</div>
+            </div>
+            <label class="ewu-switch">
+              <input type="checkbox" id="ewuModalToggleBasket" ${config.basketEnabled ? 'checked' : ''}>
+              <span class="ewu-slider"></span>
+            </label>
+          </div>
+
+          <!-- Feature 5: What-If CGPA & Target Planner -->
+          <div class="ewu-settings-toggle-row">
+            <div class="ewu-settings-toggle-info">
+              <div class="ewu-settings-toggle-name">🧮 "What-If" CGPA & Target Planner</div>
+              <div class="ewu-settings-toggle-desc">Simulate Retake Grade Boosts & Calculate Required GPA on Degree Review</div>
+            </div>
+            <label class="ewu-switch">
+              <input type="checkbox" id="ewuModalToggleCgpa" ${config.cgpaEnabled ? 'checked' : ''}>
+              <span class="ewu-slider"></span>
+            </label>
+          </div>
+
+          <!-- Feature 6: Advising Window Faculty Revealer -->
+          <div class="ewu-settings-toggle-row">
+            <div class="ewu-settings-toggle-info">
+              <div class="ewu-settings-toggle-name">👨‍🏫 Advising Window Faculty Revealer</div>
+              <div class="ewu-settings-toggle-desc">Show Teacher Initials During Live Advising & Routine Flowchart Selection</div>
+            </div>
+            <label class="ewu-switch">
+              <input type="checkbox" id="ewuModalToggleAdvisingFaculty" ${config.advisingFacultyEnabled ? 'checked' : ''}>
+              <span class="ewu-slider"></span>
+            </label>
+          </div>
+
+          <!-- Feature 7: Dark Mode -->
+          <div class="ewu-settings-toggle-row">
+            <div class="ewu-settings-toggle-info">
+              <div class="ewu-settings-toggle-name">🌙 Dark Mode Theme</div>
+              <div class="ewu-settings-toggle-desc">Sleek eye-friendly dark palette across the EWU Student Portal</div>
+            </div>
+            <label class="ewu-switch">
+              <input type="checkbox" id="ewuModalToggleDark" ${config.darkModeEnabled ? 'checked' : ''}>
+              <span class="ewu-slider"></span>
+            </label>
+          </div>
+
+          <!-- Feature 8: Ledger -->
+          <div class="ewu-settings-toggle-row">
+            <div class="ewu-settings-toggle-info">
+              <div class="ewu-settings-toggle-name">💰 Accounts Ledger Breakdown</div>
+              <div class="ewu-settings-toggle-desc">Financial calculation card with total dues and advance credit balances</div>
+            </div>
+            <label class="ewu-switch">
+              <input type="checkbox" id="ewuModalToggleLedger" ${config.ledgerEnabled ? 'checked' : ''}>
+              <span class="ewu-slider"></span>
+            </label>
+          </div>
+
+          <!-- Feature 9: Captcha -->
+          <div class="ewu-settings-toggle-row">
+            <div class="ewu-settings-toggle-info">
+              <div class="ewu-settings-toggle-name">🔢 Login Math Captcha Solver</div>
+              <div class="ewu-settings-toggle-desc">Auto-fills the simple addition challenge on portal login screen</div>
+            </div>
+            <label class="ewu-switch">
+              <input type="checkbox" id="ewuModalToggleCaptcha" ${config.captchaEnabled ? 'checked' : ''}>
+              <span class="ewu-slider"></span>
+            </label>
+          </div>
+
+          <div class="ewu-settings-section-title">Resources & Links</div>
+          <div class="ewu-settings-links-grid">
+            <a href="https://github.com/sowmiksudo/EWU-Toolkit" target="_blank" rel="noopener noreferrer" class="ewu-settings-link-btn primary">
+              ⭐ Star on GitHub
+            </a>
+            <a href="https://ewu-faculty-explorer.azurewebsites.net/" target="_blank" rel="noopener noreferrer" class="ewu-settings-link-btn secondary">
+              🌐 Faculty Explorer
+            </a>
+          </div>
+
+          <div style="margin-top: 16px; padding: 12px 14px; background: #f8fafc; border-radius: 8px; font-size: 11px; color: #64748b; line-height: 1.4; border: 1px solid #e2e8f0;">
+            <strong>Open-Source MIT License:</strong> Free for East West University students. Client-side processing only; institutional credentials and private backend data are never accessed by third parties.
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(backdrop);
+
+    const closeBtn = backdrop.querySelector('#ewuModalCloseBtn');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => backdrop.remove());
+    }
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) backdrop.remove();
+    });
+
+    const escListener = (e) => {
+      if (e.key === 'Escape') {
+        backdrop.remove();
+        document.removeEventListener('keydown', escListener);
+      }
+    };
+    document.addEventListener('keydown', escListener);
+
+    function bindToggle(id, configKey, storageKey, onToggle) {
+      const input = backdrop.querySelector(id);
+      if (!input) return;
+      input.addEventListener('change', () => {
+        config[configKey] = input.checked;
+        saveStoredConfig(storageKey, input.checked);
+        if (onToggle) onToggle(input.checked);
+        runEnhancements();
+      });
+    }
+
+    bindToggle('#ewuModalToggleSchedule', 'scheduleEnabled', 'ewu_schedule_enabled');
+    bindToggle('#ewuModalToggleRoutine', 'routineEnabled', 'ewu_routine_enabled');
+    bindToggle('#ewuModalToggleOffered', 'offeredEnabled', 'ewu_offered_enabled');
+    bindToggle('#ewuModalToggleBasket', 'basketEnabled', 'ewu_basket_enabled');
+    bindToggle('#ewuModalToggleCgpa', 'cgpaEnabled', 'ewu_cgpa_enabled');
+    bindToggle('#ewuModalToggleAdvisingFaculty', 'advisingFacultyEnabled', 'ewu_advising_faculty_enabled');
+    bindToggle('#ewuModalToggleDark', 'darkModeEnabled', 'ewu_dark_mode_enabled', () => {
+      applyTheme();
+      const floatDark = document.getElementById('ewuFloatingDarkBtn');
+      if (floatDark) floatDark.innerHTML = config.darkModeEnabled ? '☀️' : '🌙';
+    });
+    bindToggle('#ewuModalToggleLedger', 'ledgerEnabled', 'ewu_ledger_enabled');
+    bindToggle('#ewuModalToggleCaptcha', 'captchaEnabled', 'ewu_captcha_enabled');
   }
 
   // =========================================================================
@@ -3574,6 +5933,131 @@ table.ewu-ledger-table {
     }
   }
 
+  // -------------------------------------------------------------------------
+  // iCalendar (.ics) and Google Calendar Sync Utilities
+  // -------------------------------------------------------------------------
+  function exportRoutineToIcs(courses, semesterName) {
+    if (!courses || courses.length === 0) return;
+    const cleanSem = (semesterName || 'Semester').replace(/[^a-zA-Z0-9_\-]/g, '_');
+    const now = new Date();
+    const currentYear = now.getFullYear();
+
+    let startMonth = 9; // Fall (Oct)
+    let endMonth = 0;   // Jan next year
+    let endYear = currentYear + 1;
+
+    const lowerSem = (semesterName || '').toLowerCase();
+    if (lowerSem.includes('spring')) {
+      startMonth = 0; // Spring (Jan/Feb)
+      endMonth = 4;   // May
+      endYear = currentYear;
+    } else if (lowerSem.includes('summer')) {
+      startMonth = 4; // Summer (May/Jun)
+      endMonth = 8;   // Sep
+      endYear = currentYear;
+    }
+
+    const untilDateStr = `${endYear}${String(endMonth + 1).padStart(2, '0')}31T235959Z`;
+
+    const dayOffsets = {
+      'Sunday': 0,
+      'Monday': 1,
+      'Tuesday': 2,
+      'Wednesday': 3,
+      'Thursday': 4,
+      'Friday': 5,
+      'Saturday': 6
+    };
+
+    let icsLines = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//EWU-Toolkit//Class Routine Exporter//EN',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      `X-WR-CALNAME:EWU Routine - ${cleanSem}`,
+      'X-WR-TIMEZONE:Asia/Dhaka'
+    ];
+
+    courses.forEach(c => {
+      c.slots.forEach(slot => {
+        const targetDayNum = dayOffsets[slot.day] !== undefined ? dayOffsets[slot.day] : 0;
+        const eventDate = new Date(now);
+        const currentDayNum = eventDate.getDay();
+        let diff = targetDayNum - currentDayNum;
+        if (diff < 0) diff += 7;
+        eventDate.setDate(eventDate.getDate() + diff);
+
+        const startH = Math.floor(slot.startMin / 60);
+        const startM = slot.startMin % 60;
+        const endH = Math.floor(slot.endMin / 60);
+        const endM = slot.endMin % 60;
+
+        const y = eventDate.getFullYear();
+        const m = String(eventDate.getMonth() + 1).padStart(2, '0');
+        const d = String(eventDate.getDate()).padStart(2, '0');
+
+        const dtStartStr = `${y}${m}${d}T${String(startH).padStart(2, '0')}${String(startM).padStart(2, '0')}00`;
+        const dtEndStr = `${y}${m}${d}T${String(endH).padStart(2, '0')}${String(endM).padStart(2, '0')}00`;
+        const uid = `${c.courseCode}_Sec${c.section}_${slot.day}_${startH}${startM}@ewu-toolkit`;
+
+        icsLines.push('BEGIN:VEVENT');
+        icsLines.push(`UID:${uid}`);
+        icsLines.push(`SUMMARY:${c.courseCode} (Sec ${c.section}) - ${c.facultyInitial || 'TBA'}`);
+        icsLines.push(`LOCATION:Room ${c.room || 'TBA'}, East West University`);
+        icsLines.push(`DESCRIPTION:Course: ${c.courseCode}\\nSection: ${c.section}\\nRoom: ${c.room}\\nFaculty: ${c.facultyName} (${c.facultyInitial})\\nEmail: ${c.facultyEmail}`);
+        icsLines.push(`DTSTART;TZID=Asia/Dhaka:${dtStartStr}`);
+        icsLines.push(`DTEND;TZID=Asia/Dhaka:${dtEndStr}`);
+        icsLines.push(`RRULE:FREQ=WEEKLY;UNTIL=${untilDateStr}`);
+        icsLines.push('BEGIN:VALARM');
+        icsLines.push('TRIGGER:-PT15M');
+        icsLines.push('ACTION:DISPLAY');
+        icsLines.push(`DESCRIPTION:Class in 15 mins: ${c.courseCode} [Room ${c.room}]`);
+        icsLines.push('END:VALARM');
+        icsLines.push('END:VEVENT');
+      });
+    });
+
+    icsLines.push('END:VCALENDAR');
+    const icsContent = icsLines.join('\r\n');
+    const encoder = new TextEncoder();
+    downloadBinaryFile(encoder.encode(icsContent), `EWU_Routine_${cleanSem}.ics`, 'text/calendar');
+  }
+
+  function openGoogleCalendarSyncFlow(courses, semesterName) {
+    if (!courses || courses.length === 0) return;
+    const payload = {
+      semester: semesterName || 'Current Semester',
+      courses: courses.map(c => ({
+        courseCode: c.courseCode,
+        section: c.section,
+        room: c.room,
+        facultyInitial: c.facultyInitial,
+        facultyName: c.facultyName,
+        facultyEmail: c.facultyEmail,
+        slots: c.slots
+      }))
+    };
+
+    const jsonStr = encodeURIComponent(JSON.stringify(payload));
+    const targetUrl = `https://ewu-faculty-explorer.azurewebsites.net/api/calendar/sync-flow?data=${jsonStr}`;
+
+    const popupW = 560;
+    const popupH = 680;
+    const left = Math.round((window.screen.width - popupW) / 2);
+    const top = Math.round((window.screen.height - popupH) / 2);
+
+    const win = window.open(
+      targetUrl,
+      'EWUCalendarSync',
+      `width=${popupW},height=${popupH},top=${top},left=${left},status=no,toolbar=no,menubar=no`
+    );
+
+    if (!win) {
+      window.open(targetUrl, '_blank');
+    }
+  }
+
   function processClassRoutine(table, container) {
     if (!config.routineEnabled) {
       const existingCitation = container.parentElement.querySelector('.ewu-inter-table-watermark');
@@ -3593,7 +6077,7 @@ table.ewu-ledger-table {
       semesterName = semSelect.selectedOptions[0].textContent.trim();
     }
 
-    // Inter-table watermark website citation (positioned between Courses Table and Routine Timetable)
+    // Inter-table watermark citation
     let watermarkCitation = container.parentElement.querySelector('.ewu-inter-table-watermark');
     if (!watermarkCitation) {
       watermarkCitation = document.createElement('div');
@@ -3626,10 +6110,8 @@ table.ewu-ledger-table {
 
     let routineCard = container.parentElement.querySelector('.ewu-routine-card');
 
-    // Signature cache check: prevents wiping out buttons / DOM on every MutationObserver tick
     const currentSignature = courses.map(c => `${c.courseCode}_${c.section}_${c.timing}_${c.room}_${c.facultyInitial}`).join('|') + `_${semesterName}`;
     if (routineCard && routineCard.dataset.signature === currentSignature) {
-      // Ensure it stays positioned directly below the watermark citation (or table container)
       const insertAfterNode = watermarkCitation || container;
       if (insertAfterNode.nextSibling !== routineCard && routineCard.previousElementSibling !== insertAfterNode) {
         if (insertAfterNode.nextSibling) {
@@ -3688,6 +6170,8 @@ table.ewu-ledger-table {
       gridRowsHtml += `</tr>`;
     });
 
+    const isAgenda = config.routineViewMode === 'agenda';
+
     const cardHtml = `
       <div class="ewu-print-section-divider">
         <span>2. Weekly Class Routine Timetable</span>
@@ -3698,6 +6182,14 @@ table.ewu-ledger-table {
             <span class="calendar-icon">📅</span>
             <h2>My Weekly Class Routine</h2>
             <span class="ewu-sem-pill">${semesterName}</span>
+            <div class="ewu-view-mode-switcher">
+              <button type="button" class="ewu-view-btn ${!isAgenda ? 'active' : ''}" id="ewuViewModeGrid" title="Full Grid Timetable">
+                📅 Grid
+              </button>
+              <button type="button" class="ewu-view-btn ${isAgenda ? 'active' : ''}" id="ewuViewModeAgenda" title="Mobile Day Agenda">
+                📋 Day Agenda
+              </button>
+            </div>
           </div>
           <div class="routine-meta-stats">
             <span class="stat-tag"><strong>${courses.length}</strong> Courses</span>
@@ -3716,6 +6208,20 @@ table.ewu-ledger-table {
                 <div class="ewu-bottom-sheet-title">Export Routine Options</div>
                 <button type="button" class="ewu-bottom-sheet-close" id="ewuCloseDropdownBtn" title="Close">✕</button>
               </div>
+              <button type="button" class="ewu-dropdown-item" id="ewuExportCalendarBtn" title="Sync classes directly to Google Calendar">
+                <span class="dropdown-item-icon">📅</span>
+                <div class="dropdown-item-text">
+                  <div class="dropdown-item-title">Add to Google Calendar</div>
+                  <div class="dropdown-item-desc">OAuth 1-click batch sync</div>
+                </div>
+              </button>
+              <button type="button" class="ewu-dropdown-item" id="ewuExportIcsBtn" title="Download universal .ics calendar file">
+                <span class="dropdown-item-icon">📆</span>
+                <div class="dropdown-item-text">
+                  <div class="dropdown-item-title">Export Calendar (.ics)</div>
+                  <div class="dropdown-item-desc">Universal file for phone & PC</div>
+                </div>
+              </button>
               <button type="button" class="ewu-dropdown-item" id="ewuExportImageBtn" title="Export as High-Resolution PNG Image">
                 <span class="dropdown-item-icon">🖼️</span>
                 <div class="dropdown-item-text">
@@ -3745,22 +6251,38 @@ table.ewu-ledger-table {
         </div>
       </div>
       <div class="ewu-routine-body" id="ewuRoutineBody">
-        <div class="ewu-mobile-scroll-hint">
-          <span class="hint-icon">⇄</span>
-          <span>Swipe horizontally to view full routine & time slots</span>
+        <div class="ewu-routine-grid-container" id="ewuRoutineGridContainer" style="${isAgenda ? 'display: none;' : ''}">
+          <div class="ewu-mobile-scroll-hint">
+            <span class="hint-icon">⇄</span>
+            <span>Swipe horizontally to view full routine matrix</span>
+          </div>
+          <div class="table-responsive ewu-routine-table-responsive">
+            <table class="table ewu-routine-grid">
+              <thead>
+                <tr>${slotsHeaderHtml}</tr>
+              </thead>
+              <tbody>
+                ${gridRowsHtml}
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div class="table-responsive ewu-routine-table-responsive">
-          <table class="table ewu-routine-grid">
-            <thead>
-              <tr>${slotsHeaderHtml}</tr>
-            </thead>
-            <tbody>
-              ${gridRowsHtml}
-            </tbody>
-          </table>
+
+        <div class="ewu-routine-agenda-container" id="ewuRoutineAgendaContainer" style="${!isAgenda ? 'display: none;' : ''}">
+          <div class="ewu-agenda-tabs-strip" id="ewuAgendaTabsStrip">
+            ${days.map(d => {
+              const count = courses.filter(c => c.slots.some(s => s.day === d)).length;
+              return `
+                <button type="button" class="ewu-agenda-day-pill" data-day="${d}">
+                  <span>${d.slice(0, 3)}</span>
+                  <span class="day-count-badge">${count}</span>
+                </button>
+              `;
+            }).join('')}
+          </div>
+          <div class="ewu-agenda-cards-list" id="ewuAgendaCardsList"></div>
         </div>
       </div>
-
     `;
 
     const insertAfterNode = watermarkCitation || container;
@@ -3768,7 +6290,6 @@ table.ewu-ledger-table {
       routineCard = document.createElement('div');
       routineCard.className = 'ewu-routine-card';
       routineCard.innerHTML = cardHtml;
-      // Injected directly BELOW the watermark citation
       if (insertAfterNode.nextSibling) {
         insertAfterNode.parentElement.insertBefore(routineCard, insertAfterNode.nextSibling);
       } else {
@@ -3787,7 +6308,92 @@ table.ewu-ledger-table {
 
     routineCard.dataset.signature = currentSignature;
 
-    // Delegated click handler: attached once to the card container
+    function renderAgendaDayCards(selectedDay) {
+      const listContainer = routineCard.querySelector('#ewuAgendaCardsList');
+      if (!listContainer) return;
+
+      const dayPills = routineCard.querySelectorAll('.ewu-agenda-day-pill');
+      dayPills.forEach(pill => {
+        if (pill.dataset.day === selectedDay) pill.classList.add('active');
+        else pill.classList.remove('active');
+      });
+
+      const dayEvents = [];
+      courses.forEach(c => {
+        c.slots.filter(s => s.day === selectedDay).forEach(s => {
+          dayEvents.push({ course: c, slot: s });
+        });
+      });
+
+      dayEvents.sort((a, b) => a.slot.startMin - b.slot.startMin);
+
+      if (dayEvents.length === 0) {
+        listContainer.innerHTML = `
+          <div class="ewu-agenda-empty-day">
+            <span class="ewu-agenda-empty-icon">☕</span>
+            <div style="font-weight: 700; color: #334155;">No classes scheduled on ${selectedDay}</div>
+            <div style="font-size: 11px; margin-top: 4px;">Enjoy your study time or campus break!</div>
+          </div>
+        `;
+        return;
+      }
+
+      let cardsHtml = '';
+      dayEvents.forEach(item => {
+        const c = item.course;
+        const s = item.slot;
+        const dur = s.endMin - s.startMin;
+        const timeStr = s.timeLabel || `${format12h(s.startStr)} - ${format12h(s.endStr)}`;
+
+        cardsHtml += `
+          <div class="ewu-agenda-card">
+            <div class="ewu-agenda-time-col">
+              <span class="ewu-agenda-time-start">${timeStr}</span>
+              <span class="ewu-agenda-time-duration">${dur} mins</span>
+            </div>
+            <div class="ewu-agenda-card-body" style="border-left-color: ${c.color.border};">
+              <div class="ewu-agenda-course-row">
+                <div class="ewu-agenda-course-title">
+                  <strong>${c.courseCode}</strong>
+                  <span class="ewu-agenda-sec-badge">Sec ${c.section}</span>
+                </div>
+                <span class="ewu-agenda-room-badge">📍 Room ${c.room || 'TBA'}</span>
+              </div>
+              <div class="ewu-agenda-faculty-row">
+                <div class="ewu-agenda-faculty-info">
+                  <span class="ewu-agenda-initial-badge">${c.facultyInitial || 'TBA'}</span>
+                  <span>${c.facultyName || 'Faculty TBA'}</span>
+                </div>
+                ${c.facultyEmail ? `
+                  <div class="ewu-agenda-email-actions">
+                    <a href="mailto:${c.facultyEmail}" class="ewu-email-link" title="Email ${c.facultyEmail}">${c.facultyEmail}</a>
+                    <button type="button" class="ewu-copy-btn ewu-screen-only" data-email="${c.facultyEmail}" title="Copy email">📋 Copy</button>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      listContainer.innerHTML = cardsHtml;
+
+      listContainer.querySelectorAll('.ewu-copy-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const email = btn.dataset.email;
+          if (email) copyToClipboard(email, btn);
+        });
+      });
+    }
+
+    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const todayName = dayNames[new Date().getDay()];
+    const defaultDay = days.includes(todayName) ? todayName : days[0];
+    renderAgendaDayCards(defaultDay);
+
+    // Delegated click handler
     if (!routineCard.dataset.delegated) {
       routineCard.dataset.delegated = 'true';
       routineCard.addEventListener('click', (e) => {
@@ -3796,8 +6402,13 @@ table.ewu-ledger-table {
         const backdrop = e.target.closest('#ewuDropdownBackdrop');
         const exportImageBtn = e.target.closest('#ewuExportImageBtn');
         const exportExcelBtn = e.target.closest('#ewuExportExcelBtn');
+        const exportCalendarBtn = e.target.closest('#ewuExportCalendarBtn');
+        const exportIcsBtn = e.target.closest('#ewuExportIcsBtn');
         const printBtn = e.target.closest('#ewuPrintRoutineBtn');
         const toggleBtn = e.target.closest('#ewuToggleRoutineView');
+        const viewModeGridBtn = e.target.closest('#ewuViewModeGrid');
+        const viewModeAgendaBtn = e.target.closest('#ewuViewModeAgenda');
+        const dayPillBtn = e.target.closest('.ewu-agenda-day-pill');
 
         const dropdown = routineCard.querySelector('#ewuExportDropdown');
 
@@ -3809,6 +6420,40 @@ table.ewu-ledger-table {
           e.preventDefault();
           e.stopPropagation();
           if (dropdown) dropdown.classList.remove('show');
+        } else if (viewModeGridBtn) {
+          e.preventDefault();
+          config.routineViewMode = 'grid';
+          saveStoredConfig('ewu_routine_view_mode', 'grid');
+          routineCard.querySelector('#ewuViewModeGrid').classList.add('active');
+          routineCard.querySelector('#ewuViewModeAgenda').classList.remove('active');
+          routineCard.querySelector('#ewuRoutineGridContainer').style.display = 'block';
+          routineCard.querySelector('#ewuRoutineAgendaContainer').style.display = 'none';
+        } else if (viewModeAgendaBtn) {
+          e.preventDefault();
+          config.routineViewMode = 'agenda';
+          saveStoredConfig('ewu_routine_view_mode', 'agenda');
+          routineCard.querySelector('#ewuViewModeGrid').classList.remove('active');
+          routineCard.querySelector('#ewuViewModeAgenda').classList.add('active');
+          routineCard.querySelector('#ewuRoutineGridContainer').style.display = 'none';
+          routineCard.querySelector('#ewuRoutineAgendaContainer').style.display = 'block';
+          const activePill = routineCard.querySelector('.ewu-agenda-day-pill.active');
+          const selDay = activePill ? activePill.dataset.day : defaultDay;
+          renderAgendaDayCards(selDay);
+        } else if (dayPillBtn) {
+          e.preventDefault();
+          renderAgendaDayCards(dayPillBtn.dataset.day);
+        } else if (exportCalendarBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (dropdown) dropdown.classList.remove('show');
+          const currentCourses = extractAdvisingCourses(table);
+          openGoogleCalendarSyncFlow(currentCourses, semesterName);
+        } else if (exportIcsBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (dropdown) dropdown.classList.remove('show');
+          const currentCourses = extractAdvisingCourses(table);
+          exportRoutineToIcs(currentCourses, semesterName);
         } else if (exportImageBtn) {
           e.preventDefault();
           e.stopPropagation();
@@ -3880,7 +6525,6 @@ table.ewu-ledger-table {
         }
       });
 
-      // Global click-outside listener to close the dropdown
       document.addEventListener('click', (e) => {
         if (!e.target.closest('#ewuExportDropdown')) {
           const openDropdowns = document.querySelectorAll('.ewu-dropdown.show');
@@ -3891,43 +6535,298 @@ table.ewu-ledger-table {
   }
 
   // =========================================================================
-  // FEATURE 2: Offered Courses Smart Seat Availability & Filter Bar
+  // FEATURE 2: Offered Courses Smart Seat Availability, Filter Chips & Basket
   // =========================================================================
   let hideFullSections = false;
   let courseSearchQuery = '';
+  let activeDayFilter = 'ALL';
+  let activeTimeFilter = 'ALL';
+  let basketActivePreset = 'A'; // 'A' or 'B'
+  let basketPlans = { 'A': [], 'B': [] };
+
+  function loadBasketPlans() {
+    try {
+      const saved = localStorage.getItem('ewu_basket_plans');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          // Backward compatibility: If previously stored as a raw array, migrate to Plan A
+          basketPlans = { 'A': parsed, 'B': [] };
+        } else if (parsed && typeof parsed === 'object') {
+          basketPlans = {
+            'A': Array.isArray(parsed.A) ? parsed.A : [],
+            'B': Array.isArray(parsed.B) ? parsed.B : []
+          };
+        }
+      }
+      const savedPreset = localStorage.getItem('ewu_basket_preset');
+      if (savedPreset === 'A' || savedPreset === 'B') {
+        basketActivePreset = savedPreset;
+      }
+    } catch(e) {
+      basketPlans = { 'A': [], 'B': [] };
+    }
+    if (!Array.isArray(basketPlans.A)) basketPlans.A = [];
+    if (!Array.isArray(basketPlans.B)) basketPlans.B = [];
+  }
+  loadBasketPlans();
+
+  function saveBasketPlans() {
+    try {
+      localStorage.setItem('ewu_basket_plans', JSON.stringify(basketPlans));
+      localStorage.setItem('ewu_basket_preset', basketActivePreset);
+    } catch(e) {}
+    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+      chrome.storage.local.set({ ewu_basket_plans: basketPlans, ewu_basket_preset: basketActivePreset });
+    }
+  }
+
+  function parseDayCodes(timeStr) {
+    const days = new Set();
+    const upper = (timeStr || '').toUpperCase();
+    if (upper.includes('ST')) { days.add('Sun'); days.add('Tue'); }
+    if (upper.includes('MW')) { days.add('Mon'); days.add('Wed'); }
+    if (upper.includes('SR')) { days.add('Sun'); days.add('Thu'); }
+    if (upper.includes('TR')) { days.add('Tue'); days.add('Thu'); }
+    if (upper.includes('RA')) { days.add('Thu'); days.add('Sat'); }
+    if (upper.includes('FRIDAY') || /\bF\b/.test(upper)) { days.add('Fri'); }
+    if (days.size === 0) {
+      if (upper.includes('SUN')) days.add('Sun');
+      if (upper.includes('MON')) days.add('Mon');
+      if (upper.includes('TUE')) days.add('Tue');
+      if (upper.includes('WED')) days.add('Wed');
+      if (upper.includes('THU')) days.add('Thu');
+      if (upper.includes('FRI')) days.add('Fri');
+      if (upper.includes('SAT')) days.add('Sat');
+    }
+    return Array.from(days);
+  }
+
+  function parseTimeRangeMinutes(timeStr) {
+    const match = (timeStr || '').match(/(\d{1,2}):(\d{2})\s*(AM|PM)?\s*[-–]\s*(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
+    if (!match) return null;
+    let [_, h1, m1, p1, h2, m2, p2] = match;
+    let startH = parseInt(h1, 10);
+    let startM = parseInt(m1, 10);
+    let endH = parseInt(h2, 10);
+    let endM = parseInt(m2, 10);
+
+    p2 = (p2 || '').toUpperCase();
+    p1 = (p1 || '').toUpperCase() || p2;
+    if (!p2 && p1) p2 = p1;
+    if (!p1 && !p2) {
+      p1 = (startH >= 8 && startH < 12) ? 'AM' : 'PM';
+      p2 = (endH >= 8 && endH < 12 && endH > startH) ? 'AM' : 'PM';
+    }
+
+    if (p1 === 'PM' && startH < 12) startH += 12;
+    if (p1 === 'AM' && startH === 12) startH = 0;
+    if (p2 === 'PM' && endH < 12) endH += 12;
+    if (p2 === 'AM' && endH === 12) endH = 0;
+
+    return {
+      start: startH * 60 + startM,
+      end: endH * 60 + endM
+    };
+  }
+
+  function detectScheduleClashes(courses) {
+    const clashes = [];
+    for (let i = 0; i < courses.length; i++) {
+      for (let j = i + 1; j < courses.length; j++) {
+        const c1 = courses[i];
+        const c2 = courses[j];
+        const days1 = parseDayCodes(c1.time);
+        const days2 = parseDayCodes(c2.time);
+        const commonDays = days1.filter(d => days2.includes(d));
+        if (commonDays.length > 0) {
+          const t1 = parseTimeRangeMinutes(c1.time);
+          const t2 = parseTimeRangeMinutes(c2.time);
+          if (t1 && t2) {
+            if (t1.start < t2.end && t2.start < t1.end) {
+              clashes.push({
+                course1: c1,
+                course2: c2,
+                commonDays: commonDays.join(', '),
+                time1: c1.time,
+                time2: c2.time
+              });
+            }
+          }
+        }
+      }
+    }
+    return clashes;
+  }
+
+  function rowMatchesDay(text, day) {
+    if (day === 'ALL') return true;
+    const upper = text.toUpperCase();
+    if (day === 'ST') return upper.includes('ST') || (upper.includes('SUN') && upper.includes('TUE'));
+    if (day === 'MW') return upper.includes('MW') || (upper.includes('MON') && upper.includes('WED'));
+    if (day === 'SR') return upper.includes('SR') || (upper.includes('SUN') && upper.includes('THU'));
+    if (day === 'TR') return upper.includes('TR') || (upper.includes('TUE') && upper.includes('THU'));
+    if (day === 'RA') return upper.includes('RA') || (upper.includes('THU') && upper.includes('SAT'));
+    if (day === 'F') return upper.includes('FRIDAY') || /\bF\b/.test(upper);
+    return true;
+  }
+
+  function rowMatchesTime(text, slot) {
+    if (slot === 'ALL') return true;
+    const upper = text.toUpperCase();
+    if (slot === '08:30') return upper.includes('08:30') || upper.includes('8:30');
+    if (slot === '10:10') return upper.includes('10:10');
+    if (slot === '11:50') return upper.includes('11:50');
+    if (slot === '01:30') return upper.includes('01:30') || upper.includes('1:30');
+    if (slot === '03:10') return upper.includes('03:10') || upper.includes('3:10') || upper.includes('04:50') || upper.includes('4:50') || upper.includes('6:20');
+    return true;
+  }
 
   function processOfferedCourses(table) {
-    if (!config.offeredEnabled) return;
-
     const headers = Array.from(table.querySelectorAll('th, tr:first-child td'));
     const isOfferedTable = headers.some(h => h.textContent && h.textContent.trim().toLowerCase() === 'capacity') ||
-                           table.querySelector('tbody tr[ng-repeat*="OfferedCourse"]');
+                           table.querySelector('tbody tr[ng-repeat*="OfferedCourse"]') ||
+                           window.location.pathname.toLowerCase().includes('offeredcourses');
 
     if (!isOfferedTable) return;
 
-    let capIdx = -1;
+    const container = ensureResponsiveTableWrapper(table, 'ewu-offered-table-responsive');
+    attachScrollableTouchShield(container);
+
+    if (!config.offeredEnabled) {
+      const existingToolbar = container.parentElement ? container.parentElement.querySelector('.ewu-offered-toolbar') : document.querySelector('.ewu-offered-toolbar');
+      if (existingToolbar) existingToolbar.style.display = 'none';
+
+      const existingBasket = document.getElementById('ewuCourseBasketDrawer');
+      if (existingBasket) existingBasket.style.display = 'none';
+      document.body.classList.remove('has-ewu-basket');
+
+      table.querySelectorAll('.ewu-draft-btn').forEach(b => b.remove());
+      table.querySelectorAll('.ewu-draft-col-header').forEach(h => h.remove());
+      delete table.dataset.offeredSignature;
+      return;
+    }
+
+    let codeIdx = -1, secIdx = -1, timeIdx = -1, roomIdx = -1, crIdx = -1, capIdx = -1;
     headers.forEach((h, idx) => {
-      if (h.textContent && h.textContent.trim().toLowerCase().includes('capacity')) {
-        capIdx = idx;
+      const text = (h.textContent || '').trim().toLowerCase();
+      if (text.includes('course code') || text === 'code') codeIdx = idx;
+      else if (text.includes('section') || text === 'sec') secIdx = idx;
+      else if (text.includes('time')) timeIdx = idx;
+      else if (text.includes('room')) roomIdx = idx;
+      else if (text.includes('credit')) crIdx = idx;
+      else if (text.includes('capacity')) capIdx = idx;
+    });
+
+    // Check Department & Semester selects
+    const deptSelect = document.querySelector('select[ng-model*="Dept" i], select[ng-model*="Department" i], select#DepartmentId, select[name*="dept" i], select[name*="department" i]');
+    const semSelect = document.querySelector('select[ng-model*="Semester" i], select#SemesterId, select[name*="Semester" i]');
+
+    const isDeptSelected = deptSelect ? (
+      deptSelect.value &&
+      deptSelect.value !== '0' &&
+      !deptSelect.value.includes('?') &&
+      !((deptSelect.options[deptSelect.selectedIndex]?.text || '').toLowerCase().includes('select'))
+    ) : true;
+
+    const isSemSelected = semSelect ? (
+      semSelect.value &&
+      semSelect.value !== '0' &&
+      !semSelect.value.includes('?') &&
+      !((semSelect.options[semSelect.selectedIndex]?.text || '').toLowerCase().includes('select'))
+    ) : true;
+
+    const allSelects = Array.from(document.querySelectorAll('select'));
+    const anySelectUnset = allSelects.some(sel => {
+      const val = (sel.value || '').trim();
+      const txt = (sel.options[sel.selectedIndex]?.text || '').toLowerCase();
+      return !val || val === '0' || val.includes('?') || txt.includes('please select') || txt.includes('select department') || txt.includes('select semester');
+    });
+
+    // Count genuine course section rows in table (must have a valid course code AND capacity)
+    const allRows = Array.from(table.querySelectorAll('tbody tr'));
+    let genuineCourseCount = 0;
+    allRows.forEach(r => {
+      const text = r.textContent || '';
+      const hasCode = /\b[A-Z]{2,4}\s*\d{3}[A-Z]?\b/i.test(text);
+      const hasCap = /\d+\s*\/\s*\d+/.test(text);
+      if (hasCode && hasCap) {
+        genuineCourseCount++;
       }
     });
 
-    const container = ensureResponsiveTableWrapper(table, 'ewu-offered-table-responsive');
-    attachScrollableTouchShield(container);
+    // Attach reactive change listener to all dropdown selects
+    allSelects.forEach(sel => {
+      if (!sel.dataset.ewuOfferedBound) {
+        sel.dataset.ewuOfferedBound = 'true';
+        sel.addEventListener('change', () => {
+          setTimeout(runEnhancements, 100);
+          setTimeout(runEnhancements, 500);
+          setTimeout(runEnhancements, 1200);
+        });
+      }
+    });
+
+    if (!isDeptSelected || !isSemSelected || anySelectUnset || genuineCourseCount === 0) {
+      // Semester or Department not chosen or no courses fetched yet:
+      // Hide helper toolbar & basket drawer, strip any draft buttons/headers
+      const existingToolbar = container.parentElement ? container.parentElement.querySelector('.ewu-offered-toolbar') : document.querySelector('.ewu-offered-toolbar');
+      if (existingToolbar) existingToolbar.style.display = 'none';
+
+      const existingBasket = document.getElementById('ewuCourseBasketDrawer');
+      if (existingBasket) existingBasket.style.display = 'none';
+      document.body.classList.remove('has-ewu-basket');
+
+      table.querySelectorAll('.ewu-draft-btn').forEach(b => b.remove());
+      table.querySelectorAll('.ewu-draft-col-header').forEach(h => h.remove());
+      delete table.dataset.offeredSignature;
+      return;
+    }
+
     let toolbar = container.parentElement.querySelector('.ewu-offered-toolbar');
+    if (toolbar) {
+      toolbar.style.display = '';
+    }
     if (!toolbar) {
       toolbar = document.createElement('div');
       toolbar.className = 'ewu-offered-toolbar';
       toolbar.innerHTML = `
-        <div class="ewu-toolbar-left">
+        <div class="ewu-toolbar-left" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
           <label class="ewu-filter-label" title="Hide courses with 0 remaining seats">
             <input type="checkbox" class="ewu-filter-checkbox" id="ewuHideFull">
             <span>Show Open Sections Only</span>
           </label>
-          <input type="text" class="ewu-search-input" id="ewuCourseSearch" placeholder="Filter by Course / Room / Time...">
+          <input type="text" class="ewu-search-input" id="ewuCourseSearch" placeholder="Search Code / Room / Time...">
+          <button type="button" class="ewu-spotlight-btn" id="ewuOpenSpotlightBtn" title="Press Ctrl+K anytime">
+            <span>🔍 Spotlight</span>
+            <kbd>Ctrl K</kbd>
+          </button>
         </div>
-        <div class="ewu-toolbar-right">
+        <div class="ewu-toolbar-right" style="display:flex;align-items:center;gap:6px;">
           <span class="ewu-stats-pill" id="ewuStatsPill">Calculating seats...</span>
+          <span class="ewu-beta-tag" title="Offered courses features are in Beta">BETA</span>
+        </div>
+
+        <div class="ewu-filter-chips-container" style="width: 100%;">
+          <div class="ewu-filter-chip-group">
+            <span class="ewu-filter-chip-label">Days:</span>
+            <button type="button" class="ewu-filter-chip active" data-day="ALL">All</button>
+            <button type="button" class="ewu-filter-chip" data-day="ST">ST</button>
+            <button type="button" class="ewu-filter-chip" data-day="MW">MW</button>
+            <button type="button" class="ewu-filter-chip" data-day="SR">SR</button>
+            <button type="button" class="ewu-filter-chip" data-day="TR">TR</button>
+            <button type="button" class="ewu-filter-chip" data-day="RA">RA</button>
+            <button type="button" class="ewu-filter-chip" data-day="F">Fri</button>
+          </div>
+          <div class="ewu-filter-chip-group" style="margin-left: 12px;">
+            <span class="ewu-filter-chip-label">Times:</span>
+            <button type="button" class="ewu-filter-chip active" data-time="ALL">All</button>
+            <button type="button" class="ewu-filter-chip" data-time="08:30">08:30 AM</button>
+            <button type="button" class="ewu-filter-chip" data-time="10:10">10:10 AM</button>
+            <button type="button" class="ewu-filter-chip" data-time="11:50">11:50 AM</button>
+            <button type="button" class="ewu-filter-chip" data-time="01:30">01:30 PM</button>
+            <button type="button" class="ewu-filter-chip" data-time="03:10">03:10+ PM</button>
+          </div>
         </div>
       `;
       container.parentElement.insertBefore(toolbar, container);
@@ -3943,6 +6842,52 @@ table.ewu-ledger-table {
         courseSearchQuery = e.target.value.toLowerCase().trim();
         applyOfferedFilter(table);
       });
+
+      const spotlightBtn = toolbar.querySelector('#ewuOpenSpotlightBtn');
+      if (spotlightBtn) {
+        spotlightBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          openSpotlightModal(table);
+        });
+      }
+
+      // Day Chips
+      toolbar.querySelectorAll('[data-day]').forEach(chip => {
+        chip.addEventListener('click', () => {
+          toolbar.querySelectorAll('[data-day]').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          activeDayFilter = chip.dataset.day;
+          applyOfferedFilter(table);
+        });
+      });
+
+      // Time Chips
+      toolbar.querySelectorAll('[data-time]').forEach(chip => {
+        chip.addEventListener('click', () => {
+          toolbar.querySelectorAll('[data-time]').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          activeTimeFilter = chip.dataset.time;
+          applyOfferedFilter(table);
+        });
+      });
+    }
+
+    const currentBasketCourses = basketPlans[basketActivePreset] || [];
+    const activeClashes = detectScheduleClashes(currentBasketCourses);
+    const clashingKeys = new Set();
+    activeClashes.forEach(cl => {
+      clashingKeys.add(`${cl.course1.code}_${cl.course1.section}`);
+      clashingKeys.add(`${cl.course2.code}_${cl.course2.section}`);
+    });
+
+    const basketSig = currentBasketCourses.map(c => `${c.code}_${c.section}`).join(',');
+    const offeredSignature = `${genuineCourseCount}_${basketActivePreset}_${basketSig}_${clashingKeys.size}`;
+
+    if (table.dataset.offeredSignature === offeredSignature) {
+      if (config.basketEnabled) {
+        renderCourseBasketDrawer(table);
+      }
+      return;
     }
 
     const rows = table.querySelectorAll('tbody tr');
@@ -3986,14 +6931,116 @@ table.ewu-ledger-table {
           `;
         }
       }
+
+      // Course Basket Section Extraction
+      const cCode = (cells[codeIdx !== -1 ? codeIdx : 0]?.textContent || '').trim().toUpperCase();
+      const cSec = (cells[secIdx !== -1 ? secIdx : 2]?.textContent || '').trim();
+      const cTime = (cells[timeIdx !== -1 ? timeIdx : 3]?.textContent || '').trim();
+      const cRoom = (cells[roomIdx !== -1 ? roomIdx : 4]?.textContent || '').trim();
+      const cCredit = parseFloat((cells[crIdx !== -1 ? crIdx : 5]?.textContent || '3.0').trim()) || 3.0;
+
+      const courseKey = `${cCode}_${cSec}`;
+      row.dataset.courseKey = courseKey;
+
+      if (clashingKeys.has(courseKey)) {
+        row.classList.add('ewu-table-row-clash');
+      } else {
+        row.classList.remove('ewu-table-row-clash');
+      }
+
+      if (config.basketEnabled && cCode && cSec) {
+        const firstCell = cells[0];
+        let draftBtn = firstCell.querySelector('.ewu-draft-btn');
+        const isInBasket = currentBasketCourses.some(c => c.code === cCode && c.section === cSec);
+
+        if (!draftBtn) {
+          draftBtn = document.createElement('button');
+          draftBtn.type = 'button';
+          draftBtn.className = 'ewu-draft-btn';
+          firstCell.insertBefore(draftBtn, firstCell.firstChild);
+        }
+
+        if (isInBasket) {
+          draftBtn.classList.add('in-basket');
+          draftBtn.textContent = '✓ Drafted';
+          draftBtn.title = 'Remove from draft basket';
+        } else {
+          draftBtn.classList.remove('in-basket');
+          draftBtn.textContent = '+ Draft';
+          draftBtn.title = 'Add to draft basket & clash sandbox';
+        }
+
+        draftBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleCourseInBasket({
+            code: cCode,
+            section: cSec,
+            time: cTime,
+            room: cRoom,
+            credits: cCredit
+          }, table);
+        };
+      }
     });
+
+    table.dataset.offeredSignature = offeredSignature;
 
     const statsPill = toolbar.querySelector('#ewuStatsPill');
     if (statsPill && totalSections > 0) {
       statsPill.textContent = `${openSections} open of ${totalSections} total sections`;
     }
 
+    if (config.basketEnabled) {
+      renderCourseBasketDrawer(table);
+    }
+
+    initSpotlightSearch(table);
     applyOfferedFilter(table);
+  }
+
+  function updateTableDraftStates(table) {
+    if (!table) table = document.querySelector('table.ewu-offered-table, table:not(.ewu-summary-table)');
+    if (!table) return;
+
+    const currentBasketCourses = basketPlans[basketActivePreset] || [];
+    const activeClashes = detectScheduleClashes(currentBasketCourses);
+    const clashingKeys = new Set();
+    activeClashes.forEach(cl => {
+      clashingKeys.add(`${cl.course1.code}_${cl.course1.section}`);
+      clashingKeys.add(`${cl.course2.code}_${cl.course2.section}`);
+    });
+
+    const rows = table.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+      const courseKey = row.dataset.courseKey;
+      if (!courseKey) return;
+      const [cCode, cSec] = courseKey.split('_');
+
+      if (clashingKeys.has(courseKey)) {
+        row.classList.add('ewu-table-row-clash');
+      } else {
+        row.classList.remove('ewu-table-row-clash');
+      }
+
+      const draftBtn = row.querySelector('.ewu-draft-btn');
+      if (draftBtn) {
+        const isInBasket = currentBasketCourses.some(c => c.code === cCode && c.section === cSec);
+        if (isInBasket) {
+          draftBtn.classList.add('in-basket');
+          draftBtn.textContent = '✓ Drafted';
+          draftBtn.title = 'Remove from draft basket';
+        } else {
+          draftBtn.classList.remove('in-basket');
+          draftBtn.textContent = '+ Draft';
+          draftBtn.title = 'Add to draft basket & clash sandbox';
+        }
+      }
+    });
+
+    const genuineCourseCount = table.querySelectorAll('tbody tr[data-course-key]').length;
+    const basketSig = currentBasketCourses.map(c => `${c.code}_${c.section}`).join(',');
+    table.dataset.offeredSignature = `${genuineCourseCount}_${basketActivePreset}_${basketSig}_${clashingKeys.size}`;
   }
 
   function applyOfferedFilter(table) {
@@ -4004,12 +7051,325 @@ table.ewu-ledger-table {
 
       const matchesSearch = !courseSearchQuery || rowText.includes(courseSearchQuery);
       const matchesOpen = !hideFullSections || available > 0;
+      const matchesDay = rowMatchesDay(rowText, activeDayFilter);
+      const matchesTime = rowMatchesTime(rowText, activeTimeFilter);
 
-      if (matchesSearch && matchesOpen) {
+      if (matchesSearch && matchesOpen && matchesDay && matchesTime) {
         row.classList.remove('ewu-row-hidden');
       } else {
         row.classList.add('ewu-row-hidden');
       }
+    });
+  }
+
+  function toggleCourseInBasket(course, table) {
+    if (!basketPlans[basketActivePreset]) basketPlans[basketActivePreset] = [];
+    const plan = basketPlans[basketActivePreset];
+    const idx = plan.findIndex(c => c.code === course.code && c.section === course.section);
+    if (idx !== -1) {
+      plan.splice(idx, 1);
+    } else {
+      plan.push(course);
+    }
+    basketPlans[basketActivePreset] = plan;
+    saveBasketPlans();
+
+    const drawer = document.getElementById('ewuCourseBasketDrawer');
+    if (drawer) delete drawer.dataset.signature;
+
+    renderCourseBasketDrawer(table);
+    updateTableDraftStates(table);
+  }
+
+  function renderCourseBasketDrawer(table) {
+    let drawer = document.getElementById('ewuCourseBasketDrawer');
+    if (!drawer) {
+      drawer = document.createElement('div');
+      drawer.id = 'ewuCourseBasketDrawer';
+      drawer.className = 'ewu-basket-drawer collapsed';
+      document.body.appendChild(drawer);
+    }
+    drawer.style.display = '';
+    document.body.classList.add('has-ewu-basket');
+
+    const currentCourses = basketPlans[basketActivePreset] || [];
+    const clashes = detectScheduleClashes(currentCourses);
+    const totalCredits = currentCourses.reduce((sum, c) => sum + (c.credits || 3.0), 0);
+    const isCollapsed = drawer.classList.contains('collapsed');
+
+    // Signature Cache: Prevents infinite DOM mutations & screen blinking on every observer tick!
+    const planASig = (basketPlans.A || []).map(c => `${c.code}_${c.section}`).join(',');
+    const planBSig = (basketPlans.B || []).map(c => `${c.code}_${c.section}`).join(',');
+    const drawerSignature = `${basketActivePreset}_${isCollapsed ? '1' : '0'}_${clashes.length}_${planASig}|${planBSig}`;
+
+    if (drawer.dataset.signature === drawerSignature) {
+      return;
+    }
+    drawer.dataset.signature = drawerSignature;
+
+    drawer.innerHTML = `
+      <div class="ewu-basket-header" id="ewuBasketHeaderToggle">
+        <div class="ewu-basket-header-title">
+          <span>🛒</span>
+          <span>Advising Sandbox (Plan ${basketActivePreset})</span>
+          <span class="ewu-beta-tag" style="font-size: 9px; padding: 1px 5px;">BETA</span>
+        </div>
+        <div class="ewu-basket-header-badges">
+          ${clashes.length > 0 ? `<span class="ewu-basket-badge-clash">⚠️ ${clashes.length} Clash${clashes.length > 1 ? 'es' : ''}</span>` : ''}
+          <span style="font-size: 11px; background: rgba(255,255,255,0.2); padding: 2px 7px; border-radius: 9999px;">
+            ${currentCourses.length} Courses &bull; ${totalCredits.toFixed(1)} Cr
+          </span>
+          <span id="ewuBasketCollapseArrow" style="font-size: 12px; margin-left: 4px;">${isCollapsed ? '▲' : '▼'}</span>
+        </div>
+      </div>
+
+      <div class="ewu-basket-body">
+        <div class="ewu-basket-plan-bar">
+          <div class="ewu-basket-presets">
+            <button type="button" class="ewu-basket-preset-btn ${basketActivePreset === 'A' ? 'active' : ''}" id="ewuPresetA">Plan A (${(basketPlans.A || []).length})</button>
+            <button type="button" class="ewu-basket-preset-btn ${basketActivePreset === 'B' ? 'active' : ''}" id="ewuPresetB">Plan B (${(basketPlans.B || []).length})</button>
+          </div>
+          ${currentCourses.length > 0 ? `<button type="button" id="ewuBasketClearBtn" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:11px;font-weight:700;">Clear All</button>` : ''}
+        </div>
+
+        ${clashes.length > 0 ? `
+          <div class="ewu-basket-clash-alert">
+            <strong>⚠️ Time Clashes Detected!</strong>
+            ${clashes.map(cl => `
+              <div style="margin-top: 4px;">&bull; <strong>${cl.course1.code} (Sec ${cl.course1.section})</strong> clashes with <strong>${cl.course2.code} (Sec ${cl.course2.section})</strong> on ${cl.commonDays} (${cl.time1})</div>
+            `).join('')}
+          </div>
+        ` : ''}
+
+        ${currentCourses.length === 0 ? `
+          <div style="text-align: center; padding: 24px 12px; color: #64748b; font-size: 13px;">
+            <div style="font-size: 28px; margin-bottom: 6px;">📝</div>
+            Your draft basket for <strong>Plan ${basketActivePreset}</strong> is empty.<br>Click <strong>[+ Draft]</strong> on any offered section to test your schedule!
+          </div>
+        ` : `
+          <div style="margin-bottom: 12px;">
+            ${currentCourses.map((c, i) => {
+              const hasClash = clashes.some(cl => (cl.course1.code === c.code && cl.course1.section === c.section) || (cl.course2.code === c.code && cl.course2.section === c.section));
+              return `
+                <div class="ewu-basket-card ${hasClash ? 'clashing' : ''}">
+                  <div class="ewu-basket-card-info">
+                    <div class="ewu-basket-course-code">
+                      ${c.code} &bull; Sec ${c.section}
+                      ${hasClash ? `<span style="color:#ef4444;font-size:11px;margin-left:4px;">⚠️ Clash</span>` : ''}
+                    </div>
+                    <div class="ewu-basket-meta">${c.time} &bull; Room: ${c.room || 'TBA'} &bull; ${c.credits} Cr</div>
+                  </div>
+                  <button type="button" class="ewu-basket-remove-btn" data-idx="${i}" title="Remove section">✕</button>
+                </div>
+              `;
+            }).join('')}
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <button type="button" id="ewuBasketSyncCalendarBtn" style="flex:1;padding:8px;border-radius:8px;border:none;background:#4f46e5;color:white;font-weight:700;font-size:12px;cursor:pointer;">
+              📅 Sync to Google
+            </button>
+            <button type="button" id="ewuBasketExportIcsBtn" style="flex:1;padding:8px;border-radius:8px;border:1px solid #cbd5e1;background:#ffffff;color:#475569;font-weight:700;font-size:12px;cursor:pointer;">
+              📆 Export .ics
+            </button>
+          </div>
+        `}
+      </div>
+    `;
+
+    const toggle = drawer.querySelector('#ewuBasketHeaderToggle');
+    if (toggle) {
+      toggle.onclick = (e) => {
+        e.preventDefault();
+        drawer.classList.toggle('collapsed');
+        const isNowCollapsed = drawer.classList.contains('collapsed');
+        const arrow = drawer.querySelector('#ewuBasketCollapseArrow');
+        if (arrow) arrow.textContent = isNowCollapsed ? '▲' : '▼';
+        const pASig = (basketPlans.A || []).map(c => `${c.code}_${c.section}`).join(',');
+        const pBSig = (basketPlans.B || []).map(c => `${c.code}_${c.section}`).join(',');
+        drawer.dataset.signature = `${basketActivePreset}_${isNowCollapsed ? '1' : '0'}_${clashes.length}_${pASig}|${pBSig}`;
+      };
+    }
+
+    function switchPreset(targetPreset) {
+      if (basketActivePreset === targetPreset) return;
+      basketActivePreset = targetPreset;
+      saveBasketPlans();
+      delete drawer.dataset.signature;
+      renderCourseBasketDrawer(table);
+      updateTableDraftStates(table);
+    }
+
+    const presetA = drawer.querySelector('#ewuPresetA');
+    const presetB = drawer.querySelector('#ewuPresetB');
+    if (presetA) {
+      presetA.onclick = (e) => {
+        e.preventDefault();
+        switchPreset('A');
+      };
+    }
+    if (presetB) {
+      presetB.onclick = (e) => {
+        e.preventDefault();
+        switchPreset('B');
+      };
+    }
+
+    const clearBtn = drawer.querySelector('#ewuBasketClearBtn');
+    if (clearBtn) {
+      clearBtn.onclick = (e) => {
+        e.preventDefault();
+        basketPlans[basketActivePreset] = [];
+        saveBasketPlans();
+        delete drawer.dataset.signature;
+        renderCourseBasketDrawer(table);
+        updateTableDraftStates(table);
+      };
+    }
+
+    drawer.querySelectorAll('.ewu-basket-remove-btn').forEach(btn => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        const i = parseInt(btn.dataset.idx, 10);
+        if (!isNaN(i) && basketPlans[basketActivePreset]) {
+          basketPlans[basketActivePreset].splice(i, 1);
+          saveBasketPlans();
+          delete drawer.dataset.signature;
+          renderCourseBasketDrawer(table);
+          updateTableDraftStates(table);
+        }
+      };
+    });
+
+    const syncBtn = drawer.querySelector('#ewuBasketSyncCalendarBtn');
+    if (syncBtn) {
+      syncBtn.onclick = (e) => {
+        e.preventDefault();
+        triggerCalendarSyncFlow(currentCourses, `Draft Plan ${basketActivePreset}`);
+      };
+    }
+
+    const icsBtn = drawer.querySelector('#ewuBasketExportIcsBtn');
+    if (icsBtn) {
+      icsBtn.onclick = (e) => {
+        e.preventDefault();
+        exportRoutineToICS(currentCourses, `Draft Plan ${basketActivePreset}`);
+      };
+    }
+  }
+
+  // =========================================================================
+  // FEATURE 3: Quick Spotlight Search (Ctrl + K)
+  // =========================================================================
+  let spotlightListenerAttached = false;
+
+  function initSpotlightSearch(table) {
+    if (spotlightListenerAttached) return;
+    spotlightListenerAttached = true;
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        openSpotlightModal(table);
+      }
+    });
+  }
+
+  function openSpotlightModal(table) {
+    let backdrop = document.getElementById('ewuSpotlightBackdrop');
+    if (backdrop) backdrop.remove();
+
+    backdrop = document.createElement('div');
+    backdrop.id = 'ewuSpotlightBackdrop';
+    backdrop.className = 'ewu-spotlight-backdrop';
+    backdrop.innerHTML = `
+      <div class="ewu-spotlight-modal" role="dialog" aria-modal="true">
+        <div class="ewu-spotlight-input-wrapper">
+          <span class="ewu-spotlight-icon">🔍</span>
+          <input type="text" class="ewu-spotlight-input" id="ewuSpotlightInput" placeholder="Quick search Course, Room, Section, Time (e.g. CSE101, AB2-501)..." autofocus>
+          <kbd style="font-size:11px;padding:3px 6px;background:#f1f5f9;border-radius:4px;color:#64748b;">ESC</kbd>
+        </div>
+        <div class="ewu-spotlight-results" id="ewuSpotlightResults">
+          <div style="padding: 24px; text-align: center; color: #94a3b8; font-size: 13px;">
+            Type any course code, section, or room to find sections instantly...
+          </div>
+        </div>
+        <div class="ewu-spotlight-footer">
+          <span>Tip: Click any section to jump directly to it in the table</span>
+          <span>EWU-Toolkit v1.5.0</span>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(backdrop);
+
+    const input = backdrop.querySelector('#ewuSpotlightInput');
+    const resultsContainer = backdrop.querySelector('#ewuSpotlightResults');
+    input.focus();
+
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) backdrop.remove();
+    });
+
+    const escListener = (e) => {
+      if (e.key === 'Escape') {
+        backdrop.remove();
+        document.removeEventListener('keydown', escListener);
+      }
+    };
+    document.addEventListener('keydown', escListener);
+
+    // Extract all rows for spotlight
+    const rows = Array.from(table.querySelectorAll('tbody tr')).filter(r => r.querySelectorAll('td').length >= 4);
+
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      if (!q) {
+        resultsContainer.innerHTML = `<div style="padding:24px;text-align:center;color:#94a3b8;font-size:13px;">Type to search courses...</div>`;
+        return;
+      }
+
+      const matches = [];
+      rows.forEach(r => {
+        const text = r.textContent.toLowerCase();
+        if (text.includes(q)) {
+          const cells = r.querySelectorAll('td');
+          const code = (cells[0]?.textContent || '').trim();
+          const title = (cells[1]?.textContent || '').trim();
+          const sec = (cells[2]?.textContent || '').trim();
+          const time = (cells[3]?.textContent || '').trim();
+          const room = (cells[4]?.textContent || '').trim();
+          const avail = r.dataset.availableSeats || 'Open';
+          matches.push({ row: r, code, title, sec, time, room, avail });
+        }
+      });
+
+      if (matches.length === 0) {
+        resultsContainer.innerHTML = `<div style="padding:24px;text-align:center;color:#ef4444;font-size:13px;">No matching course sections found for "${q}".</div>`;
+        return;
+      }
+
+      resultsContainer.innerHTML = matches.slice(0, 30).map((m, idx) => `
+        <div class="ewu-spotlight-item" data-idx="${idx}">
+          <div>
+            <div class="ewu-spotlight-item-code">${m.code} &bull; Section ${m.sec}</div>
+            <div class="ewu-spotlight-item-meta">${m.title ? m.title + ' &bull; ' : ''}${m.time} &bull; Room: ${m.room || 'TBA'}</div>
+          </div>
+          <div style="font-size: 11px; padding: 3px 8px; border-radius: 9999px; background: ${m.avail === '0' ? '#fee2e2' : '#dcfce7'}; color: ${m.avail === '0' ? '#b91c1c' : '#15803d'}; font-weight: 700;">
+            ${m.avail === '0' ? 'Full' : `${m.avail} seats`}
+          </div>
+        </div>
+      `).join('');
+
+      resultsContainer.querySelectorAll('.ewu-spotlight-item').forEach((item, idx) => {
+        item.addEventListener('click', () => {
+          const target = matches[idx];
+          backdrop.remove();
+          target.row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          target.row.style.outline = '3px solid #4f46e5';
+          setTimeout(() => { target.row.style.outline = ''; }, 2000);
+        });
+      });
     });
   }
 
@@ -4173,7 +7533,7 @@ table.ewu-ledger-table {
             ${rowsHtml}
           </tbody>
           <tfoot>
-            <tr style="background: #f1f5f9; font-weight: 700;">
+            <tr class="ewu-ledger-tfoot-row" style="font-weight: 700;">
               <td class="sem-col">Grand Total</td>
               <td class="num-col">${formatMoney(totalBilled)}</td>
               <td class="num-col" style="color: #15803d;">${formatMoney(totalPaid)}</td>
@@ -4346,21 +7706,1150 @@ table.ewu-ledger-table {
   }
 
   // =========================================================================
+  // FEATURE 6: Advising Window Faculty Revealer (v1.5.0)
+  // =========================================================================
+  // Advising Window Lookup & Enrolled Tracker
+  const advisingFacultyLookup = {};
+  let currentlyAdvisedList = [];
+  let bridgeInjected = false;
+
+  function timeSlotsClash(slotStr1, slotStr2) {
+    if (!slotStr1 || !slotStr2) return false;
+    const days1 = parseDayCodes(slotStr1);
+    const days2 = parseDayCodes(slotStr2);
+    const commonDays = days1.filter(d => days2.includes(d));
+    if (commonDays.length === 0) return false;
+    const t1 = parseTimeRangeMinutes(slotStr1);
+    const t2 = parseTimeRangeMinutes(slotStr2);
+    if (!t1 || !t2) return false;
+    return (t1.start < t2.end && t2.start < t1.end);
+  }
+
+  function getCurrentlyAdvisedCourses() {
+    const map = new Map();
+    currentlyAdvisedList.forEach(item => {
+      if (item && item.courseCode) map.set(item.courseCode, item);
+    });
+
+    // Also extract directly from right-hand AdvisingDataList table in DOM
+    const enrolledRows = document.querySelectorAll('tr[ng-repeat*="AdvisingDataList"]');
+    enrolledRows.forEach(row => {
+      const cells = row.querySelectorAll('td');
+      if (cells.length >= 4) {
+        const code = (cells[0].textContent || '').trim().toUpperCase();
+        const sec = (cells[1].textContent || '').trim();
+        const slot = (cells[3].textContent || '').trim();
+        if (code && !code.includes('{{')) {
+          map.set(code, { courseCode: code, section: sec, timeSlot: slot });
+        }
+      }
+    });
+
+    return Array.from(map.values());
+  }
+
+  function injectAdvisingBridge() {
+    if (bridgeInjected || document.getElementById('ewu-advising-bridge')) return;
+    bridgeInjected = true;
+    try {
+      const script = document.createElement('script');
+      script.id = 'ewu-advising-bridge';
+      script.textContent = `
+        (function() {
+          function dispatchCaptured(url, data) {
+            try {
+              window.dispatchEvent(new CustomEvent('EWU_ADVISING_DATA_CAPTURED', {
+                detail: { url: String(url || ''), data: data }
+              }));
+            } catch(e) {}
+          }
+
+          // 1. Intercept future XHRs
+          const origOpen = XMLHttpRequest.prototype.open;
+          const origSend = XMLHttpRequest.prototype.send;
+          XMLHttpRequest.prototype.open = function(method, url, ...rest) {
+            this._ewuUrl = url;
+            return origOpen.call(this, method, url, ...rest);
+          };
+          XMLHttpRequest.prototype.send = function(...args) {
+            this.addEventListener('load', function() {
+              if (this._ewuUrl && (this._ewuUrl.includes('/api/Advising/') || this._ewuUrl.includes('/Advising/'))) {
+                try {
+                  const data = JSON.parse(this.responseText);
+                  dispatchCaptured(this._ewuUrl, data);
+                } catch(e) {}
+              }
+            });
+            return origSend.apply(this, args);
+          };
+
+          // 2. Intercept future Fetches
+          if (window.fetch) {
+            const origFetch = window.fetch;
+            window.fetch = async function(...args) {
+              const resp = await origFetch.apply(this, args);
+              try {
+                const url = (args[0] && args[0].url) || String(args[0] || '');
+                if (url.includes('/api/Advising/') || url.includes('/Advising/')) {
+                  const clone = resp.clone();
+                  clone.json().then(data => dispatchCaptured(url, data)).catch(() => {});
+                }
+              } catch(e) {}
+              return resp;
+            };
+          }
+
+          // 3. Eager AngularJS Scope Sync & Force Unhide isTBA
+          function syncAngularState() {
+            try {
+              var el = document.querySelector('[ng-controller="AdvisingStudentController"]');
+              if (window.angular && el) {
+                var scope = window.angular.element(el).scope();
+                if (scope) {
+                  if (scope.isTBA !== 0) {
+                    scope.isTBA = 0;
+                    if (!scope.$$phase) scope.$apply();
+                  }
+                  if (scope.FlowChartDataList && scope.FlowChartDataList.length > 0) {
+                    dispatchCaptured('/api/Advising/GetAllRoutine', scope.FlowChartDataList);
+                  }
+                  if (scope.RetakeList && scope.RetakeList.length > 0) {
+                    dispatchCaptured('/api/Advising/GetRetakableGradeList', scope.RetakeList);
+                  }
+                  if (scope.DDplusList && scope.DDplusList.length > 0) {
+                    dispatchCaptured('/api/Advising/GetDDplusGradeList', scope.DDplusList);
+                  }
+                  if (scope.FGradeDataList && scope.FGradeDataList.length > 0) {
+                    dispatchCaptured('/api/Advising/GetFGradeList', scope.FGradeDataList);
+                  }
+                  if (scope.AdvisingDataList && scope.AdvisingDataList.length > 0) {
+                    dispatchCaptured('/api/Advising/GetAdvisingData', scope.AdvisingDataList);
+                  }
+                }
+              }
+            } catch(e) {}
+          }
+          syncAngularState();
+          setInterval(syncAngularState, 600);
+
+          // 4. Eager Fetch Fallback for Immediate Hydration
+          fetch('/api/Advising/GetAllRoutine')
+            .then(function(r) { return r.json(); })
+            .then(function(data) { dispatchCaptured('/api/Advising/GetAllRoutine', data); })
+            .catch(function() {});
+          fetch('/api/Advising/GetRetakableGradeList')
+            .then(function(r) { return r.json(); })
+            .then(function(data) { dispatchCaptured('/api/Advising/GetRetakableGradeList', data); })
+            .catch(function() {});
+          fetch('/api/Advising/GetDDplusGradeList')
+            .then(function(r) { return r.json(); })
+            .then(function(data) { dispatchCaptured('/api/Advising/GetDDplusGradeList', data); })
+            .catch(function() {});
+          fetch('/api/Advising/GetFGradeList')
+            .then(function(r) { return r.json(); })
+            .then(function(data) { dispatchCaptured('/api/Advising/GetFGradeList', data); })
+            .catch(function() {});
+          fetch('/api/Advising/GetAdvisingData')
+            .then(function(r) { return r.json(); })
+            .then(function(data) { dispatchCaptured('/api/Advising/GetAdvisingData', data); })
+            .catch(function() {});
+        })();
+      `;
+      (document.head || document.documentElement).appendChild(script);
+    } catch(e) {}
+  }
+
+  window.addEventListener('EWU_ADVISING_DATA_CAPTURED', (e) => {
+    const detail = e.detail;
+    if (!detail || !detail.data) return;
+    const items = Array.isArray(detail.data) ? detail.data : (detail.data.Result && Array.isArray(detail.data.Result) ? detail.data.Result : []);
+
+    // Check if this was AdvisingDataList
+    if (detail.url && (detail.url.includes('GetAdvisingData') || detail.url.includes('AdvisingData'))) {
+      currentlyAdvisedList = items.map(item => ({
+        courseCode: (item.CourseCode || '').trim().toUpperCase(),
+        section: String(item.SectionName != null ? item.SectionName : (item.SectionId || item.Section || '')).trim(),
+        timeSlot: item.TimeSlotName || '',
+        shortName: item.ShortName || ''
+      }));
+    }
+
+    items.forEach(item => {
+      if (item && item.CourseCode) {
+        const sec = String(item.SectionName != null ? item.SectionName : (item.SectionId || item.Section || '')).trim();
+        const code = item.CourseCode.trim().toUpperCase();
+        const key = `${code}_${sec}`;
+        const initial = item.ShortName || item.FacultyInitial || (item.FacultyName ? item.FacultyName.split(' ').map(w=>w[0]).join('') : '');
+        if (initial && initial !== 'TBA') {
+          advisingFacultyLookup[key] = {
+            initial: initial,
+            name: item.FacultyName || '',
+            room: item.RoomCode || item.RoomName || '',
+            time: item.TimeSlotName || ''
+          };
+        }
+      }
+    });
+    runEnhancements();
+  });
+
+  // Helper to accurately extract column indices for any Advising table (F Grade, Recommended, D/D+, Retakable)
+  function getTableColumnIndices(table) {
+    const headers = Array.from(table.querySelectorAll('th, tr:first-child td'));
+    const colIdx = {
+      course: 0,
+      section: 1,
+      credit: 2,
+      time: -1,
+      faculty: -1,
+      room: -1,
+      capacity: -1,
+      taken: -1,
+      prereq: -1
+    };
+
+    headers.forEach((th, idx) => {
+      const text = (th.textContent || '').trim().toLowerCase();
+      if (text.includes('course') || text === 'code') colIdx.course = idx;
+      else if (text.includes('section') || text === 'sec') colIdx.section = idx;
+      else if (text.includes('credit') && !text.includes('max')) colIdx.credit = idx;
+      else if (text.includes('timing') || text.includes('time') || text.includes('slot')) colIdx.time = idx;
+      else if (text.includes('faculty') || text.includes('initial') || (th.getAttribute('ng-show') && th.getAttribute('ng-show').includes('isTBA'))) colIdx.faculty = idx;
+      else if (text.includes('room')) colIdx.room = idx;
+      else if (text.includes('capacity') || text.includes('cap')) colIdx.capacity = idx;
+      else if (text.includes('taken') || text.includes('seat')) colIdx.taken = idx;
+      else if (text.includes('prerequisite') || text.includes('pre')) colIdx.prereq = idx;
+    });
+
+    // Fallbacks if headers weren't found or text was empty
+    const cellsCount = headers.length || table.querySelector('tbody tr, tr[ng-repeat]')?.querySelectorAll('td')?.length || 9;
+    if (colIdx.time === -1) {
+      colIdx.time = (cellsCount >= 10 || table.closest('.Two, .One, #div2')) ? 4 : 3;
+    }
+    if (colIdx.capacity === -1) {
+      colIdx.capacity = (cellsCount >= 10 || table.closest('.Two, .One, #div2')) ? 7 : 6;
+    }
+    if (colIdx.taken === -1) {
+      colIdx.taken = (cellsCount >= 10 || table.closest('.Two, .One, #div2')) ? 8 : 7;
+    }
+    if (colIdx.faculty === -1) {
+      colIdx.faculty = (cellsCount >= 10 || table.closest('.Two, .One, #div2')) ? 5 : 4;
+    }
+    if (colIdx.room === -1) {
+      colIdx.room = (cellsCount >= 10 || table.closest('.Two, .One, #div2')) ? 6 : 5;
+    }
+
+    return colIdx;
+  }
+
+  function processAdvisingFaculty(table) {
+    if (!config.advisingFacultyEnabled) return;
+    injectAdvisingBridge();
+
+    // 1. Unhide native Faculty table header & data cells
+    table.querySelectorAll('th[ng-show*="isTBA"], td[ng-show*="isTBA"]').forEach(el => {
+      el.classList.add('ewu-revealed-col');
+      el.style.setProperty('display', 'table-cell', 'important');
+    });
+
+    const headers = Array.from(table.querySelectorAll('th, tr:first-child td'));
+    headers.forEach(th => {
+      const text = (th.textContent || '').toLowerCase();
+      if (text.includes('faculty') || text.includes('initial') || (th.getAttribute('ng-show') && (th.getAttribute('ng-show').includes('Status') || th.getAttribute('ng-show').includes('isTBA')))) {
+        th.classList.add('ewu-revealed-col');
+        th.style.setProperty('display', 'table-cell', 'important');
+      }
+    });
+
+    const cols = getTableColumnIndices(table);
+    const enrolled = getCurrentlyAdvisedCourses();
+
+    // 2. Process each section row in the Available Courses tables
+    const rows = table.querySelectorAll('tbody tr, tr[ng-repeat]');
+    rows.forEach(row => {
+      const repeatAttr = row.getAttribute('ng-repeat') || '';
+      // Skip the right-hand enrolled table (AdvisingDataList) itself from clash marking
+      if (repeatAttr.includes('AdvisingDataList')) {
+        return;
+      }
+
+      const cells = row.querySelectorAll('td');
+      if (cells.length < 2) return;
+
+      const cCode = (cells[cols.course]?.textContent || cells[0]?.textContent || '').trim().toUpperCase();
+      const sec = (cells[cols.section]?.textContent || cells[1]?.textContent || '').trim();
+      if (!cCode || !sec || cCode.includes('{{')) return;
+
+      const key = `${cCode}_${sec}`;
+      const info = advisingFacultyLookup[key];
+
+      // A. Reveal Faculty Initials
+      const initial = (info && info.initial) || '';
+      const nativeCell = row.querySelector('td[ng-show*="isTBA"]') || (cols.faculty !== -1 ? cells[cols.faculty] : null);
+      if (nativeCell) {
+        nativeCell.style.setProperty('display', 'table-cell', 'important');
+        if (initial && !nativeCell.querySelector('.ewu-advising-faculty-badge')) {
+          nativeCell.innerHTML = `<span class="ewu-advising-faculty-badge" title="${info && info.name ? 'Faculty: ' + info.name : 'Initial: ' + initial}">${initial}</span>`;
+        }
+      } else if (initial && !row.querySelector('.ewu-advising-faculty-badge')) {
+        const badge = document.createElement('span');
+        badge.className = 'ewu-advising-faculty-badge';
+        badge.title = info && info.name ? `Faculty: ${info.name}` : `Initial: ${initial}`;
+        badge.textContent = initial;
+        cells[cols.section].appendChild(badge);
+      }
+
+      // B. Seat Capacity Check: Show FULL or Remaining Seats
+      if (cols.capacity !== -1 && cols.taken !== -1 && cells.length > Math.max(cols.capacity, cols.taken)) {
+        let cap = parseInt(row.dataset.ewuCap || '', 10);
+        let taken = parseInt(row.dataset.ewuTaken || '', 10);
+
+        if (isNaN(cap)) {
+          const rawCap = (cells[cols.capacity]?.textContent || '').trim();
+          cap = parseInt(rawCap, 10);
+          if (!isNaN(cap)) row.dataset.ewuCap = String(cap);
+        }
+
+        const pill = cells[cols.taken]?.querySelector('.ewu-seat-pill');
+        if (isNaN(taken)) {
+          if (!pill) {
+            const rawTaken = (cells[cols.taken]?.textContent || '').trim();
+            taken = parseInt(rawTaken, 10);
+            if (!isNaN(taken)) row.dataset.ewuTaken = String(taken);
+          } else {
+            const m = (pill.textContent || '').match(/\((\d+)\/(\d+)\)/);
+            if (m) {
+              taken = parseInt(m[1], 10);
+              row.dataset.ewuTaken = String(taken);
+            }
+          }
+        }
+
+        if (!isNaN(cap) && !isNaN(taken)) {
+          const isFull = taken >= cap;
+          const rem = Math.max(0, cap - taken);
+          const targetClass = isFull ? 'ewu-seat-pill full' : (rem <= 5 ? 'ewu-seat-pill low' : 'ewu-seat-pill open');
+          const targetText = isFull ? `FULL (${taken}/${cap})` : `${rem} left (${taken}/${cap})`;
+
+          if (isFull) {
+            row.classList.add('ewu-row-full');
+          } else {
+            row.classList.remove('ewu-row-full');
+          }
+
+          if (pill) {
+            if (pill.textContent !== targetText) pill.textContent = targetText;
+            if (pill.className !== targetClass) pill.className = targetClass;
+          } else {
+            const newPill = document.createElement('span');
+            newPill.className = targetClass;
+            newPill.textContent = targetText;
+            cells[cols.taken].innerHTML = '';
+            cells[cols.taken].appendChild(newPill);
+          }
+        }
+      }
+
+      // C. Preemptive Schedule Clash Check
+      const timing = (cols.time !== -1 && cells[cols.time] ? cells[cols.time].textContent : (info && info.time)) || '';
+      const isAlreadyEnrolled = enrolled.some(e => e.courseCode === cCode);
+
+      const targetCol = cells[cols.section] || cells[1];
+      const existingClashPill = targetCol.querySelector('.ewu-clash-pill');
+      const existingEnrolledPill = targetCol.querySelector('.ewu-enrolled-pill');
+
+      if (isAlreadyEnrolled) {
+        row.classList.add('ewu-row-enrolled');
+        row.classList.remove('ewu-row-clash');
+        if (existingClashPill) existingClashPill.remove();
+
+        if (!existingEnrolledPill) {
+          const enrolledPill = document.createElement('span');
+          enrolledPill.className = 'ewu-enrolled-pill';
+          enrolledPill.textContent = '✓ Enrolled';
+          targetCol.appendChild(enrolledPill);
+        }
+      } else {
+        row.classList.remove('ewu-row-enrolled');
+        if (existingEnrolledPill) existingEnrolledPill.remove();
+
+        let clashCourse = null;
+        for (const adv of enrolled) {
+          if (adv.timeSlot && timeSlotsClash(timing, adv.timeSlot)) {
+            clashCourse = adv;
+            break;
+          }
+        }
+
+        if (clashCourse) {
+          row.classList.add('ewu-row-clash');
+          const targetText = `⚠️ Clashes: ${clashCourse.courseCode}`;
+          const targetTitle = `Time clash with enrolled course ${clashCourse.courseCode} [${clashCourse.timeSlot}]`;
+
+          if (existingClashPill) {
+            if (existingClashPill.textContent !== targetText) existingClashPill.textContent = targetText;
+            if (existingClashPill.title !== targetTitle) existingClashPill.title = targetTitle;
+          } else {
+            const clashPill = document.createElement('span');
+            clashPill.className = 'ewu-clash-pill';
+            clashPill.title = targetTitle;
+            clashPill.textContent = targetText;
+            targetCol.appendChild(clashPill);
+          }
+        } else {
+          row.classList.remove('ewu-row-clash');
+          if (existingClashPill) existingClashPill.remove();
+        }
+      }
+
+      row.dataset.ewuAdvRevealed = 'true';
+    });
+
+    // Re-apply active filters to updated rows
+    applyAdvisingFilters();
+  }
+
+  // =========================================================================
+  // Advising Window Course Browser Dynamic Toolbar & Filtering
+  // =========================================================================
+  let advisingSearchQuery = '';
+  let advisingOpenSeatsOnly = false;
+  let advisingHideClashes = false;
+  let advisingActiveDay = 'ALL';
+  let advisingActiveTime = 'ALL';
+
+  function getActiveTabInfo() {
+    if (document.querySelector('.btn1.active')) return { key: 'One', name: 'F Grade Courses' };
+    if (document.querySelector('.btn2.active')) return { key: 'Two', name: 'Recommended Courses' };
+    if (document.querySelector('.btn3.active')) return { key: 'Three', name: 'D / D+ Courses' };
+    if (document.querySelector('.btn4.active')) return { key: 'Four', name: 'Retakable Courses' };
+
+    // Fallbacks by checking display style on the 4 containers (excluding #div1)
+    const one = document.querySelector('.One');
+    if (one && window.getComputedStyle(one).display !== 'none') return { key: 'One', name: 'F Grade Courses' };
+    const two = document.querySelector('.Two');
+    if (two && window.getComputedStyle(two).display !== 'none') return { key: 'Two', name: 'Recommended Courses' };
+    const three = document.querySelector('.Three');
+    if (three && window.getComputedStyle(three).display !== 'none') return { key: 'Three', name: 'D / D+ Courses' };
+    const four = document.querySelector('.Four');
+    if (four && window.getComputedStyle(four).display !== 'none') return { key: 'Four', name: 'Retakable Courses' };
+
+    return { key: 'Two', name: 'Recommended Courses' };
+  }
+
+  function applyAdvisingFilters() {
+    const activeInfo = getActiveTabInfo();
+    const activeContainer = document.querySelector('.' + activeInfo.key);
+
+    const browserTables = Array.from(document.querySelectorAll('.One table, .Two table, .Three table, .Four table, table.grid-table')).filter(t => {
+      return !t.querySelector('tr[ng-repeat*="AdvisingDataList"]') && !t.closest('.col-lg-5');
+    });
+
+    if (browserTables.length === 0) return;
+
+    let activeTabTotal = 0;
+    let activeTabVisible = 0;
+
+    const query = (advisingSearchQuery || '').trim().toLowerCase();
+    const queryNorm = query.replace(/[\s\-_]+/g, '');
+
+    browserTables.forEach(table => {
+      const cols = getTableColumnIndices(table);
+      const rows = Array.from(table.querySelectorAll('tbody tr, tr[ng-repeat]')).filter(r => !r.querySelector('th'));
+      
+      // Determine if this table belongs to the currently active tab
+      const isInsideActiveTab = activeContainer ? (activeContainer === table || activeContainer.contains(table)) : (table.closest('.' + activeInfo.key) !== null);
+
+      rows.forEach(row => {
+        const repeatAttr = row.getAttribute('ng-repeat') || '';
+        if (repeatAttr.includes('AdvisingDataList')) return;
+
+        const cells = row.querySelectorAll('td');
+        if (cells.length < 2) return;
+
+        const cCode = (cells[cols.course]?.textContent || cells[0]?.textContent || '').trim().toUpperCase();
+        const sec = (cells[cols.section]?.textContent || cells[1]?.textContent || '').trim();
+        if (!cCode || cCode.includes('{{')) return;
+
+        if (isInsideActiveTab) activeTabTotal++;
+
+        const key = `${cCode}_${sec}`;
+        const info = advisingFacultyLookup[key];
+
+        // 1. Search Query Match
+        let matchesQuery = true;
+        if (query) {
+          const rowText = (row.textContent || '').toLowerCase();
+          const rowTextNorm = rowText.replace(/[\s\-_]+/g, '');
+          const facName = (info && info.name ? info.name.toLowerCase() : '');
+          const facInit = (info && info.initial ? info.initial.toLowerCase() : (cells[cols.faculty]?.textContent || '').toLowerCase());
+
+          matchesQuery = rowText.includes(query) ||
+                         rowTextNorm.includes(queryNorm) ||
+                         facName.includes(query) ||
+                         facInit.includes(query);
+        }
+
+        // 2. Open Seats Only Match
+        let matchesOpen = true;
+        if (advisingOpenSeatsOnly) {
+          const isFull = row.classList.contains('ewu-row-full');
+          const cap = parseInt(row.dataset.ewuCap || '', 10);
+          const taken = parseInt(row.dataset.ewuTaken || '', 10);
+          if (isFull || (!isNaN(cap) && !isNaN(taken) && taken >= cap)) {
+            matchesOpen = false;
+          }
+        }
+
+        // 3. No Time Clashes Match
+        let matchesClash = true;
+        if (advisingHideClashes) {
+          const hasClash = row.classList.contains('ewu-row-clash') || row.querySelector('.ewu-clash-pill');
+          if (hasClash) {
+            matchesClash = false;
+          }
+        }
+
+        // 4. Day Filter Match
+        const timing = (cols.time !== -1 && cells[cols.time] ? cells[cols.time].textContent : '') || (info && info.time) || '';
+        let matchesDay = true;
+        if (advisingActiveDay !== 'ALL') {
+          matchesDay = rowMatchesDay(timing, advisingActiveDay);
+        }
+
+        // 5. Time Filter Match
+        let matchesTime = true;
+        if (advisingActiveTime !== 'ALL') {
+          matchesTime = rowMatchesTime(timing, advisingActiveTime);
+        }
+
+        const shouldShow = matchesQuery && matchesOpen && matchesClash && matchesDay && matchesTime;
+        if (shouldShow) {
+          row.style.display = '';
+          if (isInsideActiveTab) activeTabVisible++;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+
+    // Update Counter / Stats Pill
+    const statsPill = document.getElementById('ewuAdvisingStatsPill');
+    if (statsPill) {
+      const isFiltered = query || advisingOpenSeatsOnly || advisingHideClashes || advisingActiveDay !== 'ALL' || advisingActiveTime !== 'ALL';
+      const tabSuffix = activeInfo.name ? ` in ${activeInfo.name}` : '';
+      if (isFiltered) {
+        statsPill.textContent = `Showing ${activeTabVisible} of ${activeTabTotal} sections${tabSuffix}`;
+        statsPill.style.color = activeTabVisible === 0 ? '#ef4444' : '#2563eb';
+      } else {
+        statsPill.textContent = `Showing all ${activeTabTotal} sections${tabSuffix}`;
+        statsPill.style.color = '';
+      }
+    }
+
+    // Clean up empty notices from inactive tab containers
+    document.querySelectorAll('.ewu-adv-empty-state').forEach(el => {
+      if (!activeContainer || !activeContainer.contains(el)) {
+        el.style.display = 'none';
+      }
+    });
+
+    // Handle Empty State Notice in active container
+    if (activeContainer) {
+      let emptyNotice = activeContainer.querySelector('.ewu-adv-empty-state');
+      const isFiltered = query || advisingOpenSeatsOnly || advisingHideClashes || advisingActiveDay !== 'ALL' || advisingActiveTime !== 'ALL';
+      if (activeTabVisible === 0 && activeTabTotal > 0 && isFiltered) {
+        if (!emptyNotice) {
+          emptyNotice = document.createElement('div');
+          emptyNotice.className = 'ewu-adv-empty-state';
+          emptyNotice.innerHTML = `
+            <div style="font-size:22px;margin-bottom:6px;">🔍</div>
+            <div><strong>No matching course sections found in ${activeInfo.name}.</strong></div>
+            <div style="font-size:12px;margin-top:4px;color:#64748b;">Try adjusting your search terms or clearing active filters.</div>
+            <button type="button" class="ewu-adv-reset-btn">Clear All Filters</button>
+          `;
+          emptyNotice.querySelector('.ewu-adv-reset-btn').addEventListener('click', resetAdvisingFilters);
+          activeContainer.appendChild(emptyNotice);
+        } else {
+          emptyNotice.style.display = '';
+        }
+      } else if (emptyNotice) {
+        emptyNotice.style.display = 'none';
+      }
+    }
+  }
+
+  function resetAdvisingFilters() {
+    advisingSearchQuery = '';
+    advisingOpenSeatsOnly = false;
+    advisingHideClashes = false;
+    advisingActiveDay = 'ALL';
+    advisingActiveTime = 'ALL';
+
+    const searchInput = document.getElementById('ewuAdvisingSearch');
+    if (searchInput) searchInput.value = '';
+
+    const clearBtn = document.getElementById('ewuAdvisingClearSearch');
+    if (clearBtn) clearBtn.style.display = 'none';
+
+    const openSeatsCheck = document.getElementById('ewuAdvOpenSeatsOnly');
+    if (openSeatsCheck) openSeatsCheck.checked = false;
+
+    const hideClashesCheck = document.getElementById('ewuAdvHideClashes');
+    if (hideClashesCheck) hideClashesCheck.checked = false;
+
+    document.querySelectorAll('.ewu-adv-chip[data-day]').forEach(c => {
+      c.classList.toggle('active', c.dataset.day === 'ALL');
+    });
+    document.querySelectorAll('.ewu-adv-chip[data-time]').forEach(c => {
+      c.classList.toggle('active', c.dataset.time === 'ALL');
+    });
+
+    applyAdvisingFilters();
+  }
+
+  function renderAdvisingCourseBrowserToolbar() {
+    if (!config.advisingFacultyEnabled) return;
+
+    let toolbar = document.getElementById('ewuAdvisingToolbar');
+    if (toolbar) {
+      applyAdvisingFilters();
+      return;
+    }
+
+    const scrollContainer = document.querySelector('.row[style*="height:400px"], .row[style*="height: 400px"]') ||
+                            document.getElementById('div1')?.closest('.row') ||
+                            document.querySelector('.One, .Two')?.closest('.row');
+
+    if (!scrollContainer || !scrollContainer.parentElement) return;
+
+    toolbar = document.createElement('div');
+    toolbar.id = 'ewuAdvisingToolbar';
+    toolbar.className = 'ewu-advising-toolbar';
+    toolbar.innerHTML = `
+      <div class="ewu-advising-toolbar-top">
+        <div class="ewu-advising-search-wrap">
+          <span class="ewu-advising-search-icon">🔍</span>
+          <input type="text" id="ewuAdvisingSearch" class="ewu-advising-search-input" placeholder="Search course code, section, faculty, room, timing..." autocomplete="off">
+          <button type="button" id="ewuAdvisingClearSearch" class="ewu-advising-clear-btn" style="display:none;" title="Clear search">✕</button>
+        </div>
+
+        <div class="ewu-advising-toggles">
+          <label class="ewu-adv-toggle" title="Show only sections with seats available">
+            <input type="checkbox" id="ewuAdvOpenSeatsOnly">
+            <span>🟢 Open Seats Only</span>
+          </label>
+          <label class="ewu-adv-toggle" title="Hide sections that clash with your enrolled courses">
+            <input type="checkbox" id="ewuAdvHideClashes">
+            <span>🛡️ No Time Clashes</span>
+          </label>
+        </div>
+
+        <div class="ewu-advising-stats">
+          <span id="ewuAdvisingStatsPill" class="ewu-advising-stats-pill">Calculating...</span>
+        </div>
+      </div>
+
+      <div class="ewu-advising-toolbar-bottom">
+        <div class="ewu-adv-chip-group">
+          <span class="ewu-adv-chip-label">Day:</span>
+          <button type="button" class="ewu-adv-chip active" data-day="ALL">All</button>
+          <button type="button" class="ewu-adv-chip" data-day="ST">ST</button>
+          <button type="button" class="ewu-adv-chip" data-day="MW">MW</button>
+          <button type="button" class="ewu-adv-chip" data-day="SR">SR</button>
+          <button type="button" class="ewu-adv-chip" data-day="TR">TR</button>
+          <button type="button" class="ewu-adv-chip" data-day="RA">RA</button>
+          <button type="button" class="ewu-adv-chip" data-day="F">Fri</button>
+        </div>
+        <div class="ewu-adv-chip-group" style="margin-left: auto;">
+          <span class="ewu-adv-chip-label">Time:</span>
+          <button type="button" class="ewu-adv-chip active" data-time="ALL">All</button>
+          <button type="button" class="ewu-adv-chip" data-time="08:30">08:30 AM</button>
+          <button type="button" class="ewu-adv-chip" data-time="10:10">10:10 AM</button>
+          <button type="button" class="ewu-adv-chip" data-time="11:50">11:50 AM</button>
+          <button type="button" class="ewu-adv-chip" data-time="01:30">01:30 PM</button>
+          <button type="button" class="ewu-adv-chip" data-time="03:10">03:10 PM+</button>
+        </div>
+      </div>
+    `;
+
+    scrollContainer.parentElement.insertBefore(toolbar, scrollContainer);
+
+    const searchInput = toolbar.querySelector('#ewuAdvisingSearch');
+    const clearBtn = toolbar.querySelector('#ewuAdvisingClearSearch');
+    const openSeatsCheck = toolbar.querySelector('#ewuAdvOpenSeatsOnly');
+    const hideClashesCheck = toolbar.querySelector('#ewuAdvHideClashes');
+
+    searchInput.addEventListener('input', (e) => {
+      advisingSearchQuery = e.target.value;
+      clearBtn.style.display = advisingSearchQuery ? 'block' : 'none';
+      applyAdvisingFilters();
+    });
+
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      advisingSearchQuery = '';
+      clearBtn.style.display = 'none';
+      searchInput.focus();
+      applyAdvisingFilters();
+    });
+
+    openSeatsCheck.addEventListener('change', (e) => {
+      advisingOpenSeatsOnly = e.target.checked;
+      applyAdvisingFilters();
+    });
+
+    hideClashesCheck.addEventListener('change', (e) => {
+      advisingHideClashes = e.target.checked;
+      applyAdvisingFilters();
+    });
+
+    toolbar.querySelectorAll('.ewu-adv-chip[data-day]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        toolbar.querySelectorAll('.ewu-adv-chip[data-day]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        advisingActiveDay = btn.dataset.day || 'ALL';
+        applyAdvisingFilters();
+      });
+    });
+
+    toolbar.querySelectorAll('.ewu-adv-chip[data-time]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        toolbar.querySelectorAll('.ewu-adv-chip[data-time]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        advisingActiveTime = btn.dataset.time || 'ALL';
+        applyAdvisingFilters();
+      });
+    });
+
+    // Delegate tab switching clicks on the document
+    document.addEventListener('click', (e) => {
+      const tabBtn = e.target.closest('.btn1, .btn2, .btn3, .btn4');
+      if (tabBtn) {
+        applyAdvisingFilters();
+        setTimeout(applyAdvisingFilters, 50);
+        setTimeout(applyAdvisingFilters, 200);
+        setTimeout(applyAdvisingFilters, 550);
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== searchInput && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+      } else if (e.key === 'Escape' && document.activeElement === searchInput) {
+        searchInput.blur();
+      }
+    });
+
+    applyAdvisingFilters();
+  }
+
+  // =========================================================================
+  // FEATURE 7: Interactive "What-If" CGPA & Target Planner (v1.5.0)
+  // =========================================================================
+  const EWU_GRADE_POINTS = {
+    'A+': 4.00, 'A': 4.00, 'A-': 3.70,
+    'B+': 3.30, 'B': 3.00, 'B-': 2.70,
+    'C+': 2.30, 'C': 2.00, 'C-': 1.70,
+    'D+': 1.30, 'D': 1.00,
+    'F': 0.00
+  };
+
+  let simulatedRetakes = [];
+  let userDegreeTotalCredits = 136.0;
+  let userTargetCGPA = 3.75;
+
+  function extractDegreeReviewCourses() {
+    const completedCoursesMap = new Map();
+    const tables = Array.from(document.querySelectorAll('table')).filter(t => 
+      !t.classList.contains('ewu-summary-table') && 
+      !t.closest('#ewuCgpaCard') && 
+      !t.closest('.ewu-basket-drawer')
+    );
+
+    tables.forEach(table => {
+      const rows = Array.from(table.querySelectorAll('tr'));
+      rows.forEach(row => {
+        const cells = Array.from(row.querySelectorAll('td, th'));
+        if (cells.length < 3) return;
+
+        const rowText = row.textContent || '';
+        if (rowText.toLowerCase().includes('grand total') || (rowText.toLowerCase().includes('total') && cells.length < 5)) {
+          return;
+        }
+
+        // 1. Find Course Code (e.g. BUS101, CSE110, ENG101, MAT101, ACT101, etc.)
+        let code = '';
+        let codeIdx = -1;
+        cells.forEach((cell, idx) => {
+          if (code) return;
+          const txt = cell.textContent.trim().toUpperCase();
+          const match = txt.match(/\b([A-Z]{2,4}\s*\d{3}[A-Z]?)\b/);
+          if (match) {
+            code = match[1].replace(/\s+/g, '');
+            codeIdx = idx;
+          }
+        });
+        if (!code) return;
+
+        // 2. Find Letter Grade & Factor
+        let grade = '';
+        let factor = NaN;
+        cells.forEach((cell, idx) => {
+          if (grade || idx === codeIdx) return;
+          const txt = cell.textContent.trim().toUpperCase();
+          if (EWU_GRADE_POINTS[txt] !== undefined) {
+            grade = txt;
+            factor = EWU_GRADE_POINTS[txt];
+          }
+        });
+
+        // Skip if not a standard graded course (e.g. W, I, P, S, or in-progress)
+        if (!grade || isNaN(factor)) return;
+
+        // 3. Find Credit
+        let credit = 3.0; // default EWU course credit
+        for (let i = 0; i < cells.length; i++) {
+          if (i === codeIdx) continue;
+          const txt = cells[i].textContent.trim();
+          const val = parseFloat(txt);
+          if (!isNaN(val) && (val === 1.0 || val === 1.5 || val === 2.0 || val === 3.0 || val === 4.0 || val === 6.0)) {
+            const cellUpper = cells[i].textContent.trim().toUpperCase();
+            if (cellUpper !== grade && val !== factor) {
+              credit = val;
+              break;
+            }
+          }
+        }
+
+        // 4. Find Title
+        let title = '';
+        if (codeIdx + 1 < cells.length) {
+          const nextTxt = cells[codeIdx + 1].textContent.trim();
+          if (nextTxt.length > 2 && isNaN(parseFloat(nextTxt))) {
+            title = nextTxt;
+          }
+        }
+        if (!title) {
+          cells.forEach((c, idx) => {
+            if (idx === codeIdx) return;
+            const t = c.textContent.trim();
+            if (t.length > title.length && isNaN(parseFloat(t)) && !EWU_GRADE_POINTS[t.toUpperCase()]) {
+              title = t;
+            }
+          });
+        }
+
+        // Deduplicate: if course was retaken in past, keep the one with higher factor
+        if (completedCoursesMap.has(code)) {
+          const existing = completedCoursesMap.get(code);
+          if (factor > existing.factor) {
+            completedCoursesMap.set(code, { code, title, credit, grade, factor, points: credit * factor });
+          }
+        } else {
+          completedCoursesMap.set(code, { code, title, credit, grade, factor, points: credit * factor });
+        }
+      });
+    });
+
+    return Array.from(completedCoursesMap.values());
+  }
+
+  function processDegreeReviewPage() {
+    if (!config.cgpaEnabled) {
+      const existing = document.getElementById('ewuCgpaCard');
+      if (existing) existing.remove();
+      return;
+    }
+
+    const completedCourses = extractDegreeReviewCourses();
+    if (completedCourses.length === 0) return;
+
+    // Sort alphabetically so student can find any course easily
+    completedCourses.sort((a, b) => a.code.localeCompare(b.code));
+
+    const signature = completedCourses.map(c => `${c.code}:${c.grade}:${c.credit}`).join('|');
+    let card = document.getElementById('ewuCgpaCard');
+
+    // Signature check: DO NOT rewrite innerHTML if already mounted and courses haven't changed!
+    if (card && card.dataset.coursesSignature === signature) {
+      return;
+    }
+
+    // Clean up any rogue/duplicate cards
+    const existingCards = document.querySelectorAll('#ewuCgpaCard');
+    if (existingCards.length > 1) {
+      for (let i = 1; i < existingCards.length; i++) existingCards[i].remove();
+    }
+
+    const firstTable = document.querySelector('table');
+    if (!firstTable) return;
+    const mountContainer = firstTable.closest('.ewu-degreereview-responsive') || firstTable;
+
+    if (!card) {
+      card = document.createElement('div');
+      card.id = 'ewuCgpaCard';
+      card.className = 'ewu-cgpa-card';
+      mountContainer.parentElement.insertBefore(card, mountContainer);
+    }
+
+    card.dataset.coursesSignature = signature;
+
+    let totalGradedCredits = 0;
+    let totalEarnedPoints = 0;
+    completedCourses.forEach(c => {
+      totalGradedCredits += c.credit;
+      totalEarnedPoints += c.points;
+    });
+    const currentCGPA = totalGradedCredits > 0 ? (totalEarnedPoints / totalGradedCredits) : 0;
+
+    renderCgpaCardUI(card, completedCourses, totalGradedCredits, totalEarnedPoints, currentCGPA);
+  }
+
+  function renderCgpaCardUI(card, courses, totalCredits, totalPoints, currentCGPA) {
+    card.innerHTML = `
+      <div class="ewu-cgpa-header">
+        <div class="ewu-cgpa-title-group">
+          <h3>🎓 <span>CGPA & Retake Simulator</span></h3>
+        </div>
+        <div class="ewu-cgpa-header-pills">
+          <span class="ewu-cgpa-stat-pill">Current CGPA: <strong>${currentCGPA.toFixed(2)}</strong></span>
+          <span class="ewu-cgpa-stat-pill">Completed: <strong>${totalCredits.toFixed(1)} Cr</strong></span>
+          <span class="ewu-cgpa-stat-pill">Total Points: <strong>${totalPoints.toFixed(1)}</strong></span>
+        </div>
+      </div>
+
+      <div class="ewu-cgpa-tabs">
+        <button type="button" class="ewu-cgpa-tab-btn active" id="ewuTabBtnRetake">🔄 Retake Simulator</button>
+        <button type="button" class="ewu-cgpa-tab-btn" id="ewuTabBtnTarget">🎯 Target CGPA Planner</button>
+      </div>
+
+      <!-- Tab 1: Retake Simulator -->
+      <div class="ewu-cgpa-pane active" id="ewuPaneRetake">
+        <div class="ewu-cgpa-retake-controls">
+          <select id="ewuRetakeCourseSelect" style="flex: 1; min-width: 220px;">
+            <option value="">-- Choose course to simulate retake --</option>
+            ${courses.map(c => `<option value="${c.code}">${c.code} ${c.title ? '- ' + c.title.slice(0, 24) : ''} (Current: ${c.grade} • ${c.factor.toFixed(2)}) [${c.credit} cr]</option>`).join('')}
+          </select>
+
+          <select id="ewuRetakeGradeSelect" style="width: 140px;">
+            <option value="4.00,A">A (4.00)</option>
+            <option value="3.70,A-">A- (3.70)</option>
+            <option value="3.30,B+">B+ (3.30)</option>
+            <option value="3.00,B">B (3.00)</option>
+            <option value="2.70,B-">B- (2.70)</option>
+            <option value="2.30,C+">C+ (2.30)</option>
+          </select>
+
+          <button type="button" class="ewu-cgpa-add-btn" id="ewuAddRetakeBtn">+ Simulate Retake</button>
+        </div>
+
+        <div id="ewuSimulatedRetakesList" style="margin-bottom: 8px; display: none; flex-direction: column; gap: 4px;"></div>
+
+        <div id="ewuSimulatedCgpaBanner" class="ewu-cgpa-simulated-banner"></div>
+      </div>
+
+      <!-- Tab 2: Target CGPA Planner -->
+      <div class="ewu-cgpa-pane" id="ewuPaneTarget">
+        <div class="ewu-cgpa-target-form" style="margin-bottom: 8px;">
+          <div class="ewu-cgpa-field">
+            <label>Total Degree Credits</label>
+            <input type="number" id="ewuDegreeCreditsInput" value="${userDegreeTotalCredits}" step="0.5" min="${totalCredits}">
+          </div>
+          <div class="ewu-cgpa-field">
+            <label>Target Graduation CGPA</label>
+            <input type="number" id="ewuTargetCgpaInput" value="${userTargetCGPA}" step="0.01" min="1.0" max="4.0">
+          </div>
+        </div>
+
+        <div id="ewuTargetResultBox" style="font-size: 13px; padding: 10px 14px; border-radius: 8px;"></div>
+      </div>
+    `;
+
+    const tabRetake = card.querySelector('#ewuTabBtnRetake');
+    const tabTarget = card.querySelector('#ewuTabBtnTarget');
+    const paneRetake = card.querySelector('#ewuPaneRetake');
+    const paneTarget = card.querySelector('#ewuPaneTarget');
+
+    tabRetake.addEventListener('click', () => {
+      tabRetake.classList.add('active');
+      tabTarget.classList.remove('active');
+      paneRetake.classList.add('active');
+      paneTarget.classList.remove('active');
+    });
+
+    tabTarget.addEventListener('click', () => {
+      tabTarget.classList.add('active');
+      tabRetake.classList.remove('active');
+      paneTarget.classList.add('active');
+      paneRetake.classList.remove('active');
+      calculateTargetCGPA();
+    });
+
+    function updateRetakesView() {
+      let deltaPoints = 0;
+      simulatedRetakes.forEach(r => {
+        deltaPoints += (r.credit * (r.newFactor - r.oldFactor));
+      });
+      const simulatedCGPA = totalCredits > 0 ? ((totalPoints + deltaPoints) / totalCredits) : currentCGPA;
+      const cgpaDiff = simulatedCGPA - currentCGPA;
+
+      const listEl = card.querySelector('#ewuSimulatedRetakesList');
+      if (listEl) {
+        if (simulatedRetakes.length > 0) {
+          listEl.style.display = 'flex';
+          listEl.innerHTML = simulatedRetakes.map((r, idx) => `
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 5px 10px; background: rgba(79, 70, 229, 0.08); border-radius: 6px; font-size: 12.5px;">
+              <span><strong>${r.code}</strong> (${r.credit} cr): Replaced <strong>${r.oldGrade}</strong> (${r.oldFactor.toFixed(2)}) with <strong>${r.newGrade}</strong> (${r.newFactor.toFixed(2)}) &bull; +${(r.credit * (r.newFactor - r.oldFactor)).toFixed(1)} pts</span>
+              <button type="button" class="ewu-remove-retake-btn" data-idx="${idx}" style="background:none;border:none;color:#ef4444;cursor:pointer;font-weight:700;font-size:14px;line-height:1;" title="Remove this retake">✕</button>
+            </div>
+          `).join('');
+
+          listEl.querySelectorAll('.ewu-remove-retake-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const i = parseInt(btn.dataset.idx, 10);
+              if (!isNaN(i)) {
+                simulatedRetakes.splice(i, 1);
+                updateRetakesView();
+              }
+            });
+          });
+        } else {
+          listEl.style.display = 'none';
+          listEl.innerHTML = '';
+        }
+      }
+
+      const bannerEl = card.querySelector('#ewuSimulatedCgpaBanner');
+      if (bannerEl) {
+        bannerEl.innerHTML = `
+          <div>
+            Current CGPA: <strong>${currentCGPA.toFixed(2)}</strong> &rarr; Simulated CGPA: <strong style="font-size: 15px; color: #10b981;">${simulatedCGPA.toFixed(2)}</strong>
+            ${cgpaDiff > 0 ? `<span style="margin-left: 8px; padding: 2px 7px; background: #10b981; color: white; border-radius: 9999px; font-size: 11px;">+${cgpaDiff.toFixed(2)} Boost!</span>` : ''}
+          </div>
+          ${simulatedRetakes.length > 0 ? `<button type="button" id="ewuResetRetakesBtn" style="background:none;border:1px solid #cbd5e1;border-radius:4px;padding:2px 6px;cursor:pointer;font-size:11px;">Reset All</button>` : ''}
+        `;
+
+        const resetBtn = bannerEl.querySelector('#ewuResetRetakesBtn');
+        if (resetBtn) {
+          resetBtn.addEventListener('click', () => {
+            simulatedRetakes = [];
+            updateRetakesView();
+          });
+        }
+      }
+
+      calculateTargetCGPA();
+    }
+
+    const addRetakeBtn = card.querySelector('#ewuAddRetakeBtn');
+    const courseSelect = card.querySelector('#ewuRetakeCourseSelect');
+    const gradeSelect = card.querySelector('#ewuRetakeGradeSelect');
+
+    addRetakeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const selectedCode = courseSelect.value;
+      if (!selectedCode) return;
+      const targetCourse = courses.find(c => c.code === selectedCode);
+      if (!targetCourse) return;
+
+      const [ptStr, grStr] = gradeSelect.value.split(',');
+      const newPt = parseFloat(ptStr);
+      if (isNaN(newPt)) return;
+
+      const existingIdx = simulatedRetakes.findIndex(r => r.code === targetCourse.code);
+      if (existingIdx !== -1) {
+        simulatedRetakes[existingIdx].newGrade = grStr;
+        simulatedRetakes[existingIdx].newFactor = newPt;
+      } else {
+        simulatedRetakes.push({
+          code: targetCourse.code,
+          title: targetCourse.title,
+          credit: targetCourse.credit,
+          oldGrade: targetCourse.grade,
+          oldFactor: targetCourse.factor,
+          newGrade: grStr,
+          newFactor: newPt
+        });
+      }
+
+      updateRetakesView();
+    });
+
+    function calculateTargetCGPA() {
+      const degCrInput = card.querySelector('#ewuDegreeCreditsInput');
+      const tgtCgpaInput = card.querySelector('#ewuTargetCgpaInput');
+      const resultBox = card.querySelector('#ewuTargetResultBox');
+      if (!degCrInput || !tgtCgpaInput || !resultBox) return;
+
+      userDegreeTotalCredits = parseFloat(degCrInput.value) || 136.0;
+      userTargetCGPA = parseFloat(tgtCgpaInput.value) || 3.75;
+
+      let deltaPoints = 0;
+      simulatedRetakes.forEach(r => {
+        deltaPoints += (r.credit * (r.newFactor - r.oldFactor));
+      });
+
+      const remCredits = Math.max(0, userDegreeTotalCredits - totalCredits);
+      if (remCredits <= 0) {
+        resultBox.className = 'ewu-cgpa-target-result success';
+        resultBox.innerHTML = `🎓 <strong>Completed Degree:</strong> You have reached or exceeded your degree credit requirements!`;
+        return;
+      }
+
+      const totalNeededPoints = userTargetCGPA * userDegreeTotalCredits;
+      const pointsRemaining = totalNeededPoints - (totalPoints + deltaPoints);
+      const requiredAverageGPA = pointsRemaining / remCredits;
+
+      if (requiredAverageGPA <= 0) {
+        resultBox.className = 'ewu-cgpa-target-result success';
+        resultBox.innerHTML = `🎉 <strong>Target Surpassed:</strong> You have already secured enough grade points to graduate with a <strong>${userTargetCGPA.toFixed(2)}</strong> CGPA!`;
+      } else if (requiredAverageGPA <= 4.00) {
+        resultBox.className = 'ewu-cgpa-target-result success';
+        resultBox.innerHTML = `🎯 <strong>Achievable Goal:</strong> To graduate with a <strong>${userTargetCGPA.toFixed(2)}</strong> CGPA, you need an average GPA of <strong style="font-size: 15px; color: #10b981;">${requiredAverageGPA.toFixed(2)}</strong> across your remaining <strong>${remCredits.toFixed(1)}</strong> credits.`;
+      } else {
+        resultBox.className = 'ewu-cgpa-target-result warning';
+        resultBox.innerHTML = `⚠️ <strong>Retakes Required:</strong> A target CGPA of <strong>${userTargetCGPA.toFixed(2)}</strong> requires an average GPA of <strong style="color: #ef4444;">${requiredAverageGPA.toFixed(2)}</strong> (> 4.00 max) in remaining credits. Switch to the <strong>Retake Simulator</strong> tab to simulate replacing C/D/F grades to boost your baseline.`;
+      }
+    }
+
+    const degCrInput = card.querySelector('#ewuDegreeCreditsInput');
+    const tgtCgpaInput = card.querySelector('#ewuTargetCgpaInput');
+    if (degCrInput) degCrInput.addEventListener('input', calculateTargetCGPA);
+    if (tgtCgpaInput) tgtCgpaInput.addEventListener('input', calculateTargetCGPA);
+
+    updateRetakesView();
+  }
+
+  // =========================================================================
   // Master Dispatcher
   // =========================================================================
   function runEnhancements() {
     ensureMobileViewport();
+    applyTheme();
+    injectPortalSidebarSettings();
     processLoginCaptcha();
     const path = window.location.pathname.toLowerCase();
     const tables = document.querySelectorAll('table');
 
+    // If not on offered courses, ensure advising basket drawer is hidden
+    if (!path.includes('offeredcourses') && !document.querySelector('[ng-repeat*="OfferedCourse"]')) {
+      const basketDrawer = document.getElementById('ewuCourseBasketDrawer');
+      if (basketDrawer) basketDrawer.style.display = 'none';
+      document.body.classList.remove('has-ewu-basket');
+    }
+
     tables.forEach((table) => {
-      // Skip internal summary table
-      if (table.classList.contains('ewu-summary-table') || table.closest('.ewu-ledger-summary-card')) {
+      // Skip internal summary table or injected widget cards
+      if (table.classList.contains('ewu-summary-table') || table.closest('.ewu-ledger-summary-card') || table.closest('.ewu-cgpa-card') || table.closest('.ewu-basket-drawer')) {
         return;
       }
       // 1. Class Schedule & Advising
-      if (!path.includes('facultyevaluation') && !path.includes('offeredcourses') && !path.includes('studentledger')) {
+      if (!path.includes('facultyevaluation') && !path.includes('offeredcourses') && !path.includes('studentledger') && !path.includes('degreereview')) {
         processClassSchedule(table);
       }
 
@@ -4373,7 +8862,22 @@ table.ewu-ledger-table {
       if (path.includes('studentledger') || table.querySelector('[ng-repeat*="StudentLedgerlist"]')) {
         processStudentLedger(table);
       }
+
+      // 5. Advising Window Faculty Revealer
+      if (path.includes('advising')) {
+        processAdvisingFaculty(table);
+      }
     });
+
+    // 5b. Advising Window Course Browser Dynamic Toolbar
+    if (path.includes('advising')) {
+      renderAdvisingCourseBrowserToolbar();
+    }
+
+    // 4. Degree Review / "What-If" CGPA & Target Planner (page-level single card)
+    if (path.includes('degreereview') || document.querySelector('[ng-repeat*="DegreeReview"]') || document.querySelector('[ng-repeat*="CompletedCourse"]')) {
+      processDegreeReviewPage();
+    }
   }
 
   if (document.readyState === 'loading') {
@@ -4383,9 +8887,24 @@ table.ewu-ledger-table {
   }
 
   let debounceTimer = null;
-  const observer = new MutationObserver(() => {
+  const observer = new MutationObserver((mutations) => {
+    const isOnlyOurOwnBadges = mutations.every(m => {
+      const t = m.target;
+      return t && t.nodeType === 1 && (
+        t.classList.contains('ewu-seat-pill') ||
+        t.classList.contains('ewu-clash-pill') ||
+        t.classList.contains('ewu-enrolled-pill') ||
+        t.classList.contains('ewu-advising-faculty-badge') ||
+        t.classList.contains('ewu-advising-toolbar') ||
+        t.classList.contains('ewu-adv-chip') ||
+        t.classList.contains('ewu-adv-toggle') ||
+        (t.closest && t.closest('.ewu-seat-pill, .ewu-clash-pill, .ewu-enrolled-pill, .ewu-advising-faculty-badge, .ewu-advising-toolbar, .ewu-adv-empty-state'))
+      );
+    });
+    if (isOnlyOurOwnBadges) return;
+
     if (debounceTimer) clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(runEnhancements, 80);
+    debounceTimer = setTimeout(runEnhancements, 120);
   });
 
   observer.observe(document.body, { childList: true, subtree: true });

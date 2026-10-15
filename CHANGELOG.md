@@ -7,6 +7,78 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.5.1] - 2026-10-16
+
+### Added
+- **Advising Window Course Search and Filter Bar**:
+  - Dynamic text search box filtering course sections by course code, section number, instructor name, room, or time on `portal.ewubd.edu/Home/Advising`.
+  - Filter toggle checkboxes:
+    - **Open Seats Only**: Filters out sections with 0 remaining capacity.
+    - **No Time Clashes**: Hides sections that overlap with courses already added to your schedule.
+  - Day filter chips (`ST`, `MW`, `SR`, `TR`, `RA`, `Fri`) and time slot filters (Morning, Afternoon, Evening) for filtering advising options.
+  - Badges displaying remaining seat counts (e.g. `8 left (22/30)`) and full section markers.
+  - Indicators for courses already added to your schedule (`✓ Enrolled`).
+  - Support across all four advising tabs: Recommended Courses, D / D+ Courses, Retakable Courses, and F Grade Courses, using dynamic column detection.
+- **Documentation Images & Visual Guides**:
+  - Added screenshots for the advising course browser, routine export menu, retake simulator, and target CGPA planner to the `images/` directory.
+  - Updated `README.md` with step-by-step descriptions and screenshots for each feature.
+
+### Changed
+- Refactored table column indexing on advising pages to adapt dynamically to varying column layouts across advising tabs.
+- Replaced extension toolbar popup with a direct link to the project repository, with settings accessible from the student portal sidebar.
+- Removed AI buzzwords and simplified phrasing across documentation.
+
+---
+
+## [1.5.0] - 2026-10-15
+
+### 🚀 Major Release: Dark Mode, What-If CGPA Planner, Advising Basket & Clash Sandbox
+
+- **🎯 Advising Window Faculty Revealer**:
+  - Automatically captures and unhides teacher initials (`ShortName`) during live advising / course selection on `portal.ewubd.edu/Home/Advising`.
+  - Injects non-intrusive faculty badges directly into routine selection rows without calling any private or backend-only APIs.
+- **🧮 Interactive "What-If" CGPA & Target Graduation Planner**:
+  - Injected directly into the Degree Review / Grades page (`/Home/DegreeReview`).
+  - **Retake Simulator**: Allows testing improved grades for previously taken courses, accurately calculating the CGPA boost by replacing old grade points while keeping credits constant.
+  - **Graduation Target Planner**: Calculates the exact average GPA required in remaining credits to achieve your target graduation CGPA (e.g. 3.50, 3.80), with dynamic feasibility banners (Achievable, Requires High Performance, or Mathematically Impossible).
+- **🛒 Advising Course Basket & Real-Time Conflict Sandbox**:
+  - Interactive course draft sandbox added to Offered Courses (`/Home/OfferedCourses`).
+  - Add courses to draft with 1-click **"+ Draft"** buttons.
+  - Supports **Plan A** and **Plan B** preset baskets stored in browser storage.
+  - Real-time time-overlap and day clash detection engine across all EWU schedules (`ST`, `MW`, `SR`, `TR`, `RA`, `Fri`).
+  - Visual clash warnings and table row highlighting for conflicting sections.
+  - Export basket to Google Calendar or universal `.ics` file.
+- **🔍 Smart Day & Time Filter Chips + Spotlight Search (`Ctrl + K`)**:
+  - Added one-click day chips (`ST`, `MW`, `SR`, `TR`, `RA`, `Fri`) and morning/afternoon time filters on Offered Courses.
+  - Added global quick-access spotlight search modal triggered by `Ctrl + K` / `Cmd + K` to search course codes, sections, rooms, and faculty initials instantly.
+- **🌙 Eyes-Friendly Dark Mode**:
+  - Complete dark theme for `portal.ewubd.edu` and `faportal.ewubd.edu` covering tables, navigation bars, bento cards, inputs, and modals.
+  - Floating dark/light toggle button (`🌙` / `☀️`) and native sidebar toggle switch.
+- **⚙️ Integrated Sidebar Settings Modal**:
+  - Full management of all 9 modular features directly from the portal sidebar.
+  - Clicking toolbar extension icon redirects to GitHub repository.
+
+---
+
+## [1.4.0] - 2026-10-15
+
+### 🚀 Added & Improved
+- **In-Portal Sidebar Settings Page & Modal**:
+  - Moved all extension controls natively into `portal.ewubd.edu` inside the student portal sidebar (`⚙️ EWU-Toolkit Settings`).
+  - Added modern in-portal settings modal with backdrop blur, smooth switch toggles for all 5 superpowers, active status indicator, and quick links.
+  - Added a floating settings shortcut button accessible on all portal pages and mobile screens.
+  - Clicking the toolbar extension icon in Chrome now redirects directly to the open-source repository on GitHub via background service worker (`background.js`).
+- **Mobile-Friendly Dynamic Weekly Routine Timetable & Day Agenda**:
+  - Added a dynamic view switcher on the routine card: `[📅 Timetable Grid]` and `[📋 Day Agenda]`.
+  - On mobile screens (`< 768px`) or when selected, automatically displays an interactive day selector tab strip (`Sun`, `Mon`, `Tue`, `Wed`, `Thu`, `Fri`, `Sat`).
+  - Selecting a day renders clean chronological class cards displaying start/end times, course code, section, room badge, teacher name, initial, and 1-click email copy button.
+  - Day pills display course counts and automatically select the current day.
+- **Google Calendar & iCalendar (.ics) Export**:
+  - Added **"📅 Add to Google Calendar"** in the routine export menu for 1-click batch calendar synchronization.
+  - Added **"📆 Export Calendar (.ics)"** generating RFC 5545 `.ics` files with recurring weekly VEVENTs and 15-minute reminders, working 100% offline across iOS, Android, macOS, and Windows.
+
+---
+
 ## [1.3.2] - 2026-10-09
 
 ### 🚀 Added

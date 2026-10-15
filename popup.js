@@ -20,13 +20,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
     chrome.storage.local.get({
       ewu_schedule_enabled: true,
-      ewu_offered_enabled: true,
+      ewu_offered_enabled: false,
       ewu_ledger_enabled: true,
       ewu_routine_enabled: true,
       ewu_captcha_enabled: true
     }, (res) => {
       toggleSchedule.checked = res.ewu_schedule_enabled !== false;
-      toggleOffered.checked = res.ewu_offered_enabled !== false;
+      toggleOffered.checked = res.ewu_offered_enabled === true;
       toggleLedger.checked = res.ewu_ledger_enabled !== false;
       if (toggleRoutine) toggleRoutine.checked = res.ewu_routine_enabled !== false;
       if (toggleCaptcha) toggleCaptcha.checked = res.ewu_captcha_enabled !== false;

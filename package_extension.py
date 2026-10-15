@@ -13,6 +13,7 @@ def package():
 
     files_to_include = [
         'manifest.json',
+        'background.js',
         'content.css',
         'content.js',
         'popup.html',
