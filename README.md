@@ -221,6 +221,7 @@ Looking for a dedicated web portal to browse, search, and plan course sections w
 * **What EWU-Toolkit does:**
   * Moves settings into the student portal navigation sidebar (`⚙️ EWU-Toolkit Settings`).
   * Opens a settings modal to turn individual features on or off.
+  * Checks for new releases in the background and displays an update notification card with download link when a new version is available.
   * Clicking the browser extension icon in the toolbar opens this GitHub repository.
 
 ---

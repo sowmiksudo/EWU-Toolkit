@@ -24,7 +24,8 @@
   ],
   "host_permissions": [
     "*://portal.ewubd.edu/*",
-    "*://faportal.ewubd.edu/*"
+    "*://faportal.ewubd.edu/*",
+    "https://api.github.com/*"
   ],
   "content_scripts": [
     {

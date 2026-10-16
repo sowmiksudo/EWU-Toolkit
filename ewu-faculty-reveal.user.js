@@ -4219,6 +4219,138 @@ body.ewu-dark-mode .ewu-spotlight-footer {
     border-top-color: #334155 !important;
 }
 
+/* ==========================================================================
+   14. Extension Update Checker & Notifications
+   ========================================================================== */
+.ewu-sidebar-badge.ewu-sidebar-update-badge {
+    background: #f59e0b !important;
+    color: #ffffff !important;
+    animation: ewu-pulse 2s infinite;
+}
+
+@keyframes ewu-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.75; }
+}
+
+.ewu-update-alert-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+}
+
+body.ewu-dark-mode .ewu-update-alert-card {
+    background: #1e293b !important;
+    border-color: #3b82f6 !important;
+}
+
+.ewu-update-alert-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.ewu-update-alert-info {
+    flex: 1;
+}
+
+.ewu-update-alert-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e40af;
+    margin-bottom: 2px;
+}
+
+body.ewu-dark-mode .ewu-update-alert-title {
+    color: #60a5fa !important;
+}
+
+.ewu-update-alert-desc {
+    font-size: 11.5px;
+    color: #475569;
+    line-height: 1.35;
+}
+
+body.ewu-dark-mode .ewu-update-alert-desc {
+    color: #94a3b8 !important;
+}
+
+.ewu-update-alert-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    background: #2563eb;
+    color: #ffffff !important;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none !important;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+
+.ewu-update-alert-btn:hover {
+    background: #1d4ed8;
+}
+
+.ewu-update-check-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+    margin-top: 14px;
+    border-top: 1px solid #e2e8f0;
+}
+
+body.ewu-dark-mode .ewu-update-check-row {
+    border-color: #334155 !important;
+}
+
+.ewu-update-check-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ewu-update-check-btn:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+    color: #0f172a;
+}
+
+body.ewu-dark-mode .ewu-update-check-btn {
+    border-color: #475569 !important;
+    color: #cbd5e1 !important;
+}
+
+body.ewu-dark-mode .ewu-update-check-btn:hover {
+    background: #334155 !important;
+    color: #ffffff !important;
+}
+
+.ewu-update-status-text {
+    font-size: 11px;
+    color: #64748b;
+}
+
+body.ewu-dark-mode .ewu-update-status-text {
+    color: #94a3b8 !important;
+}
+
+
 `;
   document.head.appendChild(style);
 
@@ -4227,9 +4359,9 @@ body.ewu-dark-mode .ewu-spotlight-footer {
   'use strict';
 
   try {
-    document.documentElement.setAttribute('data-ewu-toolkit-installed', '1.5.0');
+    document.documentElement.setAttribute('data-ewu-toolkit-installed', '1.5.1');
     window.__EWU_TOOLKIT_ACTIVE__ = true;
-    console.log('[EWU-Toolkit] Content script loaded successfully v1.5.0 on ' + window.location.href);
+    console.log('[EWU-Toolkit] Content script loaded successfully v1.5.1 on ' + window.location.href);
   } catch(e) {}
 
   let config = {
@@ -4470,7 +4602,7 @@ body.ewu-dark-mode .ewu-spotlight-footer {
         <a href="javascript:void(0)" id="ewuSidebarSettingsLink" class="ewu-sidebar-settings-link" title="Open EWU-Toolkit Extension Settings">
           <span style="font-size: 15px;">⚙️</span>
           <span class="ewu-nav-label">EWU-Toolkit</span>
-          <span class="ewu-sidebar-badge">v1.5.0</span>
+          <span class="ewu-sidebar-badge">v1.5.1</span>
         </a>
       `;
       sidebar.appendChild(li);
@@ -4480,6 +4612,19 @@ body.ewu-dark-mode .ewu-spotlight-footer {
           e.preventDefault();
           e.stopPropagation();
           openSettingsModal();
+        });
+      }
+
+      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+        chrome.storage.local.get(['ewu_update_available', 'ewu_latest_version'], (res) => {
+          if (res && res.ewu_update_available && res.ewu_latest_version) {
+            const badge = li.querySelector('.ewu-sidebar-badge');
+            if (badge) {
+              badge.textContent = `Update v${res.ewu_latest_version}`;
+              badge.classList.add('ewu-sidebar-update-badge');
+              badge.title = `Update v${res.ewu_latest_version} available on GitHub`;
+            }
+          }
         });
       }
     }
@@ -4538,14 +4683,15 @@ body.ewu-dark-mode .ewu-spotlight-footer {
             <span class="ewu-settings-brand-icon">🎓</span>
             <div class="ewu-settings-title-group">
               <h2 id="ewuModalTitle">EWU-Toolkit Settings</h2>
-              <p>Student Utility Suite &bull; <span class="version-badge">v1.5.0</span></p>
+              <p>Student Utility Suite &bull; <span class="version-badge">v1.5.1</span></p>
             </div>
           </div>
           <button type="button" class="ewu-settings-close-btn" id="ewuModalCloseBtn" title="Close Settings">✕</button>
         </div>
 
         <div class="ewu-settings-modal-body">
-          <div class="ewu-settings-section-title">Active Superpowers</div>
+          <div id="ewuUpdateAlertContainer"></div>
+          <div class="ewu-settings-section-title">Active Features</div>
 
           <!-- Feature 1 -->
           <div class="ewu-settings-toggle-row">
@@ -4671,7 +4817,14 @@ body.ewu-dark-mode .ewu-spotlight-footer {
             </a>
           </div>
 
-          <div style="margin-top: 16px; padding: 12px 14px; background: #f8fafc; border-radius: 8px; font-size: 11px; color: #64748b; line-height: 1.4; border: 1px solid #e2e8f0;">
+          <div class="ewu-update-check-row" id="ewuUpdateCheckRow">
+            <button type="button" class="ewu-update-check-btn" id="ewuCheckUpdatesBtn">
+              🔄 Check for Updates
+            </button>
+            <span class="ewu-update-status-text" id="ewuUpdateStatusText"></span>
+          </div>
+
+          <div style="margin-top: 14px; padding: 12px 14px; background: #f8fafc; border-radius: 8px; font-size: 11px; color: #64748b; line-height: 1.4; border: 1px solid #e2e8f0;">
             <strong>Open-Source MIT License:</strong> Free for East West University students. Client-side processing only; institutional credentials and private backend data are never accessed by third parties.
           </div>
         </div>
@@ -4720,6 +4873,72 @@ body.ewu-dark-mode .ewu-spotlight-footer {
     });
     bindToggle('#ewuModalToggleLedger', 'ledgerEnabled', 'ewu_ledger_enabled');
     bindToggle('#ewuModalToggleCaptcha', 'captchaEnabled', 'ewu_captcha_enabled');
+
+    // Extension update checking within modal
+    const checkBtn = backdrop.querySelector('#ewuCheckUpdatesBtn');
+    const statusText = backdrop.querySelector('#ewuUpdateStatusText');
+    const updateContainer = backdrop.querySelector('#ewuUpdateAlertContainer');
+
+    function renderUpdateAlert(info) {
+      if (!updateContainer || !info || !info.updateAvailable) return;
+      updateContainer.innerHTML = `
+        <div class="ewu-update-alert-card">
+          <div class="ewu-update-alert-icon">⚡</div>
+          <div class="ewu-update-alert-info">
+            <div class="ewu-update-alert-title">Update Available: v${info.latestVersion}</div>
+            <div class="ewu-update-alert-desc">A newer version of EWU-Toolkit is available on GitHub.</div>
+          </div>
+          <a href="${info.releaseUrl || 'https://github.com/sowmiksudo/EWU-Toolkit/releases'}" target="_blank" rel="noopener noreferrer" class="ewu-update-alert-btn">
+            Download ▾
+          </a>
+        </div>
+      `;
+    }
+
+    if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id && chrome.storage && chrome.storage.local) {
+      chrome.storage.local.get(['ewu_update_available', 'ewu_latest_version', 'ewu_release_url'], (data) => {
+        if (data && data.ewu_update_available) {
+          renderUpdateAlert({
+            updateAvailable: true,
+            latestVersion: data.ewu_latest_version,
+            releaseUrl: data.ewu_release_url
+          });
+        }
+      });
+
+      if (checkBtn) {
+        checkBtn.addEventListener('click', () => {
+          checkBtn.disabled = true;
+          if (statusText) statusText.textContent = 'Checking GitHub...';
+          try {
+            chrome.runtime.sendMessage({ action: 'check_for_updates', force: true }, (res) => {
+              checkBtn.disabled = false;
+              if (chrome.runtime.lastError || !res || res.error) {
+                if (statusText) statusText.textContent = 'Could not reach GitHub.';
+                return;
+              }
+              if (res.updateAvailable) {
+                if (statusText) statusText.textContent = `New version v${res.latestVersion} available!`;
+                renderUpdateAlert(res);
+                const sidebarBadge = document.querySelector('.ewu-sidebar-settings-link .ewu-sidebar-badge');
+                if (sidebarBadge) {
+                  sidebarBadge.textContent = `Update v${res.latestVersion}`;
+                  sidebarBadge.classList.add('ewu-sidebar-update-badge');
+                }
+              } else {
+                if (statusText) statusText.textContent = `✓ Up to date (v${res.currentVersion || '1.5.1'})`;
+              }
+            });
+          } catch (err) {
+            checkBtn.disabled = false;
+            if (statusText) statusText.textContent = 'Error checking updates.';
+          }
+        });
+      }
+    } else {
+      const updateRow = backdrop.querySelector('#ewuUpdateCheckRow');
+      if (updateRow) updateRow.style.display = 'none';
+    }
   }
 
   // =========================================================================
@@ -7296,7 +7515,7 @@ body.ewu-dark-mode .ewu-spotlight-footer {
         </div>
         <div class="ewu-spotlight-footer">
           <span>Tip: Click any section to jump directly to it in the table</span>
-          <span>EWU-Toolkit v1.5.0</span>
+          <span>EWU-Toolkit v1.5.1</span>
         </div>
       </div>
     `;
@@ -8919,6 +9138,21 @@ body.ewu-dark-mode .ewu-spotlight-footer {
         if (msg.feature === 'captcha') config.captchaEnabled = msg.enabled;
         runEnhancements();
         sendResponse({ success: true, config });
+      }
+    });
+  }
+
+  // Automatic background update check trigger for Chrome Extension
+  if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id && chrome.storage && chrome.storage.local) {
+    chrome.storage.local.get(['ewu_last_update_check'], (res) => {
+      const lastCheck = res ? res.ewu_last_update_check : 0;
+      const FOUR_HOURS = 4 * 60 * 60 * 1000;
+      if (!lastCheck || (Date.now() - lastCheck > FOUR_HOURS)) {
+        try {
+          chrome.runtime.sendMessage({ action: 'check_for_updates', force: false }, () => {
+            if (chrome.runtime.lastError) {}
+          });
+        } catch(e) {}
       }
     });
   }

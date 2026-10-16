@@ -22,6 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Documentation Images & Visual Guides**:
   - Added screenshots for the advising course browser, routine export menu, retake simulator, and target CGPA planner to the `images/` directory.
   - Updated `README.md` with step-by-step descriptions and screenshots for each feature.
+- **Chrome Extension Update Checker**:
+  - Background service worker checks the GitHub Releases API periodically for newer releases.
+  - Injects an update notification card into the settings modal and highlights the sidebar badge with the new version number when available.
+  - Adds a manual "Check for Updates" button inside the student portal settings modal.
+  - Displays a "NEW" badge on the Chrome toolbar extension icon when a new version is published.
 
 ### Changed
 - Refactored table column indexing on advising pages to adapt dynamically to varying column layouts across advising tabs.

@@ -11,8 +11,8 @@ android {
         applicationId = "edu.ewubd.toolkit"
         minSdk = 24
         targetSdk = 34
-        versionCode = 132
-        versionName = "1.3.2"
+        versionCode = 151
+        versionName = "1.5.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
